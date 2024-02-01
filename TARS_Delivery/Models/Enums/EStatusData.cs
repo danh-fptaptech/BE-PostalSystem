@@ -2,6 +2,6 @@
 
 public enum EStatusData
 {
-    Inactive,
-    Active
+    Inactive = 0,
+    Active = 1,
 }
