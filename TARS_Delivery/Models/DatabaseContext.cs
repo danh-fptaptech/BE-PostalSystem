@@ -13,20 +13,22 @@ public class DatabaseContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         #region ModelBuilder for FeeCustom
-        
+
         modelBuilder.Entity<FeeCustom>()
-            .HasOne<Location>(fc => fc.LocationToObj)
+            .HasOne<Location>(fc => fc.LocationTo)
             .WithMany()
-            .HasForeignKey(fc=>fc.LocationTo);
+            .HasForeignKey(fc => fc.PostalCodeTo)
+            .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<FeeCustom>()
-            .HasOne<Location>(fc => fc.LocationFromObj)
+            .HasOne<Location>(fc => fc.LocationFrom)
             .WithMany()
-            .HasForeignKey(fc=>fc.LocationFrom);
+            .HasForeignKey(fc=>fc.PostalCodeFrom)
+            .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<FeeCustom>()
             .HasOne<Service>(fc => fc.Service)
             .WithMany()
-            .HasForeignKey(fc => fc.ServiceId);
-        
+            .HasForeignKey(fc => fc.ServiceId)
+            .OnDelete(DeleteBehavior.Restrict);            
         #endregion
 
         #region ModelBuilder for Location
@@ -57,8 +59,9 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Item>()
             .HasOne<Package>(i => i.Package)
             .WithMany(p=>p.Items)
-            .HasForeignKey(i=>i.PackageId);
-
+            .HasForeignKey(i=>i.PackageId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         #endregion
 
         #region ModelBuilder for Package
@@ -66,12 +69,13 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Package>()
             .HasOne<User>(p => p.User)
             .WithMany(u=>u.Packages)
-            .HasForeignKey(p=>p.UserId);
+            .HasForeignKey(p=>p.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Package>()
             .HasOne<Service>(p => p.Service)
             .WithMany()
-            .HasForeignKey(p=>p.ServiceId);
-
+            .HasForeignKey(p=>p.ServiceId)
+            .OnDelete(DeleteBehavior.Restrict);
         #endregion
 
         #region ModelBuilder for RoleHasPermission
@@ -81,11 +85,13 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<RoleHasPermission>()
             .HasOne<Role>()
             .WithMany(r=>r.RoleHasPermissions)
-            .HasForeignKey(rhp=>rhp.RoleId);
+            .HasForeignKey(rhp=>rhp.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<RoleHasPermission>()
             .HasOne<Permission>(rhp => rhp.Permission)
             .WithMany()
-            .HasForeignKey(rhp=>rhp.PermissionId);
+            .HasForeignKey(rhp=>rhp.PermissionId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         #endregion
 
@@ -94,11 +100,13 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Employee>()
             .HasOne<Branch>(e => e.Branch)
             .WithMany(b=>b.Employees)
-            .HasForeignKey(e=>e.BranchId);
+            .HasForeignKey(e=>e.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Employee>()
             .HasOne<Role>(e => e.Role)
             .WithMany()
-            .HasForeignKey(e=>e.RoleId);
+            .HasForeignKey(e=>e.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         #endregion
 
@@ -109,6 +117,16 @@ public class DatabaseContext : DbContext
             .WithOne(c=>c.User)
             .HasForeignKey(c=>c.UserId);
 
+        #endregion
+        
+        #region ModelBuilder for Branch
+
+        modelBuilder.Entity<Branch>()
+            .HasMany<Item>(b=>b.Items)
+            .WithOne(i=>i.Branch)
+            .HasForeignKey(e=>e.BranchId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         #endregion
 
         #region ModelBuilder Unique
@@ -127,6 +145,7 @@ public class DatabaseContext : DbContext
             .IsUnique();
 
         #endregion
+
         
         #region modelBuilder for Seeders
 

@@ -21,10 +21,11 @@ namespace TARS_Delivery.Models.Entities
         public string Photos { get; set; }
         public int ServiceId { get; set; }
         public int UserId { get; set; }
-        public EPackageStatus Status { get; set; }
+        public EPackageStatus Step { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-
+        
+        public EStatusData Status { get; set; }
 
 
         [ForeignKey("UserId")]

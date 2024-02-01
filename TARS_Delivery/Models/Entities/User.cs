@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TARS_Delivery.Models.Enum;
 
 namespace TARS_Delivery.Models.Entities;
 
@@ -18,7 +19,7 @@ public class User
     public string Avatar { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
-
+    public EStatusData Status { get; set; }
     // Relation with Customer
     public virtual ICollection<Customer> Customers { get; set; }
 

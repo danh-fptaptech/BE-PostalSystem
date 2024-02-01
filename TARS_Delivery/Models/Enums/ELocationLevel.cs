@@ -3,9 +3,8 @@
     public enum ELocationLevel
     {
         Country,
-        State,
+        Province,
         City,
-        District,
-        Ward
+        District
     }
 }

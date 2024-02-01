@@ -15,7 +15,8 @@ namespace TARS_Delivery.Models.Entities
         public int? LocationOf { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-
+        
+        public EStatusData Status { get; set; }
 
         [ForeignKey("LocationOf")]
         public virtual Location ParentLocation { get; set; }
