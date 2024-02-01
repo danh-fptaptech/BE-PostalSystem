@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TARS_Delivery", "TARS_Delivery\TARS_Delivery.csproj", "{272485AC-ED94-45C5-A244-9308961A143B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{272485AC-ED94-45C5-A244-9308961A143B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{272485AC-ED94-45C5-A244-9308961A143B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{272485AC-ED94-45C5-A244-9308961A143B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{272485AC-ED94-45C5-A244-9308961A143B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6094B76B-F8AD-4900-8759-588338672FE8}
+	EndGlobalSection
+EndGlobal

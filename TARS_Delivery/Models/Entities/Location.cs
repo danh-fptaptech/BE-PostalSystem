@@ -1,0 +1,24 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using TARS_Delivery.Models.Enum;
+
+namespace TARS_Delivery.Models.Entities
+{
+    public class Location
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public string LocationName { get; set; }
+        public int PostalCode { get; set; }
+        public ELocationLevel LocationLevel { get; set; }
+        public int? LocationOf { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+
+        [ForeignKey("LocationOf")]
+        public virtual Location ParentLocation { get; set; }
+        public virtual ICollection<Location> ChildLocations { get; set; }
+    }
+}

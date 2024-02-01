@@ -1,0 +1,6 @@
+@TARS_Delivery_HostAddress = http://localhost:5255
+
+GET {{TARS_Delivery_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
