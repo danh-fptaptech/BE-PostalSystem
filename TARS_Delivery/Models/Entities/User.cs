@@ -6,24 +6,56 @@ namespace TARS_Delivery.Models.Entities;
 
 public class User
 {
+    private readonly List<Customer> _customers = [];
+    private readonly List<Package> _packages = [];
+
+    private User(
+        string fullname, 
+        string email, 
+        string password) 
+        {
+            Fullname = fullname;
+            Email = email;
+            Password = password;
+            CreatedAt = DateTime.Now;
+            Status = EStatusData.Active;
+        }
+
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public int Id { get; private set; }
+
     [Required]
-    public required string Fullname { get; set; }
+    public string Fullname { get; private set; }
+
     [Required]
-    public required string Email { get; set; }
+    public string Email { get; private set; }
+
     [Required]
-    public required string Password { get; set; }
-    public string Phone { get; set; }
-    public string Avatar { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    public EStatusData Status { get; set; }
+    public string Password { get; private set; }
+
+    public string Phone { get; private set; } = string.Empty;
+
+    public string Avatar { get; private set; } = string.Empty;
+
+    public DateTime CreatedAt { get; private set; }
+
+    public DateTime? UpdatedAt { get; private set; }
+
+    public EStatusData Status { get; private set; }
+
     // Relation with Customer
-    public virtual ICollection<Customer> Customers { get; set; }
+    public ICollection<Customer> Customers => _customers;
 
     // Relation with Package
-    public virtual ICollection<Package> Packages { get; set; }
+    public ICollection<Package> Packages => _packages;
 
+    public static User RegisterUser(
+        string fullname,
+        string email,
+        string password) => 
+            new(
+                fullname,
+                email,
+                password);
 }
