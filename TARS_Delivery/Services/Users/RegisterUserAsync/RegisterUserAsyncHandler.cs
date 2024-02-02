@@ -9,14 +9,17 @@ namespace TARS_Delivery.Services.Users.RegisterUserAsync;
 internal class RegisterUserAsyncHandler(
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
-    IHashProvider hashProvider)
+    IHashProvider hashProvider,
+    IJwtProvider jwtProvider)
     : IRequestHandler<RegisterUserAsyncCommand, string>
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IHashProvider _hashProvider = hashProvider;
+    private readonly IJwtProvider _jwtProvider = jwtProvider;
 
-    public async Task<string> Handle(RegisterUserAsyncCommand command, 
+    public async Task<string> Handle(
+        RegisterUserAsyncCommand command, 
         CancellationToken cancellationToken)
     {
         User? user = await _userRepository
@@ -29,16 +32,18 @@ internal class RegisterUserAsyncHandler(
 
         string hashedPassword = _hashProvider.Hash(command.Password);
 
-        User newUser = User.RegisterUser(
+        User newUser = User.Register(
             command.FullName, 
             command.Email,
+            command.Phone,
             hashedPassword);
 
         await _userRepository.AddUser(newUser, cancellationToken);
 
         await _unitOfWork.SaveChangeAsync(cancellationToken);
 
-        // jwt and login
-        return newUser.Email;
+        string token = _jwtProvider.Generate(newUser);
+
+        return token;
     }
 }

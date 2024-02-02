@@ -8,5 +8,9 @@ internal interface IUserRepository
 
     Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
 
+    Task<User?> GetUserByPhoneAsync(string phone, CancellationToken cancellationToken);
+
+    Task<User?> GetUserByIdWithAddressListAsync(int id, CancellationToken cancellationToken);
+
     Task AddUser(User user, CancellationToken cancellationToken);
 }

@@ -10,11 +10,11 @@ internal class GetUserByIdAsyncHandler(IUserRepository userRepository) :
     private readonly IUserRepository _userRepository = userRepository;
 
     public async Task<RegisterUserAsyncResponse> Handle(
-        GetUserByIdAsyncQuery request, 
+        GetUserByIdAsyncQuery query, 
         CancellationToken cancellationToken)
     {
         User? user = await _userRepository
-            .GetUserByIdAsync(request.Id, cancellationToken);
+            .GetUserByIdAsync(query.Id, cancellationToken);
 
         if (user == null)
         {

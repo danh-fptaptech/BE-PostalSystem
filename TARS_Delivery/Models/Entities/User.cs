@@ -12,10 +12,12 @@ public class User
     private User(
         string fullname, 
         string email, 
+        string phone,
         string password) 
         {
             Fullname = fullname;
             Email = email;
+            Phone = phone;
             Password = password;
             CreatedAt = DateTime.Now;
             Status = EStatusData.Active;
@@ -34,7 +36,7 @@ public class User
     [Required]
     public string Password { get; private set; }
 
-    public string Phone { get; private set; } = string.Empty;
+    public string Phone { get; private set; }
 
     public string Avatar { get; private set; } = string.Empty;
 
@@ -45,17 +47,51 @@ public class User
     public EStatusData Status { get; private set; }
 
     // Relation with Customer
-    public ICollection<Customer> Customers => _customers;
+    public IReadOnlyCollection<Customer> Customers => _customers;
 
     // Relation with Package
-    public ICollection<Package> Packages => _packages;
+    public IReadOnlyCollection<Package> Packages => _packages;
 
-    public static User RegisterUser(
+    public static User Register(
         string fullname,
         string email,
+        string phone,
         string password) => 
             new(
                 fullname,
                 email,
+                phone,
                 password);
+
+    public void ChangePassword(string password)
+    {
+        Password = password;
+        UpdatedAt = DateTime.Now;
+    }
+
+    public void AddCustomer(
+            string name,
+            string phoneNumber,
+            string address,
+            string city,
+            string district,
+            string ward,
+            string postalCode,
+            ETypeInfo typeInfo)
+    {
+        Customer customer = Customer.CreateCustomer(
+            Id,
+            name,
+            phoneNumber,
+            address,
+            city,
+            district,
+            ward,
+            postalCode,
+            typeInfo);
+        
+        _customers.Add(customer);
+
+        UpdatedAt = DateTime.Now;
+    }
 }

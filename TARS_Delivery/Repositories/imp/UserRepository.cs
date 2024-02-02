@@ -28,6 +28,26 @@ internal class UserRepository(DatabaseContext dbContext) : IUserRepository
                 cancellationToken);
     }
 
+    public async Task<User?> GetUserByPhoneAsync(string phone,
+        CancellationToken cancellationToken)
+    {
+        return await _dbContext
+            .Users
+            .FirstOrDefaultAsync(
+                u => u.Phone == phone,
+                cancellationToken);
+    }
+
+    public async Task<User?> GetUserByIdWithAddressListAsync(
+        int id, CancellationToken cancellationToken)
+    {
+        User? user = await _dbContext
+            .Users.Include(u => u.Customers)
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+
+        return user;
+    }
+
     public Task AddUser(User user, 
         CancellationToken cancellationToken)
     {

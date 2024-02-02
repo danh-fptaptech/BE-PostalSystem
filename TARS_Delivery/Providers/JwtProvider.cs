@@ -17,7 +17,7 @@ internal class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
         List<Claim> claims =
         [
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(JwtRegisteredClaimNames.Email, user.Email)
+            new(JwtRegisteredClaimNames.Email, user.Email),
         ];
 
         SigningCredentials signingCredentials = new(

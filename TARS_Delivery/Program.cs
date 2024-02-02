@@ -46,12 +46,11 @@ builder.Services.AddAutoMapper(typeof(DtoProfile));
 
 //authentication and authorization
 builder.Services.ConfigureJwtSetup(configuration);
-
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
 
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
 
 // configure options binding
 

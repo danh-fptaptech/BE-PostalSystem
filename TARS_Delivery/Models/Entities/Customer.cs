@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TARS_Delivery.Models.Enum;
 
 namespace TARS_Delivery.Models.Entities
@@ -12,23 +11,20 @@ namespace TARS_Delivery.Models.Entities
             string name,
             string phoneNumber,
             string address,
-            string province,
             string city,
             string district,
-            string country,
-            int postalCode,
+            string ward,
+            string postalCode,
             ETypeInfo typeInfo) {
                 UserId = userId;
                 Name = name;
                 PhoneNumber = phoneNumber;
                 Address = address;
-                Province = province;
                 City = city;
                 District = district;
-                Country = country;
+                Ward = ward;
                 PostalCode = postalCode;
                 CreatedAt = DateTime.Now;
-                UpdatedAt = DateTime.Now;
                 Status = EStatusData.Active;
                 TypeInfo = typeInfo;
             }
@@ -45,21 +41,19 @@ namespace TARS_Delivery.Models.Entities
 
         public string Address { get; private set; }
 
-        public string Province { get; private set; }
-
         public string City { get; private set; }
 
         public string District { get; private set; }
 
-        public string Country { get; private set; }
+        public string Ward { get; private set; }
 
-        public int PostalCode { get; private set; }
+        public string PostalCode { get; private set; }
 
         public ETypeInfo TypeInfo { get; private set; }
 
         public DateTime CreatedAt { get; private set; }
 
-        public DateTime UpdatedAt { get; private set; }
+        public DateTime? UpdatedAt { get; private set; }
 
         public EStatusData Status { get; private set; }
 
@@ -71,21 +65,19 @@ namespace TARS_Delivery.Models.Entities
             string name,
             string phoneNumber,
             string address,
-            string province,
             string city,
             string district,
-            string country,
-            int postalCode,
+            string ward,
+            string postalCode,
             ETypeInfo typeInfo) =>
                 new(
                     userId,
                     name,
                     phoneNumber,
                     address,
-                    province,
                     city,
                     district,
-                    country,
+                    ward,
                     postalCode,
                     typeInfo
                 );

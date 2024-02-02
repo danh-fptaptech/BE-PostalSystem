@@ -16,6 +16,7 @@
 **/appsettings.json
 **/bin
 **/obj
+**/Migrations
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
