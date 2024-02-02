@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TARS_Delivery.Models.DTOs.req.Location;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Models.Enum;
 using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Controllers
@@ -151,9 +152,32 @@ namespace TARS_Delivery.Controllers
             }
         }
         [HttpGet("GetListLocationByLevel/{eLocationLevel}")]
-        public async Task<ActionResult> GetListLocationByLevel()
+        public async Task<ActionResult<List<RDTOLocation>>> GetListLocationByLevel(string eLocationLevel)
         {
-            return Ok();
+            try
+            {
+                switch (eLocationLevel.ToLower())
+                {
+                    case "country":
+                        var country = await _iLocationRepository.GetListLocationByLevel(ELocationLevel.Country);
+                        return Ok(country);
+                    case "province":
+                        var province = await _iLocationRepository.GetListLocationByLevel(ELocationLevel.Province);
+                        return Ok(province);
+                    case "city":
+                        var city = await _iLocationRepository.GetListLocationByLevel(ELocationLevel.City);
+                        return Ok(city);
+                    case "district":
+                        var distric = await _iLocationRepository.GetListLocationByLevel(ELocationLevel.District);
+                        return Ok(distric);
+                    default:
+                        return NotFound("Please choice [Country,Province,City,District]");
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
         }
     }
 }

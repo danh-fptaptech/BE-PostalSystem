@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req.Location;
 using TARS_Delivery.Models.Entities;
@@ -34,38 +35,38 @@ namespace TARS_Delivery.Repositories.imp
 
         public async Task<ICollection<RDTOLocation>> GetAllLocations()
         {
-            List<Location> locations = _context.Locations.ToList();
+            List<Location> locations = await _context.Locations.ToListAsync();
             List<RDTOLocation> rdtolocations = _mapper.Map<List<RDTOLocation>>(locations);
             return rdtolocations;
         }
 
-        public Task<Location> GetLocationById(int id)
+        public async Task<Location> GetLocationById(int id)
         {
-            var location = _context.Locations.Find(id);
+            var location = await _context.Locations.FindAsync(id);
             if (location == null)
             {
                 return null;
             }
-            return Task.FromResult(location);
+            return location;
         }
 
         public async Task UpdateLocation(int id, Location location)
         {
-            var locationUpdate = _context.Locations.Find(id);
+            var locationUpdate = await _context.Locations.FindAsync(id);
             _context.Entry(locationUpdate).CurrentValues.SetValues(location);
             await _context.SaveChangesAsync();
             return;
         }
         public async Task UpdateStatus(int id)
         {
-            var location = _context.Locations.Find(id);
+            var location = await _context.Locations.FindAsync(id);
             location.Status = location.Status == EStatusData.Active ? EStatusData.Deactive : EStatusData.Active;
             await _context.SaveChangesAsync();
             return;
         }
-        public Task<object> GetChildLocation(int id)
+        public async Task<object> GetChildLocation(int id)
         {
-            var location = _context.Locations.FirstOrDefault(x => x.Id == id);
+            var location = await _context.Locations.FirstOrDefaultAsync(x => x.Id == id);
 
             if (location == null)
             {
@@ -74,7 +75,7 @@ namespace TARS_Delivery.Repositories.imp
 
             if (location.LocationLevel == ELocationLevel.Country)
             {
-                var locationChild = _context.Locations.Where(x => x.LocationOf == id).ToList();
+                var locationChild = await _context.Locations.Where(x => x.LocationOf == id).ToListAsync();
                 if (locationChild.Any())
                 {
                     var countryChild = new RDTOLocationCountry
@@ -122,7 +123,7 @@ namespace TARS_Delivery.Repositories.imp
             }
             else if (location.LocationLevel == ELocationLevel.Province)
             {
-                var locationChild = _context.Locations.Where(x => x.LocationOf == id).ToList();
+                var locationChild = await _context.Locations.Where(x => x.LocationOf == id).ToListAsync();
                 if (locationChild.Any())
                 {
                     var provinceChild = new RDTOLocationProvince
@@ -159,7 +160,7 @@ namespace TARS_Delivery.Repositories.imp
             }
             else if (location.LocationLevel == ELocationLevel.City)
             {
-                var locationChild = _context.Locations.Where(x => x.LocationOf == id).ToList();
+                var locationChild = await _context.Locations.Where(x => x.LocationOf == id).ToListAsync();
                 if (locationChild.Any())
                 {
                     var cityChild = new RDTOLocationCity
@@ -188,10 +189,11 @@ namespace TARS_Delivery.Repositories.imp
         }
 
 
-        public Task GetListLocationByLevel(ELocationLevel eLocationLevel)
+        public async Task<List<RDTOLocation>> GetListLocationByLevel(ELocationLevel eLocationLevel)
         {
-            var location = _context.Locations.Where(x => x.LocationLevel == eLocationLevel).ToList();
-            return Task.FromResult(location);
+            var locations = await _context.Locations.Where(x => x.LocationLevel == eLocationLevel).ToListAsync();
+            List<RDTOLocation> rdtolocations = _mapper.Map<List<RDTOLocation>>(locations);
+            return rdtolocations;
         }
     }
 }

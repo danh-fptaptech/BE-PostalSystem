@@ -13,7 +13,7 @@ namespace TARS_Delivery.Repositories
         Task UpdateLocation(int id, Location location);
         Task DeleteLocation(int id);
         Task<object> GetChildLocation(int id);
-        Task GetListLocationByLevel(ELocationLevel eLocationLevel);
+        Task<List<RDTOLocation>> GetListLocationByLevel(ELocationLevel eLocationLevel);
         Task UpdateStatus(int id);
     }
 }
