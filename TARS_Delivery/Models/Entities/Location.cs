@@ -19,7 +19,7 @@ namespace TARS_Delivery.Models.Entities
         public EStatusData Status { get; set; }
 
         [ForeignKey("LocationOf")]
-        public virtual Location ParentLocation { get; set; }
-        public virtual ICollection<Location> ChildLocations { get; set; }
+        public virtual Location? ParentLocation { get; set; }
+        public virtual ICollection<Location>? ChildLocations { get; set; }
     }
 }

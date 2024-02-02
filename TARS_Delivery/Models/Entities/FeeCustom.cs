@@ -23,10 +23,10 @@ namespace TARS_Delivery.Models.Entities
         public EStatusData Status { get; set; }
 
         [ForeignKey("ServiceId")]
-        public Service Service { get; set; }
+        public Service? Service { get; set; }
         [ForeignKey("PostalCodeFrom")]
-        public Location LocationFrom { get; set; }
+        public Location? LocationFrom { get; set; }
         [ForeignKey("PostalCodeTo")]
-        public Location LocationTo { get; set; }
+        public Location? LocationTo { get; set; }
     }
 }
