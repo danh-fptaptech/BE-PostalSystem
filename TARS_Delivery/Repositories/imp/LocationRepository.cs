@@ -60,7 +60,7 @@ namespace TARS_Delivery.Repositories.imp
         public async Task UpdateStatus(int id)
         {
             var location = await _context.Locations.FindAsync(id);
-            location.Status = location.Status == EStatusData.Active ? EStatusData.Deactive : EStatusData.Active;
+            location.Status = location.Status == EStatusData.Active ? EStatusData.Inactive : EStatusData.Active;
             await _context.SaveChangesAsync();
             return;
         }
