@@ -2,7 +2,7 @@
 {
     public enum ETypeInfo
     {
-        Sender,
-        Receiver
+        Sender = 0,
+        Receiver = 1,
     }
 }

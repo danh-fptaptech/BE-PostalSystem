@@ -2,8 +2,8 @@
 {
     public enum EItemType
     {
-        Document,
-        Pack,
-        Money
+        Document = 0,
+        Pack = 1,
+        Money = 2,
     }
 }
