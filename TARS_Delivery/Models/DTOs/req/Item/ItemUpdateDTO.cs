@@ -1,8 +1,8 @@
 ﻿using TARS_Delivery.Models.Enum;
 
-namespace TARS_Delivery.Models.DTOs.req
+namespace TARS_Delivery.Models.DTOs.req.Item
 {
-    public class ListItemDTO
+    public class ItemUpdateDTO
     {
         public int Id { get; set; }
         public int PackageId { get; set; }

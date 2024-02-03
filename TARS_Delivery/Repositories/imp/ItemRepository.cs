@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
-using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.DTOs.req.Item;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Models.Enum;
 
 namespace TARS_Delivery.Repositories.imp
 {
-    public class ItemRepository : IItemInterface
+    public class ItemRepository : IItemRepository
     {
         private readonly DatabaseContext _context;
         public ItemRepository(DatabaseContext context)

@@ -19,8 +19,11 @@ builder.Services.Scan(scan =>
 builder.Services.Scan(scan => 
     scan.FromAssemblyOf<IBranchService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
 
-builder.Services.AddScoped<IItemInterface, ItemRepository>();
+
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<ItemService>();
+builder.Services.AddScoped< IHistoryLogRepository, HistoryLogRepository > ();
+builder.Services.AddScoped<HistoryLogService>();
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(DtoProfile));
 

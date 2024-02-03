@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TARS_Delivery.Models.Enum;
 
@@ -9,19 +10,25 @@ namespace TARS_Delivery.Models.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Required]
         public int PackageId { get; set; }
+        [Required]
         public int EmployeeId { get; set; }
+        [Required]
+        [DefaultValue(EPackageStatus.WaitingForPickup)]
         public EPackageStatus Step { get; set; }
-        public string HistoryNote { get; set; }
-        public string Photos { get; set; }
+        public string? HistoryNote { get; set; }
+        public string? Photos { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        [Required]
+        [DefaultValue(EStatusData.Active)]
         public EStatusData Status { get; set; }
 
         // Navigation properties
         [ForeignKey("PackageId")]
-        public virtual Package Package { get; set; }
+        public virtual Package? Package { get; set; }
         [ForeignKey("EmployeeId")]
-        public virtual Employee Employee { get; set; }
+        public virtual Employee? Employee { get; set; }
     }
 }

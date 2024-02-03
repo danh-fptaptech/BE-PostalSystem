@@ -1,4 +1,4 @@
-﻿using TARS_Delivery.Models.DTOs.req;
+﻿using TARS_Delivery.Models.DTOs.req.Item;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
 
@@ -6,8 +6,8 @@ namespace TARS_Delivery.Services.imp
 {
     public class ItemService
     {
-        private readonly IItemInterface _itemRepository;
-        public ItemService(IItemInterface itemRepository)
+        private readonly IItemRepository _itemRepository;
+        public ItemService(IItemRepository itemRepository)
         {
             _itemRepository = itemRepository;
         }

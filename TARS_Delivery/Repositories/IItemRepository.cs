@@ -1,9 +1,9 @@
-﻿using TARS_Delivery.Models.DTOs.req;
+﻿using TARS_Delivery.Models.DTOs.req.Item;
 using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories
 {
-    public interface IItemInterface
+    public interface IItemRepository
     {
         Task<IEnumerable<ListItemDTO>> GetAllItems();
         Task<Item> GetItemById(int id);

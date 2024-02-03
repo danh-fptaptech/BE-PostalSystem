@@ -1,6 +1,6 @@
 ﻿using TARS_Delivery.Models.Enum;
 
-namespace TARS_Delivery.Models.DTOs.req
+namespace TARS_Delivery.Models.DTOs.req.Item
 {
     public class ItemCreateDTO
     {
