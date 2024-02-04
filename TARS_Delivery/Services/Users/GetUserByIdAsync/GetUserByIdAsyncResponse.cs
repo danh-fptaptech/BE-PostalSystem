@@ -1,6 +1,6 @@
 ﻿namespace TARS_Delivery.Services.Users.GetUserByIdAsync;
 
-internal record RegisterUserAsyncResponse(
+internal sealed record RegisterUserAsyncResponse(
     string Fullname,
     string Email,
     string Phone,

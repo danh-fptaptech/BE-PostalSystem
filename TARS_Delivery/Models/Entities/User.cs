@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography;
 using TARS_Delivery.Models.Enum;
 
 namespace TARS_Delivery.Models.Entities;
@@ -46,6 +47,10 @@ public class User
 
     public EStatusData Status { get; private set; }
 
+    public string? RefreshToken { get; private set; }
+
+    public DateTime RefreshTokenExpires { get; private set; }
+
     // Relation with Customer
     public IReadOnlyCollection<Customer> Customers => _customers;
 
@@ -76,7 +81,7 @@ public class User
             string city,
             string district,
             string ward,
-            string postalCode,
+            int postalCode,
             ETypeInfo typeInfo)
     {
         Customer customer = Customer.CreateCustomer(
@@ -93,5 +98,24 @@ public class User
         _customers.Add(customer);
 
         UpdatedAt = DateTime.Now;
+    }
+
+    public void GenerateRefreshToken(HttpContext httpContext)
+    {
+        RefreshToken = Convert.ToBase64String(
+            RandomNumberGenerator.GetBytes(64));
+
+        RefreshTokenExpires = DateTime.Now.AddDays(7);
+
+        CookieOptions options = new()
+        {
+            HttpOnly = true,
+            Expires = RefreshTokenExpires
+        };
+
+        httpContext
+            .Response
+            .Cookies
+            .Append("refresh-token", RefreshToken, options);
     }
 }

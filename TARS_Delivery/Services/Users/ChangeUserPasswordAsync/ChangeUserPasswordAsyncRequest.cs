@@ -1,3 +1,3 @@
 ﻿namespace TARS_Delivery.Services.Users.ChangeUserPasswordAsync;
 
-public record ChangeUserPasswordAsyncRequest(string OldPassword, string NewPassword);
+public sealed record ChangeUserPasswordAsyncRequest(string OldPassword, string NewPassword);

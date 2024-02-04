@@ -12,5 +12,7 @@ internal interface IUserRepository
 
     Task<User?> GetUserByIdWithAddressListAsync(int id, CancellationToken cancellationToken);
 
+    Task<bool> CheckUserIsExisting(string email, string phone, CancellationToken cancellationToken);
+
     Task AddUser(User user, CancellationToken cancellationToken);
 }

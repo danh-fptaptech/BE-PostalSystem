@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TARS_Delivery.Services.Users.AddUserAddressAsync;
 using TARS_Delivery.Services.Users.ChangeUserPasswordAsync;
-using TARS_Delivery.Services.Users.GetUserByIdWithAddressListAsync;
 using TARS_Delivery.Services.Users.GetUserByIdAsync;
+using TARS_Delivery.Services.Users.GetUserByIdWithAddressListAsync;
 using TARS_Delivery.Services.Users.LoginUserAsync;
 using TARS_Delivery.Services.Users.RegisterUserAsync;
+using TARS_Delivery.Services.Users.RefreshTokenAsync;
 
 namespace TARS_Delivery.Controllers;
 
@@ -15,7 +16,7 @@ public class UsersController(ISender sender)
     : ApiController(sender)
 {
     [HttpPost("Register")]
-    public async Task<IActionResult> RegisterUser(
+    public async Task<IActionResult> RegisterUserAsync(
         [FromBody] RegisterUserAsyncRequest request,
         CancellationToken cancellationToken)
     {
@@ -37,7 +38,7 @@ public class UsersController(ISender sender)
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> LoginUser(
+    public async Task<IActionResult> LoginUserAsync(
         [FromBody] LoginUserAsyncRequest request,
         CancellationToken cancellationToken)
     {
@@ -57,8 +58,8 @@ public class UsersController(ISender sender)
     }
 
     [Authorize]
-    [HttpPut("change-password/{id:int}")]
-    public async Task<IActionResult> ChangeUserPassword(
+    [HttpPut("Change-password/{id:int}")]
+    public async Task<IActionResult> ChangeUserPasswordAsync(
         int id,
         [FromBody] ChangeUserPasswordAsyncRequest request,
         CancellationToken cancellationToken)
@@ -79,9 +80,26 @@ public class UsersController(ISender sender)
         return Ok(result);
     }
 
+    [HttpPost("Refresh-token")]
+    public async Task<IActionResult> RefreshToken(
+        CancellationToken cancellationToken)
+    {
+        RefreshTokenAsyncCommand command = new();
+
+        string? result = await Sender.Send(
+            command, cancellationToken);
+        //
+        if (!result)
+        {
+            return Unauthorized();
+        }
+
+        return Ok(result);
+    }
+
     [Authorize]
-    [HttpGet("addresses/{userId:int}")]
-    public async Task<IActionResult> GetUserAddressList(
+    [HttpGet("Addresses/{userId:int}")]
+    public async Task<IActionResult> GetUserAddressListAsync(
         int userId,
         CancellationToken cancellationToken)
     {
@@ -113,7 +131,7 @@ public class UsersController(ISender sender)
     }
 
     [Authorize]
-    [HttpPost("addresses/{userId:int}")]
+    [HttpPost("Addresses/{userId:int}")]
     public async Task<IActionResult> AddUserAddressAsync(
     int userId,
     [FromBody] AddUserAddressAsyncRequest request,

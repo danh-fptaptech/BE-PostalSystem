@@ -2,7 +2,7 @@
 
 namespace TARS_Delivery.Services.Users.AddUserAddressAsync;
 
-public record AddUserAddressAsyncRequest(
+public sealed record AddUserAddressAsyncRequest(
     string Name,
     string PhoneNumber,
     string Address,

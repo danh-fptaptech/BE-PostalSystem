@@ -2,5 +2,5 @@
 
 namespace TARS_Delivery.Services.Users.GetUserByIdAsync;
 
-internal record GetUserByIdAsyncQuery(int Id) : 
+internal sealed record GetUserByIdAsyncQuery(int Id) : 
     IRequest<RegisterUserAsyncResponse>;

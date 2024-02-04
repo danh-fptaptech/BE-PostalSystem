@@ -10,22 +10,27 @@ internal class RegisterUserAsyncHandler(
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     IHashProvider hashProvider,
-    IJwtProvider jwtProvider)
+    IJwtProvider jwtProvider,
+    IMailProvider mailProvider)
     : IRequestHandler<RegisterUserAsyncCommand, string>
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IHashProvider _hashProvider = hashProvider;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
+    private readonly IMailProvider _mailProvider = mailProvider;
 
     public async Task<string> Handle(
         RegisterUserAsyncCommand command, 
         CancellationToken cancellationToken)
     {
-        User? user = await _userRepository
-            .GetUserByEmailAsync(command.Email, cancellationToken);
+        bool IsUserExisting = await _userRepository
+            .CheckUserIsExisting(
+                command.Email,
+                command.Phone, 
+                cancellationToken);
         
-        if (user is not null)
+        if (IsUserExisting)
         {
             return null;
         }

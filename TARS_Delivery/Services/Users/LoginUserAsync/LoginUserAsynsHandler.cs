@@ -2,16 +2,23 @@
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Providers;
 using TARS_Delivery.Repositories;
+using TARS_Delivery.UnitOfWork;
 
 namespace TARS_Delivery.Services.Users.LoginUserAsync;
 
-internal class LoginUserAsynsHandler(
+internal sealed class LoginUserAsynsHandler(
     IUserRepository userRepository,
+    IUnitOfWork unitOfWork,
     IHashProvider hashProvider,
-    IJwtProvider jwtProvider)
+    IJwtProvider jwtProvider,
+    IHttpContextAccessor httpContextAccessor)
     : IRequestHandler<LoginUserAsyncCommand, string>
 {
     private readonly IUserRepository _userRepository = userRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IHashProvider _hashProvider = hashProvider;
+    private readonly IJwtProvider _jwtProvider = jwtProvider;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     public async Task<string> Handle(
         LoginUserAsyncCommand command, 
@@ -35,13 +42,24 @@ internal class LoginUserAsynsHandler(
             return null;
         }
 
-        if (!hashProvider.Verify(command.Password, user.Password))
+        if (!_hashProvider.Verify(command.Password, user.Password))
         {
             return null;
         }
 
-        string token = jwtProvider.Generate(user);
+        string token = _jwtProvider.Generate(user);
 
+        var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext is null)
+        {
+            return "";
+        }
+
+        user.GenerateRefreshToken(httpContext);
+
+        await _unitOfWork.SaveChangeAsync(cancellationToken);
+        //
         return token;
     }
 }

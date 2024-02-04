@@ -50,7 +50,7 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
 
-//builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
 
 // configure options binding
 

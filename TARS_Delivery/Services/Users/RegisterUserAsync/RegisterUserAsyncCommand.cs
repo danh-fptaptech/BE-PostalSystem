@@ -2,7 +2,7 @@
 
 namespace TARS_Delivery.Services.Users.RegisterUserAsync;
 
-internal record RegisterUserAsyncCommand(
+internal sealed record RegisterUserAsyncCommand(
     string FullName, 
     string Email, 
     string Phone,

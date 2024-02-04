@@ -14,7 +14,7 @@ namespace TARS_Delivery.Models.Entities
             string city,
             string district,
             string ward,
-            string postalCode,
+            int postalCode,
             ETypeInfo typeInfo) {
                 UserId = userId;
                 Name = name;
@@ -47,7 +47,7 @@ namespace TARS_Delivery.Models.Entities
 
         public string Ward { get; private set; }
 
-        public string PostalCode { get; private set; }
+        public int PostalCode { get; private set; }
 
         public ETypeInfo TypeInfo { get; private set; }
 
@@ -68,7 +68,7 @@ namespace TARS_Delivery.Models.Entities
             string city,
             string district,
             string ward,
-            string postalCode,
+            int postalCode,
             ETypeInfo typeInfo) =>
                 new(
                     userId,

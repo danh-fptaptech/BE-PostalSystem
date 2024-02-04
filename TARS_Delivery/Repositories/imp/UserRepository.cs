@@ -8,44 +8,54 @@ internal class UserRepository(DatabaseContext dbContext) : IUserRepository
 {
     private readonly DatabaseContext _dbContext = dbContext;
 
-    public async Task<User?> GetUserByIdAsync(int id, 
+    public Task<User?> GetUserByIdAsync(int id, 
         CancellationToken cancellationToken)
     {
-        return await _dbContext
+        return _dbContext
             .Users
             .FirstOrDefaultAsync(
                 u => u.Id == id, 
                 cancellationToken);
     }
 
-    public async Task<User?> GetUserByEmailAsync(string email, 
+    public Task<User?> GetUserByEmailAsync(string email, 
         CancellationToken cancellationToken)
     {
-        return await _dbContext
+        return _dbContext
             .Users
             .FirstOrDefaultAsync(
                 u => u.Email == email,
                 cancellationToken);
     }
 
-    public async Task<User?> GetUserByPhoneAsync(string phone,
+    public Task<User?> GetUserByPhoneAsync(string phone,
         CancellationToken cancellationToken)
     {
-        return await _dbContext
+        return _dbContext
             .Users
             .FirstOrDefaultAsync(
                 u => u.Phone == phone,
                 cancellationToken);
     }
 
-    public async Task<User?> GetUserByIdWithAddressListAsync(
+    public Task<User?> GetUserByIdWithAddressListAsync(
         int id, CancellationToken cancellationToken)
     {
-        User? user = await _dbContext
+        return _dbContext
             .Users.Include(u => u.Customers)
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+    }
 
-        return user;
+    public Task<bool> CheckUserIsExisting(
+        string email, 
+        string phone, 
+        CancellationToken cancellationToken)
+    {
+        return _dbContext
+            .Users
+            .AnyAsync(
+                u => u.Email == email || u.Phone == phone, 
+                cancellationToken);
     }
 
     public Task AddUser(User user, 

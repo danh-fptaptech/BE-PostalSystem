@@ -38,4 +38,28 @@ internal class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 
         return tokenValue;
     }
+
+    public ClaimsPrincipal GetClaimsPrincipalFromExpiredToken(string token)
+    {
+        TokenValidationParameters validationParams = new()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = _options.Issuer,
+            ValidAudience = _options.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(_options.SecretKey)),
+            ClockSkew = new TimeSpan(0, 0, 5)
+        };
+
+        ClaimsPrincipal claimsPrincipal = new JwtSecurityTokenHandler()
+        {
+            MapInboundClaims = false,
+        }
+        .ValidateToken(token, validationParams, out _);
+
+        return claimsPrincipal;
+    }
 }

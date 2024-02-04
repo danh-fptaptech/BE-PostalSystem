@@ -3,7 +3,7 @@ using TARS_Delivery.Models.Enum;
 
 namespace TARS_Delivery.Services.Users.AddUserAddressAsync;
 
-internal record AddUserAddressAsyncCommand(
+internal sealed record AddUserAddressAsyncCommand(
     int UserId,
     string Name,
     string PhoneNumber,

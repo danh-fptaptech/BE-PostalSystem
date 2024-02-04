@@ -16,7 +16,8 @@ internal static class JwtExtensions
 
         services.Configure<JwtOptions>(jwtSection);
 
-        services.PostConfigureAll<JwtBearerOptions>(options => 
+        services.PostConfigureAll<JwtBearerOptions>(options =>
+        {
             options.TokenValidationParameters = new()
             {
                 ValidateIssuer = true,
@@ -26,8 +27,13 @@ internal static class JwtExtensions
                 ValidIssuer = jwtOptions.Issuer,
                 ValidAudience = jwtOptions.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
-            });
+                    Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
+                ClockSkew = new TimeSpan(0, 0, 5)
+            };
+
+            options.MapInboundClaims = false;
+        });
+
 
         return services;
     }

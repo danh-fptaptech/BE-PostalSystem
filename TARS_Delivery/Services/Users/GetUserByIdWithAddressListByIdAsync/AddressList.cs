@@ -2,7 +2,7 @@
 
 namespace TARS_Delivery.Services.Users.GetUserByIdWithAddressListByIdAsync;
 
-public record AddressList(
+public sealed record AddressList(
     string Name,
     string PhoneNumber,
     string Address,
