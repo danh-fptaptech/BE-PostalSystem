@@ -88,8 +88,26 @@ public class UsersController(ISender sender)
 
         string? result = await Sender.Send(
             command, cancellationToken);
+        
+        if (result is null)
+        {
+            return Unauthorized();
+        }
+
+        return Ok(result);
+    }
+
+    [Authorize]
+    [HttpDelete("Revoke-token")]
+    public async Task<IActionResult> RevokeToken(
+        CancellationToken cancellationToken)
+    {
+        RefreshTokenAsyncCommand command = new();
+
+        string? result = await Sender.Send(
+            command, cancellationToken);
         //
-        if (!result)
+        if (result is null)
         {
             return Unauthorized();
         }

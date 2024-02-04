@@ -49,7 +49,7 @@ public class User
 
     public string? RefreshToken { get; private set; }
 
-    public DateTime RefreshTokenExpires { get; private set; }
+    public DateTime? RefreshTokenExpires { get; private set; }
 
     // Relation with Customer
     public IReadOnlyCollection<Customer> Customers => _customers;
@@ -117,5 +117,11 @@ public class User
             .Response
             .Cookies
             .Append("refresh-token", RefreshToken, options);
+    }
+
+    public void RevokeToken()
+    {
+        RefreshToken = null;
+        RefreshTokenExpires = null;
     }
 }
