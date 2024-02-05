@@ -21,7 +21,7 @@ namespace TARS_Delivery.Repositories
                 return null;
             }
 
-            service.Status = service.Status == EStatusData.Active ? EStatusData.Deactive : EStatusData.Active;
+            service.Status = service.Status == EStatusData.Active ? EStatusData.Inactive : EStatusData.Active;
             await _context.SaveChangesAsync();
             return service;
         }
@@ -35,7 +35,7 @@ namespace TARS_Delivery.Repositories
 
         public async Task DeleteService(int id)
         {
-            var service = _context.Services.Find(id);
+            var service = await _context.Services.FindAsync(id);
             _context.Services.Remove(service);
             await _context.SaveChangesAsync();
         }
@@ -62,6 +62,8 @@ namespace TARS_Delivery.Repositories
             var serviceToUpdate = await _context.Services.FindAsync(id);
             if (serviceToUpdate != null)
             {
+                service.CreatedAt = serviceToUpdate.CreatedAt;
+                service.UpdatedAt = DateTime.Now;
                 _context.Entry(serviceToUpdate).CurrentValues.SetValues(service);
                 await _context.SaveChangesAsync();
                 return serviceToUpdate;

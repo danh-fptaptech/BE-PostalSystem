@@ -14,7 +14,7 @@ namespace TARS_Delivery.Controllers
         {
             _iServiceRepository = iServiceRepository;
         }
-
+        //Get all Services
         [HttpGet]
         public async Task<ActionResult<ICollection<Service>>> GetAllServices()
         {
@@ -28,7 +28,7 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
+        //Get Service by Id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetServiceById(int id)
         {
@@ -43,7 +43,7 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
+        //Add Service
         [HttpPost]
         public async Task<IActionResult> AddService(Service service)
         {
@@ -64,7 +64,7 @@ namespace TARS_Delivery.Controllers
                    return BadRequest("Invalid model state");
             }
         }
-
+        //Update Service
         [HttpPut]
         public async Task<IActionResult> UpdateService(Service service)
         {
@@ -82,20 +82,6 @@ namespace TARS_Delivery.Controllers
             }else
             {
                 return BadRequest("Invalid model state");
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteService(int id)
-        {
-            try
-            {
-                await _iServiceRepository.DeleteService(id);
-                return Ok("Service deleted successfully");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
         //change status

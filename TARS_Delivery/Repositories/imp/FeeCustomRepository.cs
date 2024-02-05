@@ -28,7 +28,7 @@ namespace TARS_Delivery.Repositories.imp
             var feeCustom = await _context.FeeCustoms.FindAsync(id);
             if (feeCustom != null)
             {
-                feeCustom.Status = feeCustom.Status == EStatusData.Active ? EStatusData.Deactive : EStatusData.Active;
+                feeCustom.Status = feeCustom.Status == EStatusData.Active ? EStatusData.Inactive : EStatusData.Active;
                 await _context.SaveChangesAsync();
             }
         }
@@ -39,9 +39,9 @@ namespace TARS_Delivery.Repositories.imp
             return feeCustoms;
         }
 
-        public Task<FeeCustom> GetFeeById(int id)
+        public async Task<FeeCustom> GetFeeById(int id)
         {
-            var feeCustom = _context.FeeCustoms.FirstOrDefaultAsync(fee => fee.Id == id);
+            var feeCustom = await _context.FeeCustoms.FirstOrDefaultAsync(fee => fee.Id == id);
             if (feeCustom != null)
             {
                 return feeCustom;
@@ -51,10 +51,12 @@ namespace TARS_Delivery.Repositories.imp
 
         public async Task<FeeCustom> UpdateFee(int id, FeeCustom fee)
         {
-            var feeCustom = _context.FeeCustoms.FirstOrDefaultAsync(fee => fee.Id == id);
+            var feeCustom = await _context.FeeCustoms.FirstOrDefaultAsync(fee => fee.Id == id);
+            fee.CreatedAt = feeCustom.CreatedAt;
+            fee.UpdatedAt = DateTime.Now;
             _context.Entry(feeCustom).CurrentValues.SetValues(fee);
             await _context.SaveChangesAsync();
-            return fee;
+            return feeCustom;
         }
         public async Task<FeeCustom> GetFeeByPostalCode(int postalCodeFrom, int postalCodeTo)
         {

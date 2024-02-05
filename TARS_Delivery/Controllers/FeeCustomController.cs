@@ -14,6 +14,7 @@ namespace TARS_Delivery.Controllers
         {
             _feeCustomRepository = feeCustomRepository;
         }
+        //Get all Fees
         [HttpGet]
         public async Task<ActionResult<ICollection<FeeCustom>>> GetAllFees()
         {
@@ -27,6 +28,7 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Get Fee by Id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetFeeById(int id)
         {
@@ -40,6 +42,7 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Add Fee
         [HttpPost]
         public async Task<IActionResult> CreateFee(FeeCustom fee)
         {
@@ -57,6 +60,7 @@ namespace TARS_Delivery.Controllers
             }
             return BadRequest("Invalid model");
         }
+        //Update Fee
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFee(int id, FeeCustom fee)
         {
@@ -74,6 +78,7 @@ namespace TARS_Delivery.Controllers
             }
             return BadRequest("Invalid model");
         }
+        //Change Status
         [HttpPut("ChangeStatus/{id}")]
         public async Task<IActionResult> ChangeStatus(int id)
         {
@@ -87,6 +92,7 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Get Fee by Postal Code
         [HttpGet("GetFeeByPostalCode/{postalCodeFrom}/{postalCodeTo}")]
         public async Task<IActionResult> GetFeeByPostalCode(int postalCodeFrom, int postalCodeTo)
         {

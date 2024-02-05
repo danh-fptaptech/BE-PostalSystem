@@ -11,5 +11,6 @@ public class DtoProfile : Profile
         CreateMap<Branch, RDTOBranch>().ReverseMap();
         CreateMap<Branch, SDTOBranch>().ReverseMap();
         CreateMap<Location, RDTOLocation>().ReverseMap();
+        CreateMap<Location, RDTOLocationByZipcode>().ReverseMap();
     }
 }

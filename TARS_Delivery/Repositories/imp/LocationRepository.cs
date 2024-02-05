@@ -53,6 +53,8 @@ namespace TARS_Delivery.Repositories.imp
         public async Task UpdateLocation(int id, Location location)
         {
             var locationUpdate = await _context.Locations.FindAsync(id);
+            location.CreatedAt = locationUpdate.CreatedAt;
+            location.UpdatedAt = DateTime.Now;
             _context.Entry(locationUpdate).CurrentValues.SetValues(location);
             await _context.SaveChangesAsync();
             return;
@@ -72,10 +74,14 @@ namespace TARS_Delivery.Repositories.imp
             {
                 return Task.FromResult<object>(null);
             }
+            if (location.Status == EStatusData.Inactive)
+            {
+                return Task.FromResult<object>(null);
+            }
 
             if (location.LocationLevel == ELocationLevel.Country)
             {
-                var locationChild = await _context.Locations.Where(x => x.LocationOf == id).ToListAsync();
+                var locationChild = await _context.Locations.Where(x => x.LocationOf == id && x.Status == EStatusData.Active).ToListAsync();
                 if (locationChild.Any())
                 {
                     var countryChild = new RDTOLocationCountry
@@ -95,7 +101,7 @@ namespace TARS_Delivery.Repositories.imp
                             LocationOf = x.LocationOf,
                             Status = x.Status,
                             cities = _context.Locations
-                                .Where(y => y.LocationOf == x.Id)
+                                .Where(y => y.LocationOf == x.Id && x.Status == EStatusData.Active)
                                 .Select(y => new RDTOLocationCity
                                 {
                                     Id = y.Id,
@@ -123,7 +129,7 @@ namespace TARS_Delivery.Repositories.imp
             }
             else if (location.LocationLevel == ELocationLevel.Province)
             {
-                var locationChild = await _context.Locations.Where(x => x.LocationOf == id).ToListAsync();
+                var locationChild = await _context.Locations.Where(x => x.LocationOf == id && x.Status == EStatusData.Active).ToListAsync();
                 if (locationChild.Any())
                 {
                     var provinceChild = new RDTOLocationProvince
@@ -143,7 +149,7 @@ namespace TARS_Delivery.Repositories.imp
                             LocationOf = x.LocationOf,
                             Status = x.Status,
                             districs = _context.Locations
-                                .Where(y => y.LocationOf == x.Id)
+                                .Where(y => y.LocationOf == x.Id && x.Status == EStatusData.Active)
                                 .Select(y => new RDTOLocationDistric
                                 {
                                     Id = y.Id,
@@ -160,9 +166,19 @@ namespace TARS_Delivery.Repositories.imp
             }
             else if (location.LocationLevel == ELocationLevel.City)
             {
-                var locationChild = await _context.Locations.Where(x => x.LocationOf == id).ToListAsync();
+                var locationChild = await _context.Locations.Where(x => x.LocationOf == id && x.Status == EStatusData.Active).ToListAsync();
                 if (locationChild.Any())
                 {
+                    var districs =  locationChild.Select(x => new RDTOLocationDistric
+                    {
+                        Id = x.Id,
+                        LocationName = x.LocationName,
+                        PostalCode = x.PostalCode,
+                        LocationLevel = x.LocationLevel,
+                        LocationOf = x.LocationOf,
+                        Status = x.Status
+                    }).ToList();
+
                     var cityChild = new RDTOLocationCity
                     {
                         Id = location.Id,
@@ -171,29 +187,44 @@ namespace TARS_Delivery.Repositories.imp
                         LocationLevel = location.LocationLevel,
                         LocationOf = location.LocationOf,
                         Status = location.Status,
-                        districs = locationChild.Select(x => new RDTOLocationDistric
-                        {
-                            Id = x.Id,
-                            LocationName = x.LocationName,
-                            PostalCode = x.PostalCode,
-                            LocationLevel = x.LocationLevel,
-                            LocationOf = x.LocationOf,
-                            Status = x.Status
-                        }).ToList()
+                        districs = districs.Count > 0 ? districs : null
                     };
                     return Task.FromResult<object>(cityChild);
                 }
             }
-
+            else if (location.LocationLevel == ELocationLevel.District)
+            {
+                return Task.FromResult<object>(null);
+            }
             return Task.FromResult<object>(location);
         }
 
 
         public async Task<List<RDTOLocation>> GetListLocationByLevel(ELocationLevel eLocationLevel)
         {
-            var locations = await _context.Locations.Where(x => x.LocationLevel == eLocationLevel).ToListAsync();
-            List<RDTOLocation> rdtolocations = _mapper.Map<List<RDTOLocation>>(locations);
-            return rdtolocations;
+            var locations = await _context.Locations.Where(x => x.LocationLevel == eLocationLevel && x.Status == EStatusData.Active).ToListAsync();
+            if (locations.Count > 0)
+            {
+                List<RDTOLocation> rdtolocations = _mapper.Map<List<RDTOLocation>>(locations);
+                return rdtolocations;
+            }
+            return null;
+        }
+        public async Task<RDTOLocationByZipcode> GetLocationByCode(int zipcode)
+        {
+            var location = await _context.Locations.FirstOrDefaultAsync(x => x.PostalCode == zipcode && x.LocationLevel == ELocationLevel.District && x.Status == EStatusData.Active);
+            if (location != null)
+            {
+                var rdtolocation = _mapper.Map<RDTOLocationByZipcode>(location);
+                if (location.LocationOf.HasValue)
+                {
+                    var LocationOfString = await GetLocationById(location.LocationOf.Value);
+                    rdtolocation.LocationOfString = LocationOfString.LocationName;
+                }
+                rdtolocation.LocationLevelString = Enum.GetName(typeof(ELocationLevel), location.LocationLevel);
+                return rdtolocation;
+            }
+            return null;
         }
     }
 }

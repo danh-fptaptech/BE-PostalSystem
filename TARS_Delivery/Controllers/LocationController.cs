@@ -16,7 +16,7 @@ namespace TARS_Delivery.Controllers
         {
             _iLocationRepository = iLocationRepository;
         }
-
+        //Get all Locations
         [HttpGet]
         public async Task<IActionResult> GetAllLocations()
         {
@@ -30,6 +30,7 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Get Location by Id
         [HttpGet("{id}")]
         public async Task<ActionResult<Location>> GetLocationById(int id)
         {
@@ -43,6 +44,7 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Add Location
         [HttpPost]
         public async Task<ActionResult> AddLocation(Location location)
         {
@@ -63,6 +65,7 @@ namespace TARS_Delivery.Controllers
                 return BadRequest(ModelState);
             }
         }
+        //Update Location
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateLocation(Location location)
         {
@@ -83,32 +86,21 @@ namespace TARS_Delivery.Controllers
                 return BadRequest(ModelState);
             }
         }
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteLocation(int id)
-        {
-            try
-            {
-                await _iLocationRepository.DeleteLocation(id);
-                return Ok("Delete successfully");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
+        //Change Status
         [HttpPut("ChangeStatus/{id}")]
         public async Task<ActionResult> UpdateStatus(int id)
         {
             try
             {
                 await _iLocationRepository.UpdateStatus(id);
-                return Ok();
+                return Ok("Update successfully");
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Get Child Location
         [HttpGet("GetChildLocation/{id}")]
         public async Task<ActionResult> GetChildLocation(int id)
         {
@@ -119,30 +111,25 @@ namespace TARS_Delivery.Controllers
                 if (location is RDTOLocationCountry)
                 {
                     var countryChild = (RDTOLocationCountry)location;
-                    // Xử lý khi là RDTOLocationCountry
                     return Ok(countryChild);
                 }
                 else if (location is RDTOLocationProvince)
                 {
                     var provinceChild = (RDTOLocationProvince)location;
-                    // Xử lý khi là RDTOLocationProvince
                     return Ok(provinceChild);
                 }
                 else if (location is RDTOLocationCity)
                 {
                     var cityChild = (RDTOLocationCity)location;
-                    // Xử lý khi là RDTOLocationCity
                     return Ok(cityChild);
                 }
                 else if (location is RDTOLocationDistric)
                 {
                     var districChild = (RDTOLocationDistric)location;
-                    // Xử lý khi là RDTOLocationDistric
                     return Ok(districChild);
                 }
                 else
                 {
-                    // Xử lý khi là đối tượng không xác định
                     return Ok(location);
                 }
             }
@@ -151,6 +138,7 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Get List Location By Level
         [HttpGet("GetListLocationByLevel/{eLocationLevel}")]
         public async Task<ActionResult<List<RDTOLocation>>> GetListLocationByLevel(string eLocationLevel)
         {
@@ -177,6 +165,27 @@ namespace TARS_Delivery.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+        //Get Location by ZipCode
+        [HttpGet("GetLocationByZipCode/{zipCode}")]
+        public async Task<ActionResult> GetLocationByZipCode(int zipCode)
+        {
+            try
+            {
+                var location = await _iLocationRepository.GetLocationByCode(zipCode);
+                if (location != null)
+                {
+                    return Ok(location);
+                }
+                else
+                {
+                    return NotFound("Location not found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }
