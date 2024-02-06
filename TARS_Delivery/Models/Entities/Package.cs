@@ -12,13 +12,13 @@ namespace TARS_Delivery.Models.Entities
         public string TrackingCode { get; set; }
         public string NameFrom { get; set; }
         public string AddressFrom { get; set; }
-        public int PostalCodeFrom { get; set; }
+        public string PostalCodeFrom { get; set; }
         public string NameTo { get; set; }
         public string AddressTo { get; set; }
-        public int PostalCodeTo { get; set; }
-        public string PackageNote { get; set; }
+        public string PostalCodeTo { get; set; }
+        public string? PackageNote { get; set; }
         public decimal TotalFee { get; set; }
-        public string Photos { get; set; }
+        public string? Photos { get; set; }
         public int ServiceId { get; set; }
         public int UserId { get; set; }
         public EPackageStatus Step { get; set; }

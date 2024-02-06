@@ -8,10 +8,23 @@ namespace TARS_Delivery.Models;
 public class DtoProfile : Profile
 {
     public DtoProfile() {
+      
+        #region Request DTOs
+        
         
         CreateMap<Branch, RDTOBranch>().ReverseMap();
+        
+
+        #endregion
+
+        #region Response DTOs
+
+        
         CreateMap<Branch, SDTOBranch>().ReverseMap();
         
+        CreateMap<Package, SDTOPackage>().ReverseMap();
+
+        #endregion
         
     }
 }
