@@ -15,14 +15,11 @@ namespace TARS_Delivery.Models.Entities
         public int ItemQuantity { get; set; }
         public decimal ItemValue { get; set; }
         public EItemType ItemType { get; set; }
-        public int BranchId { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public DateTime? CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         public EStatusData Status { get; set; }
         
         [ForeignKey("PackageId")]
         public virtual Package Package { get; set; }
-        [ForeignKey("BranchId")]
-        public virtual Branch Branch { get; set; }
     }
 }
