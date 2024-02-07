@@ -124,7 +124,7 @@ namespace TARS_Delivery.Repositories.imp
                                 }).ToList()
                         }).ToList()
                     };
-                    return Task.FromResult<object>(countryChild);
+                    return Task.FromResult<object>(countryChild).Result;
                 }
             }
             else if (location.LocationLevel == ELocationLevel.Province)
@@ -161,7 +161,7 @@ namespace TARS_Delivery.Repositories.imp
                                 }).ToList()
                         }).ToList()
                     };
-                    return Task.FromResult<object>(provinceChild);
+                    return Task.FromResult<object>(provinceChild).Result;
                 }
             }
             else if (location.LocationLevel == ELocationLevel.City)
@@ -189,14 +189,14 @@ namespace TARS_Delivery.Repositories.imp
                         Status = location.Status,
                         districs = districs.Count > 0 ? districs : null
                     };
-                    return Task.FromResult<object>(cityChild);
+                    return Task.FromResult<object>(cityChild).Result;
                 }
             }
             else if (location.LocationLevel == ELocationLevel.District)
             {
                 return Task.FromResult<object>(null);
             }
-            return Task.FromResult<object>(location);
+            return Task.FromResult<object>(location).Result;
         }
 
 
