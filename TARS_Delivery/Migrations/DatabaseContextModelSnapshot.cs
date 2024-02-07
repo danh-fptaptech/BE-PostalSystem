@@ -38,11 +38,7 @@ namespace TARS_Delivery.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("District")
@@ -53,8 +49,9 @@ namespace TARS_Delivery.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PostalCode")
-                        .HasColumnType("int");
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Province")
                         .IsRequired()
@@ -63,7 +60,7 @@ namespace TARS_Delivery.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -83,15 +80,7 @@ namespace TARS_Delivery.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("District")
@@ -106,9 +95,6 @@ namespace TARS_Delivery.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PostalCode")
-                        .HasColumnType("int");
-
                     b.Property<string>("Province")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -119,7 +105,7 @@ namespace TARS_Delivery.Migrations
                     b.Property<int>("TypeInfo")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
@@ -151,11 +137,7 @@ namespace TARS_Delivery.Migrations
                     b.Property<int>("BranchId")
                         .HasColumnType("int");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("District")
@@ -182,9 +164,6 @@ namespace TARS_Delivery.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PostalCode")
-                        .HasColumnType("int");
-
                     b.Property<string>("Province")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -196,10 +175,9 @@ namespace TARS_Delivery.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SubmitedInfo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -231,10 +209,10 @@ namespace TARS_Delivery.Migrations
                     b.Property<decimal>("FeeCharge")
                         .HasColumnType("decimal(12,2)");
 
-                    b.Property<int>("PostalCodeFrom")
+                    b.Property<int>("LocationIdFrom")
                         .HasColumnType("int");
 
-                    b.Property<int>("PostalCodeTo")
+                    b.Property<int>("LocationIdTo")
                         .HasColumnType("int");
 
                     b.Property<int>("ServiceId")
@@ -251,9 +229,9 @@ namespace TARS_Delivery.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PostalCodeFrom");
+                    b.HasIndex("LocationIdFrom");
 
-                    b.HasIndex("PostalCodeTo");
+                    b.HasIndex("LocationIdTo");
 
                     b.HasIndex("ServiceId");
 
@@ -273,7 +251,6 @@ namespace TARS_Delivery.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SettingValue")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -292,21 +269,19 @@ namespace TARS_Delivery.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<string>("HistoryNote")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
 
                     b.Property<string>("Photos")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -315,7 +290,7 @@ namespace TARS_Delivery.Migrations
                     b.Property<int>("Step")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -335,10 +310,7 @@ namespace TARS_Delivery.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ItemName")
@@ -363,12 +335,10 @@ namespace TARS_Delivery.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
 
                     b.HasIndex("PackageId");
 
@@ -383,7 +353,7 @@ namespace TARS_Delivery.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("LocationLevel")
@@ -396,13 +366,13 @@ namespace TARS_Delivery.Migrations
                     b.Property<int?>("LocationOf")
                         .HasColumnType("int");
 
-                    b.Property<int>("PostalCode")
-                        .HasColumnType("int");
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -440,18 +410,18 @@ namespace TARS_Delivery.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PackageNote")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Photos")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCodeFrom")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PostalCodeFrom")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostalCodeTo")
-                        .HasColumnType("int");
+                    b.Property<string>("PostalCodeTo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
@@ -555,15 +525,10 @@ namespace TARS_Delivery.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ServiceDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ServiceImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ServiceName")
@@ -573,7 +538,10 @@ namespace TARS_Delivery.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<int>("TypeService")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -590,10 +558,9 @@ namespace TARS_Delivery.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -609,13 +576,12 @@ namespace TARS_Delivery.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -624,7 +590,8 @@ namespace TARS_Delivery.Migrations
                         .IsUnique();
 
                     b.HasIndex("Phone")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Phone] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
@@ -663,13 +630,13 @@ namespace TARS_Delivery.Migrations
                 {
                     b.HasOne("TARS_Delivery.Models.Entities.Location", "LocationFrom")
                         .WithMany()
-                        .HasForeignKey("PostalCodeFrom")
+                        .HasForeignKey("LocationIdFrom")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TARS_Delivery.Models.Entities.Location", "LocationTo")
                         .WithMany()
-                        .HasForeignKey("PostalCodeTo")
+                        .HasForeignKey("LocationIdTo")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -707,19 +674,11 @@ namespace TARS_Delivery.Migrations
 
             modelBuilder.Entity("TARS_Delivery.Models.Entities.Item", b =>
                 {
-                    b.HasOne("TARS_Delivery.Models.Entities.Branch", "Branch")
-                        .WithMany("Items")
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("TARS_Delivery.Models.Entities.Package", "Package")
                         .WithMany("Items")
                         .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Branch");
 
                     b.Navigation("Package");
                 });
@@ -781,8 +740,6 @@ namespace TARS_Delivery.Migrations
             modelBuilder.Entity("TARS_Delivery.Models.Entities.Branch", b =>
                 {
                     b.Navigation("Employees");
-
-                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("TARS_Delivery.Models.Entities.Employee", b =>

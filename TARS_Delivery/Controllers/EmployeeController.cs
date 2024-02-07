@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security;
+using TARS_Delivery.Helpers;
 using TARS_Delivery.Models.DTOs;
+using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Services.imp;
 
@@ -12,11 +14,11 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly EmployeeService service;
+        private readonly EmployeeService _service;
 
-        public EmployeeController(EmployeeService service, IMapper mapper)
+        public EmployeeController(EmployeeService service)
         {
-            this.service = service;
+            _service = service;
         }
 
 
@@ -25,7 +27,7 @@ namespace TARS_Delivery.Controllers
         {
             try
             {
-                var employees = await service.GetEmployees();
+                var employees = await _service.GetEmployees();
                 return Ok(employees);
             }
             catch (Exception)
@@ -40,7 +42,7 @@ namespace TARS_Delivery.Controllers
         {
             try
             {
-                var employee = await service.GetEmployee(id);
+                var employee = await _service.GetEmployee(id);
                 if (employee != null)
                 {
                     return Ok(employee);
@@ -55,37 +57,36 @@ namespace TARS_Delivery.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> CreateEmployee([FromForm] EmployeeDTO employeeDTO, IFormFile file)
+        public async Task<ActionResult> CreateEmployee([FromForm] RDTOEmployee employee)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await service.Create(employeeDTO, file);
-                    return Ok("Adding new employee is successful.");
+                    await _service.Create(employee);
+                    return Ok(employee);
                 }
                 return BadRequest();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ModelState.AddModelError("PermissionName", ex.Message);
-                return Problem(ex.Message);
+                throw;
             }
         }
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateEmployee(int id, Employee employee)
+        public async Task<ActionResult> UpdatePassword(int id, [FromForm] UpdatePassword employee)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var existedEmployee = await service.GetEmployee(id);
-                    if (existedEmployee != null)
+                    var updatedEmployee = await _service.GetEmployee(id);
+                    if (updatedEmployee != null)
                     {
-                        existedEmployee.Password = employee.Password;
-                        return Ok(existedEmployee);
+                        await _service.UpdatePassword(id, employee);
+                        return Ok(updatedEmployee);
                     }
                     return NotFound("This employee does not exist !");
                 }
@@ -97,24 +98,27 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-
-        /*[HttpDelete("{id}")]
-        public async Task<ActionResult> RemoveEmployee(int id)
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> UpdateInfo(int id, [FromForm] EmployeeUpdateInfo employee)
         {
             try
             {
-                Employee employee = await service.GetEmployee(id);
-                if (employee != null)
+                if (ModelState.IsValid)
                 {
-                    await service.Remove(id);
-                    return Ok("Delete Successfully.");
+                    var updatedEmployee = await _service.GetEmployee(id);
+                    if (updatedEmployee != null)
+                    {
+                        await _service.UpdateInfo(id, employee);
+                        return Ok(updatedEmployee);
+                    }
+                    return NotFound("This employee does not exist !");
                 }
-                return NotFound("This employee does not exist !");
+                return BadRequest();
             }
             catch (Exception)
             {
                 throw;
             }
-        }*/
+        }
     }
 }

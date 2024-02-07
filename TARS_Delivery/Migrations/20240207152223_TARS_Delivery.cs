@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TARS_Delivery.Migrations
 {
     /// <inheritdoc />
-    public partial class eProject : Migration
+    public partial class TARS_Delivery : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,11 +21,10 @@ namespace TARS_Delivery.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -40,7 +39,7 @@ namespace TARS_Delivery.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SettingName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SettingValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SettingValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -55,11 +54,11 @@ namespace TARS_Delivery.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LocationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<int>(type: "int", nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LocationLevel = table.Column<int>(type: "int", nullable: false),
                     LocationOf = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -107,10 +106,10 @@ namespace TARS_Delivery.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ServiceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ServiceDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ServiceImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ServiceDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeService = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -127,10 +126,10 @@ namespace TARS_Delivery.Migrations
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -150,16 +149,14 @@ namespace TARS_Delivery.Migrations
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<int>(type: "int", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SubmitedInfo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubmitedInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BranchId = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -218,8 +215,8 @@ namespace TARS_Delivery.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
-                    PostalCodeFrom = table.Column<int>(type: "int", nullable: false),
-                    PostalCodeTo = table.Column<int>(type: "int", nullable: false),
+                    LocationIdFrom = table.Column<int>(type: "int", nullable: false),
+                    LocationIdTo = table.Column<int>(type: "int", nullable: false),
                     Distance = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     FeeCharge = table.Column<decimal>(type: "decimal(12,2)", nullable: false),
                     TimeProcess = table.Column<int>(type: "int", nullable: false),
@@ -231,14 +228,14 @@ namespace TARS_Delivery.Migrations
                 {
                     table.PrimaryKey("PK_FeeCustoms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FeeCustoms_Locations_PostalCodeFrom",
-                        column: x => x.PostalCodeFrom,
+                        name: "FK_FeeCustoms_Locations_LocationIdFrom",
+                        column: x => x.LocationIdFrom,
                         principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_FeeCustoms_Locations_PostalCodeTo",
-                        column: x => x.PostalCodeTo,
+                        name: "FK_FeeCustoms_Locations_LocationIdTo",
+                        column: x => x.LocationIdTo,
                         principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -261,13 +258,10 @@ namespace TARS_Delivery.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCode = table.Column<int>(type: "int", nullable: false),
                     TypeInfo = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -290,13 +284,13 @@ namespace TARS_Delivery.Migrations
                     TrackingCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     NameFrom = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressFrom = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCodeFrom = table.Column<int>(type: "int", nullable: false),
+                    PostalCodeFrom = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NameTo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressTo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PostalCodeTo = table.Column<int>(type: "int", nullable: false),
-                    PackageNote = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostalCodeTo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PackageNote = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Photos = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Photos = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Step = table.Column<int>(type: "int", nullable: false),
@@ -330,10 +324,10 @@ namespace TARS_Delivery.Migrations
                     PackageId = table.Column<int>(type: "int", nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     Step = table.Column<int>(type: "int", nullable: false),
-                    HistoryNote = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Photos = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    HistoryNote = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Photos = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -365,20 +359,13 @@ namespace TARS_Delivery.Migrations
                     ItemQuantity = table.Column<int>(type: "int", nullable: false),
                     ItemValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ItemType = table.Column<int>(type: "int", nullable: false),
-                    BranchId = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Items_Branches_BranchId",
-                        column: x => x.BranchId,
-                        principalTable: "Branches",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Items_Packages_PackageId",
                         column: x => x.PackageId,
@@ -409,14 +396,14 @@ namespace TARS_Delivery.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeeCustoms_PostalCodeFrom",
+                name: "IX_FeeCustoms_LocationIdFrom",
                 table: "FeeCustoms",
-                column: "PostalCodeFrom");
+                column: "LocationIdFrom");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FeeCustoms_PostalCodeTo",
+                name: "IX_FeeCustoms_LocationIdTo",
                 table: "FeeCustoms",
-                column: "PostalCodeTo");
+                column: "LocationIdTo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FeeCustoms_ServiceId",
@@ -432,11 +419,6 @@ namespace TARS_Delivery.Migrations
                 name: "IX_HistoryLogs_PackageId",
                 table: "HistoryLogs",
                 column: "PackageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Items_BranchId",
-                table: "Items",
-                column: "BranchId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_PackageId",
@@ -484,7 +466,8 @@ namespace TARS_Delivery.Migrations
                 name: "IX_Users_Phone",
                 table: "Users",
                 column: "Phone",
-                unique: true);
+                unique: true,
+                filter: "[Phone] IS NOT NULL");
         }
 
         /// <inheritdoc />

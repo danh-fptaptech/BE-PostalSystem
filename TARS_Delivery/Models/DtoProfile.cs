@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using TARS_Delivery.Models.DTOs;
+using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Models;
@@ -7,10 +9,24 @@ namespace TARS_Delivery.Models;
 public class DtoProfile : Profile
 {
     public DtoProfile() {
+      
+        #region Request DTOs
+        
         
         CreateMap<Branch, RDTOBranch>().ReverseMap();
+        CreateMap<Employee, RDTOEmployee>().ReverseMap();
+
+
+        #endregion
+
+        #region Response DTOs
+
+
         CreateMap<Branch, SDTOBranch>().ReverseMap();
-        CreateMap<Employee, EmployeeDTO>().ReverseMap();
+        CreateMap<Package, SDTOPackage>().ReverseMap();
+        CreateMap<Employee, SDTOEmployee>().ReverseMap();
+
+        #endregion
 
     }
 }

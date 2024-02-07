@@ -2,89 +2,97 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 using TARS_Delivery.Helpers;
 using TARS_Delivery.Models;
-using TARS_Delivery.Models.DTOs;
+using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories.imp
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private readonly DatabaseContext databaseContext;
+        private readonly DatabaseContext _context;
         private readonly IMapper mapper;
-        public EmployeeRepository(DatabaseContext databaseContext, IMapper mapper)
+        public EmployeeRepository(DatabaseContext context, IMapper mapper)
         {
-            this.databaseContext = databaseContext;
+            _context = context;
             this.mapper = mapper;
         }
 
 
-        public async Task<IEnumerable<EmployeeDTO>> GetEmployees()
+        public async Task<IEnumerable<SDTOEmployee>> GetEmployees()
         {
-            IEnumerable<Employee> employees = await databaseContext.Employees.ToListAsync();
-            var employeeDTO  = mapper.Map<EmployeeDTO>(employees);
-            return (IEnumerable<EmployeeDTO>)employeeDTO;
+            IEnumerable<Employee> employees = await _context.Employees.ToListAsync();
+            return mapper.Map<IEnumerable<SDTOEmployee>>(employees);
         }    
 
 
-        public async Task<EmployeeDTO> GetEmployee(int id)
+        public async Task<Employee> GetEmployee(int id)
         {
-            Employee? employee = await databaseContext.Employees.FindAsync(id);
-            if (employee != null) 
+            return await _context.Employees.FindAsync(id);
+        }
+
+
+        public async Task<Employee> Create(Employee employee)
+        {
+            try
             {
-                var employeeDTO = mapper.Map<EmployeeDTO>(employee);
-                return employeeDTO;
+                await _context.Employees.AddAsync(employee);
+                await _context.SaveChangesAsync();
+                return employee;
             }
-            return null;
-        }
-
-
-        public async Task<EmployeeDTO> Create([FromForm] EmployeeDTO employeeDTO, IFormFile file)
-        {
-            Employee employee = mapper.Map<Employee>(employeeDTO);
-            employeeDTO.Avatar = FileUpload.SaveFile("Avatar", file);
-            await databaseContext.Employees.AddAsync(employee);
-            await databaseContext.SaveChangesAsync();
-            return employeeDTO;
-        }
-
-        public async Task<EmployeeDTO> Update(int id, [FromForm] EmployeeDTO employeeDTO, IFormFile file)
-        {
-            Employee updatedEmployee = await databaseContext.Employees.FindAsync(id);
-            if (updatedEmployee != null)
+            catch (Exception e)
             {
-                if (file != null)
+                Console.WriteLine(e);
+                throw;
+                //throw new Exception("Error when trying to create new employee.");
+            }
+        }
+
+        public async Task<Employee> UpdatePassword(int id, UpdatePassword employee)
+        {
+            try
+            {
+                Employee updatedEmployee = await _context.Employees.FindAsync(id);
+                if(updatedEmployee != null)
                 {
-                    if (updatedEmployee.Avatar != null)
+                    if (!string.IsNullOrEmpty(updatedEmployee.Password))
                     {
-                        FileUpload.DeleteFile(updatedEmployee.Avatar);
+                        updatedEmployee.Password = employee.Password;
                     }
 
-                    employeeDTO.Avatar = FileUpload.SaveFile("Avatar", file);
+                    updatedEmployee.UpdatedAt = DateTime.Now;
+
+                    await _context.SaveChangesAsync();
+                    return updatedEmployee;
                 }
 
-                updatedEmployee.Password = employeeDTO.Password;
-                updatedEmployee.Address = employeeDTO.Address;
-                updatedEmployee.PhoneNumber = employeeDTO.PhoneNumber;
-
-                await databaseContext.SaveChangesAsync();
+                throw new Exception("Employee not found !");
             }
-
-            return null;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
+        private static string GenerateSubmittedInfo(RDTOEmployee employee)
+        {
+            string submitedInfo = 
+                $"Address: {employee.Address}, " +
+                $"Province: {employee.Province}, " +
+                $"District: {employee.District}, " +
+                $"PhoneNumber: {employee.PhoneNumber}, " +
+                $"BranchId: {employee.BranchId}, ";
 
-        //public async Task<Employee> Remove(int id)
-        //{
-        //    Employee? employee = await databaseContext.Employees.FindAsync(id);
-        //    if(employee != null)
-        //    {
-        //        databaseContext.Employees.Remove(employee);
-        //        await databaseContext.SaveChangesAsync();
-        //    }
-        //    return null;
-        //} 
+            return submitedInfo;
+        }
 
+        public Task<Employee> UpdateInfo(int id, EmployeeUpdateInfo employee)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

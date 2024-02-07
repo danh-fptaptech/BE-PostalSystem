@@ -11,12 +11,10 @@ namespace TARS_Delivery.Controllers
     public class PermissionController : ControllerBase
     {
         private readonly PermissionService service;
-        private readonly IMapper mapper;
 
-        public PermissionController(PermissionService service, IMapper mapper)
+        public PermissionController(PermissionService service)
         {
             this.service = service;
-            this.mapper = mapper;
         }
 
 

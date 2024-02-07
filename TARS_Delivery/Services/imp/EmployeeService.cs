@@ -1,41 +1,68 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TARS_Delivery.Helpers;
 using TARS_Delivery.Models.DTOs;
+using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Models.Enum;
 using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Services.imp
 {
     public class EmployeeService : IEmployeeService
     { 
-        private readonly IEmployeeRepository repository;
+        private readonly IEmployeeRepository _repository;
         public EmployeeService (IEmployeeRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
-        public async Task<IEnumerable<EmployeeDTO>> GetEmployees()
+        public async Task<IEnumerable<SDTOEmployee>> GetEmployees()
         {
-            return await repository.GetEmployees();
+            return await _repository.GetEmployees();
         }
 
-        public async Task<EmployeeDTO> GetEmployee(int id)
+        public async Task<Employee> GetEmployee(int id)
         {
-            return await repository.GetEmployee(id);
+            return await _repository.GetEmployee(id);
         }
 
-        public async Task<EmployeeDTO> Create(EmployeeDTO employeeDTO, IFormFile file)
+        public async Task<Employee> Create(RDTOEmployee employee)
         {
-            return await repository.Create(employeeDTO, file);
+            Employee newEmployee = new()
+            {
+                EmployeeCode = employee.EmployeeCode,
+                Email = employee.Email,
+                Password = employee.Password,
+                Fullname = employee.Fullname,
+                Address = employee.Address,
+                Province = employee.Province,
+                District = employee.District,
+                PhoneNumber = employee.PhoneNumber,
+                SubmitedInfo = null,
+                Avatar = employee.Avatar,
+                BranchId = employee.BranchId,
+                RoleId = employee.RoleId,
+                Status = EStatusData.Active,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
+            };
+            return await _repository.Create(newEmployee);
         }
 
-        public async Task<EmployeeDTO> Update(int id, EmployeeDTO employeeDTO, IFormFile file)
+        public async Task<Employee> UpdatePassword(int id, UpdatePassword employee)
         {
-            return await repository.Update(id, employeeDTO, file);
+            var updatedEmployee = await _repository.GetEmployee(id);
+            if (updatedEmployee == null)
+            {
+                throw new Exception("Employee not found !");
+            }
+            return await _repository.UpdatePassword(id, employee);
         }
 
-        //public async Task<Employee> Remove(int id)
-        //{
-        //    return await repository.Remove(id);
-        //}
+        public Task<Employee> UpdateInfo(int id, EmployeeUpdateInfo employee)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

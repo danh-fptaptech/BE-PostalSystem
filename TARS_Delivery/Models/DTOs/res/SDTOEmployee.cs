@@ -1,13 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Models.Enum;
 
-namespace TARS_Delivery.Models.Entities
+namespace TARS_Delivery.Models.DTOs.res
 {
-    public class Employee
+    public class SDTOEmployee
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string EmployeeCode { get; set; }
         public string Email { get; set; }
@@ -19,16 +17,8 @@ namespace TARS_Delivery.Models.Entities
         public string PhoneNumber { get; set; }
         public string Avatar { get; set; }
         public string? SubmitedInfo { get; set; }
-        public int BranchId { get; set; }
-        public int RoleId { get; set; }
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         public EStatusData Status { get; set; }
-
-        [ForeignKey("BranchId")]
-        public virtual Branch Branch { get; set; }
-        [ForeignKey("RoleId")]
-        public virtual Role Role { get; set; }
-        public virtual ICollection<HistoryLog>? HistoryLogs { get; set; }
     }
 }
