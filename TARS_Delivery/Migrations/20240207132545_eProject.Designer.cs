@@ -12,8 +12,8 @@ using TARS_Delivery.Models;
 namespace TARS_Delivery.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240201170059_TARS_Delivery")]
-    partial class TARS_Delivery
+    [Migration("20240207132545_eProject")]
+    partial class eProject
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

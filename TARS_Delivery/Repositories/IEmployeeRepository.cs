@@ -14,7 +14,5 @@ namespace TARS_Delivery.Repositories
 
         Task<EmployeeDTO> Update(int id, EmployeeDTO employeeDTO, IFormFile file);
 
-        //Task<Employee> Remove(int id);
-
     }
 }

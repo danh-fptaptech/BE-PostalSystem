@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TARS_Delivery.Migrations
 {
     /// <inheritdoc />
-    public partial class TARS_Delivery : Migration
+    public partial class eProject : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
