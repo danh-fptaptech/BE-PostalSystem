@@ -12,10 +12,10 @@ namespace TARS_Delivery.Models.Entities
         public int PackageId { get; set; }
         public int EmployeeId { get; set; }
         public EPackageStatus Step { get; set; }
-        public string HistoryNote { get; set; }
-        public string Photos { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public string? HistoryNote { get; set; }
+        public string? Photos { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         public EStatusData Status { get; set; }
 
         // Navigation properties

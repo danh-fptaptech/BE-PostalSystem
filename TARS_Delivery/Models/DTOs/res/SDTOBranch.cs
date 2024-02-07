@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using TARS_Delivery.Models.Enum;
 
-namespace TARS_Delivery.Models.Entities
+namespace TARS_Delivery.Models.DTOs.res
 {
     public class SDTOBranch
     {
@@ -20,13 +19,7 @@ namespace TARS_Delivery.Models.Entities
         public string District { get; set; }
 
         public int PostalCode { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-
-        public virtual ICollection<Employee> Employees { get; set; }
-
-        public virtual ICollection<Item> Items { get; set; }
         
+        public EStatusData Status { get; set; }
     }
 }

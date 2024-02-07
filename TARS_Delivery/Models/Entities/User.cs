@@ -15,15 +15,15 @@ public class User
     public required string Email { get; set; }
     [Required]
     public required string Password { get; set; }
-    public string Phone { get; set; }
-    public string Avatar { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    public string? Phone { get; set; }
+    public string? Avatar { get; set; }
+    public DateTime? CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? UpdatedAt { get; set; } = DateTime.Now;
     public EStatusData Status { get; set; }
     // Relation with Customer
-    public virtual ICollection<Customer> Customers { get; set; }
+    public virtual ICollection<Customer>? Customers { get; set; }
 
     // Relation with Package
-    public virtual ICollection<Package> Packages { get; set; }
+    public virtual ICollection<Package>? Packages { get; set; }
 
 }

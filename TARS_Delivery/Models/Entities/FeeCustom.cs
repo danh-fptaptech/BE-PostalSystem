@@ -9,10 +9,9 @@ namespace TARS_Delivery.Models.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
         public int ServiceId { get; set; }
-        public int PostalCodeFrom { get; set; }
-        public int PostalCodeTo { get; set; }
+        public int LocationIdFrom { get; set; }
+        public int LocationIdTo { get; set; }
         [Column(TypeName = "decimal(12,2)")]
         public decimal Distance { get; set; }
         [Column(TypeName = "decimal(12,2)")]
@@ -24,9 +23,9 @@ namespace TARS_Delivery.Models.Entities
 
         [ForeignKey("ServiceId")]
         public Service? Service { get; set; }
-        [ForeignKey("PostalCodeFrom")]
+        [ForeignKey("LocationIdFrom")]
         public Location? LocationFrom { get; set; }
-        [ForeignKey("PostalCodeTo")]
+        [ForeignKey("LocationIdTo")]
         public Location? LocationTo { get; set; }
     }
 }
