@@ -21,6 +21,7 @@ namespace TARS_Delivery.Models.Entities
         public string PhoneNumber { get; set; }
         public string Avatar { get; set; }
         public string SubmitedInfo { get; set; }
+
         public int BranchId { get; set; }
         public int RoleId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;

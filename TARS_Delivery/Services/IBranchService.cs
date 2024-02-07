@@ -1,6 +1,6 @@
-﻿namespace TARS_Delivery.Services;
+﻿using TARS_Delivery.Models.Entities;
 
-public interface IBranchService
+internal interface IBranchService
 {
     
 }
