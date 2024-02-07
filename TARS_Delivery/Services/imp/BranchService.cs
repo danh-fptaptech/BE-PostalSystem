@@ -32,7 +32,6 @@ public class BranchService : IBranchService
             BranchName = branch.BranchName,
             Address = branch.Address,
             Province = branch.Province,
-            City = branch.City,
             District = branch.District,
             PhoneNumber = branch.PhoneNumber,
             PostalCode = branch.PostalCode,

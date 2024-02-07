@@ -14,7 +14,6 @@ namespace TARS_Delivery.Seeders
                     Id = 1,
                     ServiceName = "EMS Delivery Service",
                     ServiceDescription = "Fast and secure international delivery service",
-                    ServiceImage = "ems_delivery.jpg",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                     Status = EStatusData.Active
@@ -24,7 +23,6 @@ namespace TARS_Delivery.Seeders
                     Id = 2,
                     ServiceName = "Freight Delivery Services",
                     ServiceDescription = "Reliable freight and cargo delivery solutions",
-                    ServiceImage = "freight_delivery.jpg",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                     Status = EStatusData.Active
@@ -34,7 +32,6 @@ namespace TARS_Delivery.Seeders
                     Id = 3,
                     ServiceName = "Express Delivery",
                     ServiceDescription = "Fast and convenient express delivery service",
-                    ServiceImage = "express_delivery.jpg",
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                     Status = EStatusData.Active

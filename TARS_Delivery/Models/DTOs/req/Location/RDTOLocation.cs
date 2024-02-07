@@ -6,7 +6,7 @@ namespace TARS_Delivery.Models.DTOs.req.Location
     {
         public int Id { get; set; }
         public string LocationName { get; set; }
-        public int PostalCode { get; set; }
+        public string PostalCode { get; set; }
         public ELocationLevel LocationLevel { get; set; }
         public int? LocationOf { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;

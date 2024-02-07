@@ -108,24 +108,19 @@ namespace TARS_Delivery.Controllers
             {
                 var location = await _iLocationRepository.GetChildLocation(id);
 
-                if (location is RDTOLocationCountry)
+                if (location is RDTOLocationProvince)
                 {
-                    var countryChild = (RDTOLocationCountry)location;
+                    var countryChild = (RDTOLocationProvince)location;
                     return Ok(countryChild);
-                }
-                else if (location is RDTOLocationProvince)
-                {
-                    var provinceChild = (RDTOLocationProvince)location;
-                    return Ok(provinceChild);
-                }
-                else if (location is RDTOLocationCity)
-                {
-                    var cityChild = (RDTOLocationCity)location;
-                    return Ok(cityChild);
                 }
                 else if (location is RDTOLocationDistric)
                 {
                     var districChild = (RDTOLocationDistric)location;
+                    return Ok(districChild);
+                }
+                else if (location is RDTOLocationWard)
+                {
+                    var districChild = (RDTOLocationWard)location;
                     return Ok(districChild);
                 }
                 else
@@ -146,20 +141,17 @@ namespace TARS_Delivery.Controllers
             {
                 switch (eLocationLevel.ToLower())
                 {
-                    case "country":
-                        var country = await _iLocationRepository.GetListLocationByLevel(ELocationLevel.Country);
-                        return Ok(country);
                     case "province":
                         var province = await _iLocationRepository.GetListLocationByLevel(ELocationLevel.Province);
                         return Ok(province);
-                    case "city":
-                        var city = await _iLocationRepository.GetListLocationByLevel(ELocationLevel.City);
-                        return Ok(city);
                     case "district":
                         var distric = await _iLocationRepository.GetListLocationByLevel(ELocationLevel.District);
                         return Ok(distric);
+                    case "ward":
+                        var ward = await _iLocationRepository.GetListLocationByLevel(ELocationLevel.Ward);
+                        return Ok(ward);
                     default:
-                        return NotFound("Please choice [Country,Province,City,District]");
+                        return NotFound("Please choice [Province,District,Ward]");
                 }
             }
             catch (Exception)
@@ -169,7 +161,7 @@ namespace TARS_Delivery.Controllers
         }
         //Get Location by ZipCode
         [HttpGet("GetLocationByZipCode/{zipCode}")]
-        public async Task<ActionResult> GetLocationByZipCode(int zipCode)
+        public async Task<ActionResult> GetLocationByZipCode(string zipCode)
         {
             try
             {

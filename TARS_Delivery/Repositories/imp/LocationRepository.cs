@@ -78,55 +78,6 @@ namespace TARS_Delivery.Repositories.imp
             {
                 return Task.FromResult<object>(null);
             }
-
-            if (location.LocationLevel == ELocationLevel.Country)
-            {
-                var locationChild = await _context.Locations.Where(x => x.LocationOf == id && x.Status == EStatusData.Active).ToListAsync();
-                if (locationChild.Any())
-                {
-                    var countryChild = new RDTOLocationCountry
-                    {
-                        Id = location.Id,
-                        LocationName = location.LocationName,
-                        PostalCode = location.PostalCode,
-                        LocationLevel = location.LocationLevel,
-                        LocationOf = location.LocationOf,
-                        Status = location.Status,
-                        provinces = locationChild.Select(x => new RDTOLocationProvince
-                        {
-                            Id = x.Id,
-                            LocationName = x.LocationName,
-                            PostalCode = x.PostalCode,
-                            LocationLevel = x.LocationLevel,
-                            LocationOf = x.LocationOf,
-                            Status = x.Status,
-                            cities = _context.Locations
-                                .Where(y => y.LocationOf == x.Id && x.Status == EStatusData.Active)
-                                .Select(y => new RDTOLocationCity
-                                {
-                                    Id = y.Id,
-                                    LocationName = y.LocationName,
-                                    PostalCode = y.PostalCode,
-                                    LocationLevel = y.LocationLevel,
-                                    LocationOf = y.LocationOf,
-                                    Status = y.Status,
-                                    districs = _context.Locations
-                                        .Where(z => z.LocationOf == y.Id)
-                                        .Select(z => new RDTOLocationDistric
-                                        {
-                                            Id = z.Id,
-                                            LocationName = z.LocationName,
-                                            PostalCode = z.PostalCode,
-                                            LocationLevel = z.LocationLevel,
-                                            LocationOf = z.LocationOf,
-                                            Status = z.Status
-                                        }).ToList()
-                                }).ToList()
-                        }).ToList()
-                    };
-                    return Task.FromResult<object>(countryChild).Result;
-                }
-            }
             else if (location.LocationLevel == ELocationLevel.Province)
             {
                 var locationChild = await _context.Locations.Where(x => x.LocationOf == id && x.Status == EStatusData.Active).ToListAsync();
@@ -140,7 +91,7 @@ namespace TARS_Delivery.Repositories.imp
                         LocationLevel = location.LocationLevel,
                         LocationOf = location.LocationOf,
                         Status = location.Status,
-                        cities = locationChild.Select(x => new RDTOLocationCity
+                        Districs = locationChild.Select(x => new RDTOLocationDistric
                         {
                             Id = x.Id,
                             LocationName = x.LocationName,
@@ -148,9 +99,9 @@ namespace TARS_Delivery.Repositories.imp
                             LocationLevel = x.LocationLevel,
                             LocationOf = x.LocationOf,
                             Status = x.Status,
-                            districs = _context.Locations
+                            Wards = _context.Locations
                                 .Where(y => y.LocationOf == x.Id && x.Status == EStatusData.Active)
-                                .Select(y => new RDTOLocationDistric
+                                .Select(y => new RDTOLocationWard
                                 {
                                     Id = y.Id,
                                     LocationName = y.LocationName,
@@ -164,12 +115,12 @@ namespace TARS_Delivery.Repositories.imp
                     return Task.FromResult<object>(provinceChild).Result;
                 }
             }
-            else if (location.LocationLevel == ELocationLevel.City)
+            else if (location.LocationLevel == ELocationLevel.District)
             {
                 var locationChild = await _context.Locations.Where(x => x.LocationOf == id && x.Status == EStatusData.Active).ToListAsync();
                 if (locationChild.Any())
                 {
-                    var districs =  locationChild.Select(x => new RDTOLocationDistric
+                    var wards =  locationChild.Select(x => new RDTOLocationWard
                     {
                         Id = x.Id,
                         LocationName = x.LocationName,
@@ -179,7 +130,7 @@ namespace TARS_Delivery.Repositories.imp
                         Status = x.Status
                     }).ToList();
 
-                    var cityChild = new RDTOLocationCity
+                    var districtChild = new RDTOLocationDistric
                     {
                         Id = location.Id,
                         LocationName = location.LocationName,
@@ -187,12 +138,12 @@ namespace TARS_Delivery.Repositories.imp
                         LocationLevel = location.LocationLevel,
                         LocationOf = location.LocationOf,
                         Status = location.Status,
-                        districs = districs.Count > 0 ? districs : null
+                        Wards = wards.Count > 0 ? wards : null
                     };
-                    return Task.FromResult<object>(cityChild).Result;
+                    return Task.FromResult<object>(districtChild).Result;
                 }
             }
-            else if (location.LocationLevel == ELocationLevel.District)
+            else if (location.LocationLevel == ELocationLevel.Ward)
             {
                 return Task.FromResult<object>(null);
             }
@@ -210,7 +161,7 @@ namespace TARS_Delivery.Repositories.imp
             }
             return null;
         }
-        public async Task<RDTOLocationByZipcode> GetLocationByCode(int zipcode)
+        public async Task<RDTOLocationByZipcode> GetLocationByCode(string zipcode)
         {
             var location = await _context.Locations.FirstOrDefaultAsync(x => x.PostalCode == zipcode && x.LocationLevel == ELocationLevel.District && x.Status == EStatusData.Active);
             if (location != null)

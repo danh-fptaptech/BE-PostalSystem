@@ -98,5 +98,23 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Get Services by Weight
+        [HttpGet("/GetServicesByWeight/{weight}")]
+        public async Task<IActionResult> GetServicesByWeight(int weight)
+        {
+            try
+            {
+                var services = await _iServiceRepository.GetServicesByWeight(weight);
+                if (services.Count == 0)
+                {
+                    return NotFound("No services found");
+                }
+                return Ok(services);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 }

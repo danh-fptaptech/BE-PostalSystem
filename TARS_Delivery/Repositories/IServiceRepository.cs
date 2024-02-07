@@ -10,5 +10,6 @@ namespace TARS_Delivery.Repositories
         Task<Service> UpdateService(int id, Service service);
         Task DeleteService(int id);
         Task<Service> ChangeStatus(int id);
+        Task<List<Service>> GetServicesByWeight(int weight);
     }
 }

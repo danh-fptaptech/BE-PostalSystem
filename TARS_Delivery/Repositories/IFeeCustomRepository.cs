@@ -10,6 +10,6 @@ namespace TARS_Delivery.Repositories
         Task<FeeCustom> CreateFee(FeeCustom fee);
         Task<FeeCustom> UpdateFee(int id, FeeCustom fee);
         Task ChangeStatus(int id);
-        Task<FeeCustom> GetFeeByPostalCode(int postalCodeFrom, int postalCodeTo);
+        Task<FeeCustom> GetFeeByPostalCode(string postalCodeFrom, string postalCodeTo);
     }
 }

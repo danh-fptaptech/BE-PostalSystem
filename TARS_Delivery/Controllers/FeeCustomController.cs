@@ -94,7 +94,7 @@ namespace TARS_Delivery.Controllers
         }
         //Get Fee by Postal Code
         [HttpGet("GetFeeByPostalCode/{postalCodeFrom}/{postalCodeTo}")]
-        public async Task<IActionResult> GetFeeByPostalCode(int postalCodeFrom, int postalCodeTo)
+        public async Task<IActionResult> GetFeeByPostalCode(string postalCodeFrom, string postalCodeTo)
         {
             try
             {

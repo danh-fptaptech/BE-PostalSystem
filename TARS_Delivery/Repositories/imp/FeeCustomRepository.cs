@@ -58,13 +58,16 @@ namespace TARS_Delivery.Repositories.imp
             await _context.SaveChangesAsync();
             return feeCustom;
         }
-        public async Task<FeeCustom> GetFeeByPostalCode(int postalCodeFrom, int postalCodeTo)
+        public async Task<FeeCustom> GetFeeByPostalCode(string postalCodeFrom, string postalCodeTo)
         {
-            var postalCodeFromItem = await _context.Locations.FirstOrDefaultAsync(l => l.PostalCode == postalCodeFrom && l.LocationLevel == ELocationLevel.District);
-            var postalCodeToItem = await _context.Locations.FirstOrDefaultAsync(l => l.PostalCode == postalCodeTo && l.LocationLevel == ELocationLevel.District);
+            var postalCodeFromItem = await _context.Locations
+                .FirstOrDefaultAsync(l => l.PostalCode == postalCodeFrom && l.LocationLevel == ELocationLevel.Ward);
+            var postalCodeToItem = await _context.Locations
+                .FirstOrDefaultAsync(l => l.PostalCode == postalCodeTo && l.LocationLevel == ELocationLevel.Ward);
             if (postalCodeFromItem != null || postalCodeToItem != null)
             {
-                var feeCustom = await _context.FeeCustoms.FirstOrDefaultAsync(fee => fee.PostalCodeFrom == postalCodeFromItem.Id && fee.PostalCodeTo == postalCodeToItem.Id);
+                var feeCustom = await _context.FeeCustoms
+                    .FirstOrDefaultAsync(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdFrom == postalCodeToItem.Id);
                 return feeCustom;
             }
             return null;

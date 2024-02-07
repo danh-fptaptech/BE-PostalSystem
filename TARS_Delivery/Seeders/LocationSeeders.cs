@@ -13,8 +13,8 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 1,
                     LocationName = "TP HCM",
-                    PostalCode = 700000,
-                    LocationLevel = ELocationLevel.City,
+                    PostalCode = "700000",
+                    LocationLevel = ELocationLevel.Province,
                     LocationOf = null,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
@@ -24,7 +24,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 2,
                     LocationName = "Quận 1",
-                    PostalCode = 710100,
+                    PostalCode = "710100",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -35,7 +35,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 3,
                     LocationName = "Quận 2",
-                    PostalCode = 713000,
+                    PostalCode = "713000",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -46,7 +46,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 4,
                     LocationName = "Quận 3",
-                    PostalCode = 722000,
+                    PostalCode = "722000",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -57,7 +57,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 5,
                     LocationName = "Quận 4",
-                    PostalCode = 754000,
+                    PostalCode = "754000",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -68,7 +68,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 6,
                     LocationName = "Quận 5",
-                    PostalCode = 748000,
+                    PostalCode = "748000",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -79,7 +79,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 7,
                     LocationName = "Quận 6",
-                    PostalCode = 746000,
+                    PostalCode = "746000",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -90,7 +90,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 8,
                     LocationName = "Quận 7",
-                    PostalCode = 756000,
+                    PostalCode = "756000",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -101,7 +101,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 9,
                     LocationName = "Quận 8",
-                    PostalCode = 751500,
+                    PostalCode = "751500",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -112,7 +112,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 10,
                     LocationName = "Quận 9",
-                    PostalCode = 715000,
+                    PostalCode = "715000",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -123,7 +123,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 11,
                     LocationName = "Quận 10",
-                    PostalCode = 740010,
+                    PostalCode = "740010",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -134,7 +134,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 12,
                     LocationName = "Quận 11",
-                    PostalCode = 743800,
+                    PostalCode = "743800",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -145,7 +145,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 13,
                     LocationName = "Quận 12",
-                    PostalCode = 729400,
+                    PostalCode = "729400",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -156,7 +156,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 14,
                     LocationName = "Quận Gò Vấp",
-                    PostalCode = 727010,
+                    PostalCode = "727010",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -167,7 +167,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 15,
                     LocationName = "Quận Tân Bình",
-                    PostalCode = 736090,
+                    PostalCode = "736090",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -178,7 +178,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 16,
                     LocationName = "Quận Tân Phú",
-                    PostalCode = 760000,
+                    PostalCode = "760000",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -189,7 +189,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 17,
                     LocationName = "Quận Phú Nhuận",
-                    PostalCode = 725060,
+                    PostalCode = "725060",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -200,7 +200,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 18,
                     LocationName = "Quận Bình Thạnh",
-                    PostalCode = 718440,
+                    PostalCode = "718440",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
@@ -211,7 +211,7 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 19,
                     LocationName = "Quận Thủ Đức",
-                    PostalCode = 720150,
+                    PostalCode = "720150",
                     LocationLevel = ELocationLevel.District,
                     LocationOf = 1, // TP HCM
                     CreatedAt = DateTime.Now,
