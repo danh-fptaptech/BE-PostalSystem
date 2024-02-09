@@ -1,6 +1,9 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Services.imp;
 
 namespace TARS_Delivery.Controllers
@@ -10,10 +13,12 @@ namespace TARS_Delivery.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly EmployeeService _service;
+        private readonly DatabaseContext _context;
 
-        public EmployeeController(EmployeeService service)
+        public EmployeeController(EmployeeService service, DatabaseContext context)
         {
             _service = service;
+            _context = context;
         }
 
 
@@ -63,17 +68,17 @@ namespace TARS_Delivery.Controllers
                 }
                 return BadRequest();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
 
-                ModelState.AddModelError("EmployeeCode", e.Message);
-                ModelState.AddModelError("Email", e.Message);
-                ModelState.AddModelError("PhoneNumber", e.Message);
-                return Problem(e.Message);
+                ModelState.AddModelError("EmployeeCode", ex.Message);
+                ModelState.AddModelError("Email", ex.Message);
+                ModelState.AddModelError("PhoneNumber", ex.Message);
+                return Problem(ex.Message);
             }
         }
 
-
+        
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdatePassword(int id, [FromForm] UpdatePassword employee)
         {
@@ -91,9 +96,9 @@ namespace TARS_Delivery.Controllers
                 }
                 return BadRequest();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -115,10 +120,59 @@ namespace TARS_Delivery.Controllers
                 }
                 return BadRequest();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
+
+        // Check Login
+        [HttpPost("login")]
+        public async Task<ActionResult<Employee>> CheckLogin([FromForm] RDTOEmployeeLogin employee)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    await _service.CheckLogin(employee);
+                    return Ok(employee);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /*public async Task<ActionResult<Employee>> CheckLogin(RDTOEmployeeLogin employee)
+        {
+            try
+            {
+                var existedEmployee = await _context.Employees.FirstOrDefaultAsync(a => a.Email.Equals(employee.Email));
+                if (existedEmployee != null)
+                {
+                    var checkMatchPass = await _context.Employees.FirstOrDefaultAsync(a => a.Password.Equals(employee.Password));
+                    if (checkMatchPass != null)
+                    {
+                        return existedEmployee;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }*/
+
     }
 }

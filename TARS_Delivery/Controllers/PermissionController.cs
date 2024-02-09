@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Services.imp;
 
@@ -24,9 +25,9 @@ namespace TARS_Delivery.Controllers
                 var permissions = await _service.GetPermissions();
                 return Ok(permissions);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return Problem(ex.Message);
             }
         }
 
@@ -43,9 +44,9 @@ namespace TARS_Delivery.Controllers
                 }
                 return NotFound("This permissions does not exist !");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return Problem(ex.Message);
             }
         }
 
@@ -71,14 +72,19 @@ namespace TARS_Delivery.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdatePermission(int id, [FromForm] Permission permission)
+        public async Task<ActionResult> UpdatePermission(int id, [FromForm] RDTOPermisson permission)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await _service.Update(id, permission);
-                    return Ok(permission);
+                    Permission updatedPermission = await _service.GetPermission(id);
+                    if(updatedPermission != null)
+                    {
+                        await _service.Update(id, permission);
+                        return Ok(permission);
+                    }
+                    return NotFound("This permission does not exist !");
                 }
                 return BadRequest();
             }
@@ -102,9 +108,9 @@ namespace TARS_Delivery.Controllers
                 }
                 return NotFound("This permission does not exist !");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return Problem(ex.Message);
             }
         }
     }

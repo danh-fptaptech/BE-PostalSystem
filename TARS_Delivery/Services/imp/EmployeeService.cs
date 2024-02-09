@@ -55,12 +55,20 @@ namespace TARS_Delivery.Services.imp
             {
                 throw new Exception("Employee not found !");
             }
-            return await _repository.UpdatePassword(id, employee);
+            else
+            {
+                return await _repository.UpdatePassword(id, employee);
+            }
         }
 
         public Task<Employee> UpdateInfo(int id, EmployeeUpdateInfo employee)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Employee> CheckLogin(RDTOEmployeeLogin employee)
+        {
+            return await _repository.CheckLogin(employee);
         }
     }
 }

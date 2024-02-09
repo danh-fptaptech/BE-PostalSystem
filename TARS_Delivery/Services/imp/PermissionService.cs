@@ -1,4 +1,6 @@
-﻿using TARS_Delivery.Models.Entities;
+﻿
+using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Services.imp
@@ -30,7 +32,7 @@ namespace TARS_Delivery.Services.imp
             return await _repository.Create(newPermission);
         }
 
-        public Task<Permission> Update(int id, Permission permission)
+        public Task<Permission> Update(int id, RDTOPermisson permission)
         {
             return _repository.Update(id, permission);
         }

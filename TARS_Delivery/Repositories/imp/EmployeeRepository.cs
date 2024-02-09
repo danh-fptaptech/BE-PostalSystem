@@ -57,11 +57,9 @@ namespace TARS_Delivery.Repositories.imp
                 await _context.SaveChangesAsync();
                 return employee;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
-                //throw new Exception("Error when trying to create a new employee.");
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -85,10 +83,9 @@ namespace TARS_Delivery.Repositories.imp
 
                 throw new Exception("Employee not found !");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
-                throw new Exception("Error when trying to update passsword.");
+                throw new Exception(ex.Message);
             }
         }
 
@@ -106,7 +103,38 @@ namespace TARS_Delivery.Repositories.imp
 
         public Task<Employee> UpdateInfo(int id, EmployeeUpdateInfo employee)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<Employee> CheckLogin(RDTOEmployeeLogin employee)
+        {
+            try
+            {
+                var existedEmployee = await _context.Employees.FirstOrDefaultAsync(e => e.Email == employee.Email);
+
+                if (existedEmployee != null)
+                {
+                    var checkPassword = AccountSecurity.VerifyPassword(employee.Password, existedEmployee.Password);
+                    if (checkPassword)
+                    {
+                        return existedEmployee;
+                    }
+                    return null;
+                }
+                throw new Exception("The employee does not exist !");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

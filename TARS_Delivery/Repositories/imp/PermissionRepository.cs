@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
 using TARS_Delivery.Models;
+using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories.imp
@@ -39,10 +40,27 @@ namespace TARS_Delivery.Repositories.imp
 
                 return permission;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
-                throw new Exception("Error when trying to create a new permission");
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<Permission> Update(int id, RDTOPermisson permission)
+        {
+            try
+            {
+                var updatedPermission = await _context.Permissions.FindAsync(id);
+                if (updatedPermission != null)
+                {
+                    updatedPermission.PermissionName = permission.PermissionName;
+                    await _context.SaveChangesAsync();
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
@@ -56,31 +74,11 @@ namespace TARS_Delivery.Repositories.imp
                     _context.Permissions.Remove(existedPermission);
                     await _context.SaveChangesAsync();
                 }
-                throw new Exception("The permission does not exist !");
+                return null;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
-                throw;
-            }
-        }
-
-        public async Task<Permission> Update(int id, Permission permission)
-        {
-            try
-            {
-                var updatedPermission = await _context.Permissions.FindAsync(id);
-                if(updatedPermission != null)
-                {
-                    _context.Entry(updatedPermission).CurrentValues.SetValues(permission);
-                    await _context.SaveChangesAsync();
-                }
-                throw new Exception("Permission not found.");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw new Exception("Error when trying to update !");
+                throw new Exception(ex.Message);
             }
         }
     }

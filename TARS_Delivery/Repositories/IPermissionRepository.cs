@@ -1,4 +1,5 @@
-﻿using TARS_Delivery.Models.Entities;
+﻿using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories
 {
@@ -7,7 +8,7 @@ namespace TARS_Delivery.Repositories
         Task<IEnumerable<Permission>> GetPermissions();
         Task<Permission> GetPermission(int id);
         Task<Permission> Create(Permission permission);
-        Task<Permission> Update(int id, Permission permission);
+        Task<Permission> Update(int id, RDTOPermisson permission);
         Task<Permission> Delete(int id);
     }
 }

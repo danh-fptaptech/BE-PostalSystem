@@ -101,7 +101,7 @@ namespace TARS_Delivery.Controllers
                     await _service.Delete(id);
                     return Ok("Delete successfully.");
                 }
-                return NotFound("Role not found.");
+                return NotFound("This role does not exist !");
             }
             catch (Exception)
             {

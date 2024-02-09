@@ -14,9 +14,9 @@ namespace TARS_Delivery.Models.Entities
         
         public EStatusData Status { get; set; }
 
-        public static implicit operator Role(List<Role> v)
+        /*public static implicit operator Role(List<Role> v)
         {
             throw new NotImplementedException();
-        }
+        }*/
     }
 }

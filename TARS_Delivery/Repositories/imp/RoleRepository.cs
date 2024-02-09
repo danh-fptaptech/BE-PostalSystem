@@ -45,7 +45,6 @@ namespace TARS_Delivery.Repositories.imp
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error when trying to create a new role !");
                 throw new Exception(ex.Message);
             }
         }
@@ -64,7 +63,6 @@ namespace TARS_Delivery.Repositories.imp
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error when trying to update a role !");
                 throw new Exception(ex.Message);
             }
         }
@@ -74,7 +72,7 @@ namespace TARS_Delivery.Repositories.imp
             try
             {
                 var removedRole = await _context.Roles.FindAsync(id);
-                if (removedRole == null)
+                if (removedRole != null)
                 {
                     _context.Roles.Remove(removedRole);
                     await _context.SaveChangesAsync();
@@ -83,7 +81,6 @@ namespace TARS_Delivery.Repositories.imp
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error when trying to delete a role !");
                 throw new Exception(ex.Message);
             }
         }
