@@ -5,30 +5,39 @@ namespace TARS_Delivery.Services.imp
 {
     public class PermissionService : IPermissionService
     {
-        private readonly IPermissionRepository repository;
+        private readonly IPermissionRepository _repository;
         public PermissionService(IPermissionRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task<IEnumerable<Permission>> GetPermissions()
         {
-            return await repository.GetPermissions();
+            return await _repository.GetPermissions();
         }
 
         public async Task<Permission> GetPermission(int id)
         {
-            return await repository.GetPermission(id);
+            return await _repository.GetPermission(id);
         }
 
         public async Task<Permission> Create(Permission permission)
         {
-            return await repository.Create(permission);
+            Permission newPermission = new()
+            {
+                PermissionName = permission.PermissionName,
+            };
+            return await _repository.Create(newPermission);
         }
 
-        public async Task<Permission> Remove(int id)
+        public Task<Permission> Update(int id, Permission permission)
         {
-            return await repository.Remove(id);
+            return _repository.Update(id, permission);
+        }
+
+        public async Task<Permission> Delete(int id)
+        {
+            return await _repository.Delete(id);
         }
     }
 }

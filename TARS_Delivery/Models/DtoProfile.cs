@@ -15,6 +15,8 @@ public class DtoProfile : Profile
         
         CreateMap<Branch, RDTOBranch>().ReverseMap();
         CreateMap<Employee, RDTOEmployee>().ReverseMap();
+        CreateMap<Employee, UpdatePassword>().ReverseMap();
+        CreateMap<Role, RDTORole>().ReverseMap();
 
 
         #endregion
@@ -25,6 +27,7 @@ public class DtoProfile : Profile
         CreateMap<Branch, SDTOBranch>().ReverseMap();
         CreateMap<Package, SDTOPackage>().ReverseMap();
         CreateMap<Employee, SDTOEmployee>().ReverseMap();
+        CreateMap<Role, SDTORole>().ReverseMap();
 
         #endregion
 

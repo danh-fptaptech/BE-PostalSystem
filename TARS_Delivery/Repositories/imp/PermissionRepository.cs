@@ -7,53 +7,81 @@ namespace TARS_Delivery.Repositories.imp
 {
     public class PermissionRepository : IPermissionRepository
     {
-        private readonly DatabaseContext databaseContext;
+        private readonly DatabaseContext _context;
         public PermissionRepository(DatabaseContext databaseContext)
         {
-            this.databaseContext = databaseContext;
+            _context = databaseContext;
         }
 
 
         public async Task<IEnumerable<Permission>> GetPermissions()
         {
-            return await databaseContext.Permissions.ToListAsync();
+            return await _context.Permissions.ToListAsync();
         }
 
         public async Task<Permission> GetPermission(int id)
         {
-            var permission = await databaseContext.Permissions.FindAsync(id);
-            if (permission != null)
-            {
-                return permission;
-            }
-            return null;
+            return await _context.Permissions.FindAsync(id);
         }
-
 
         public async Task<Permission> Create(Permission permission)
         {
-            var duplicatedName = await databaseContext.Permissions.FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName);
-            if (duplicatedName != null)
+            try
             {
-                throw new InvalidOperationException("Permission name already exists.");
+                var duplicatedName = await _context.Permissions.FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName);
+                if (duplicatedName != null)
+                {
+                    throw new Exception("The permission name has already existed.");
+                }
+
+                await _context.Permissions.AddAsync(permission);
+                await _context.SaveChangesAsync();
+
+                return permission;
             }
-
-            await databaseContext.Permissions.AddAsync(permission);
-            await databaseContext.SaveChangesAsync();
-
-            return permission;
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw new Exception("Error when trying to create a new permission");
+            }
         }
 
-
-        public async Task<Permission> Remove(int id)
+        public async Task<Permission> Delete(int id)
         {
-            var existedPermission = await databaseContext.Permissions.FindAsync(id);
-            if (existedPermission != null)
+            try
             {
-                databaseContext.Permissions.Remove(existedPermission);
-                await databaseContext.SaveChangesAsync();
+                var existedPermission = await _context.Permissions.FindAsync(id);
+                if (existedPermission != null)
+                {
+                    _context.Permissions.Remove(existedPermission);
+                    await _context.SaveChangesAsync();
+                }
+                throw new Exception("The permission does not exist !");
             }
-            return null;
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+        }
+
+        public async Task<Permission> Update(int id, Permission permission)
+        {
+            try
+            {
+                var updatedPermission = await _context.Permissions.FindAsync(id);
+                if(updatedPermission != null)
+                {
+                    _context.Entry(updatedPermission).CurrentValues.SetValues(permission);
+                    await _context.SaveChangesAsync();
+                }
+                throw new Exception("Permission not found.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw new Exception("Error when trying to update !");
+            }
         }
     }
 }

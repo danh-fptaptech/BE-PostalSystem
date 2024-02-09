@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Security;
-using TARS_Delivery.Models.DTOs;
+using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Services.imp;
 
@@ -13,21 +10,18 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
-        private readonly RoleService service;
-        private readonly IMapper mapper;
-        public RoleController(RoleService service, IMapper mapper)
+        private readonly RoleService _service;
+        public RoleController(RoleService service)
         {
-            this.service = service;
-            this.mapper = mapper;
+            _service = service;
         }
-
 
         [HttpGet]
         public async Task<ActionResult> GetRoles()
         {
             try
             {
-                var roles = await service.GetRoles();
+                var roles = await _service.GetRoles();
                 return Ok(roles);
             }
             catch (Exception)
@@ -36,13 +30,12 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-
         [HttpGet("{id}")]
         public async Task<ActionResult> GetRole(int id)
         {
             try
             {
-                var role = await service.GetRole(id);
+                var role = await _service.GetRole(id);
                 if (role != null)
                 {
                     return Ok(role);
@@ -55,16 +48,15 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-
         [HttpPost]
-        public async Task<ActionResult> CreateRole(Role RolePost)
+        public async Task<ActionResult> CreateRole([FromForm] Role role)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await service.Create(RolePost);
-                    return Ok(RolePost);
+                    await _service.Create(role);
+                    return Ok(role);
                 }
                 return BadRequest();
             }
@@ -75,24 +67,41 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateRole(int id, Role role)
+        public async Task<ActionResult> UpdateRole(int id, [FromForm] RDTORole role)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var updatedRole = await service.GetRole(id);
-                    if(updatedRole != null)
+                    var updatedRole = await _service.GetRole(id);
+                    if (updatedRole != null)
                     {
-                        updatedRole.RoleHasPermissions = role.RoleHasPermissions;
-                        updatedRole.Status = role.Status;
+                        await _service.Update(id, role);
                         return Ok(updatedRole);
                     }
                     return NotFound("This role does not exist !");
                 }
                 return BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteRole(int id)
+        {
+            try
+            {
+                var removedRole = await _service.GetRole(id);
+                if(removedRole != null)
+                {
+                    await _service.Delete(id);
+                    return Ok("Delete successfully.");
+                }
+                return NotFound("Role not found.");
             }
             catch (Exception)
             {

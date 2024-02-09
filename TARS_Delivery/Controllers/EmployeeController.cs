@@ -1,11 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using System.Security;
-using TARS_Delivery.Helpers;
-using TARS_Delivery.Models.DTOs;
 using TARS_Delivery.Models.DTOs.req;
-using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Services.imp;
 
 namespace TARS_Delivery.Controllers
@@ -68,9 +63,13 @@ namespace TARS_Delivery.Controllers
                 }
                 return BadRequest();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+
+                ModelState.AddModelError("EmployeeCode", e.Message);
+                ModelState.AddModelError("Email", e.Message);
+                ModelState.AddModelError("PhoneNumber", e.Message);
+                return Problem(e.Message);
             }
         }
 
@@ -97,6 +96,7 @@ namespace TARS_Delivery.Controllers
                 throw;
             }
         }
+
 
         [HttpPatch("{id}")]
         public async Task<ActionResult> UpdateInfo(int id, [FromForm] EmployeeUpdateInfo employee)

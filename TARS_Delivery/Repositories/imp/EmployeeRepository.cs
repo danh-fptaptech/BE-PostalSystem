@@ -1,9 +1,6 @@
 ﻿
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using TARS_Delivery.Helpers;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
@@ -28,26 +25,43 @@ namespace TARS_Delivery.Repositories.imp
             return mapper.Map<IEnumerable<SDTOEmployee>>(employees);
         }    
 
-
         public async Task<Employee> GetEmployee(int id)
         {
             return await _context.Employees.FindAsync(id);
         }
 
-
         public async Task<Employee> Create(Employee employee)
         {
             try
             {
+                var duplicatedCode = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeCode == employee.EmployeeCode);
+                var existedEmail = await _context.Employees.FirstOrDefaultAsync(e => e.Email == employee.Email);
+                var existedPhone = await _context.Employees.FirstOrDefaultAsync(e => e.PhoneNumber == employee.PhoneNumber);
+                
+                if (duplicatedCode != null)
+                {
+                    throw new Exception("The employee code has already existed.");
+                }
+
+                if(existedEmail != null)
+                {
+                    throw new Exception("The email address has already been used.");
+                }
+
+                if(existedPhone != null)
+                {
+                    throw new Exception("The phone number has already been used.");
+                }
+
                 await _context.Employees.AddAsync(employee);
                 await _context.SaveChangesAsync();
                 return employee;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
+                //throw new Exception("Error when trying to create a new employee.");
                 throw;
-                //throw new Exception("Error when trying to create new employee.");
             }
         }
 
@@ -73,8 +87,8 @@ namespace TARS_Delivery.Repositories.imp
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                Console.WriteLine(e.Message);
+                throw new Exception("Error when trying to update passsword.");
             }
         }
 

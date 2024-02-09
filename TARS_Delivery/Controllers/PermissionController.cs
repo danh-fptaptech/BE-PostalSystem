@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Services.imp;
@@ -10,11 +9,10 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class PermissionController : ControllerBase
     {
-        private readonly PermissionService service;
-
+        private readonly PermissionService _service;
         public PermissionController(PermissionService service)
         {
-            this.service = service;
+            _service = service;
         }
 
 
@@ -23,7 +21,7 @@ namespace TARS_Delivery.Controllers
         {
             try
             {
-                var permissions = await service.GetPermissions();
+                var permissions = await _service.GetPermissions();
                 return Ok(permissions);
             }
             catch (Exception)
@@ -38,7 +36,7 @@ namespace TARS_Delivery.Controllers
         {
             try
             {
-                Permission permission = await service.GetPermission(id);
+                Permission permission = await _service.GetPermission(id);
                 if (permission != null)
                 {
                     return Ok(permission);
@@ -53,13 +51,13 @@ namespace TARS_Delivery.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> CreatePermission(Permission permission)
+        public async Task<ActionResult> CreatePermission([FromForm] Permission permission)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await service.Create(permission);
+                    await _service.Create(permission);
                     return Ok(permission);
                 }
                 return BadRequest();
@@ -72,15 +70,34 @@ namespace TARS_Delivery.Controllers
         }
 
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdatePermission(int id, [FromForm] Permission permission)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    await _service.Update(id, permission);
+                    return Ok(permission);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> RemovePermission(int id)
         {
             try
             {
-                Permission permission = await service.GetPermission(id);
+                Permission permission = await _service.GetPermission(id);
                 if (permission != null)
                 {
-                    await service.Remove(id);
+                    await _service.Delete(id);
                     return Ok("Delete Successfully.");
                 }
                 return NotFound("This permission does not exist !");
