@@ -2,6 +2,7 @@
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Providers;
 using TARS_Delivery.Repositories;
+using TARS_Delivery.Shared;
 using TARS_Delivery.UnitOfWork;
 
 namespace TARS_Delivery.Services.Users.LoginUserAsync;
@@ -12,7 +13,7 @@ internal sealed class LoginUserAsynsHandler(
     IHashProvider hashProvider,
     IJwtProvider jwtProvider,
     IHttpContextAccessor httpContextAccessor)
-    : IRequestHandler<LoginUserAsyncCommand, string>
+    : IRequestHandler<LoginUserAsyncCommand, Result<string>>
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -20,11 +21,11 @@ internal sealed class LoginUserAsynsHandler(
     private readonly IJwtProvider _jwtProvider = jwtProvider;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<string> Handle(
+    public async Task<Result<string>> Handle(
         LoginUserAsyncCommand command, 
         CancellationToken cancellationToken)
     {
-        User? user = null;
+        User? user;
 
         if (command.Type == Type.Email)
         {
@@ -39,27 +40,22 @@ internal sealed class LoginUserAsynsHandler(
 
         if (user is null)
         {
-            return null;
+            return Result.Failure<string>(LoginUserAsyncErrors.NotFound);
         }
 
         if (!_hashProvider.Verify(command.Password, user.Password))
         {
-            return null;
+            return Result.Failure<string>(LoginUserAsyncErrors.IncorrectPassword);
         }
 
         string token = _jwtProvider.Generate(user);
 
-        var httpContext = _httpContextAccessor.HttpContext;
-
-        if (httpContext is null)
-        {
-            return "";
-        }
+        var httpContext = _httpContextAccessor.HttpContext!;
 
         user.GenerateRefreshToken(httpContext);
 
         await _unitOfWork.SaveChangeAsync(cancellationToken);
-        //
-        return token;
+        
+        return Result.Success(token);
     }
 }

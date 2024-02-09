@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Quartz;
 using Scrutor;
 using TARS_Delivery;
+using TARS_Delivery.BackgroundJobs;
 using TARS_Delivery.Extensions;
 using TARS_Delivery.Models;
 using TARS_Delivery.Repositories;
@@ -52,6 +54,23 @@ builder.Services
 
 builder.Services.AddHttpContextAccessor();
 
+// mail
+builder.Services.ConfigureMailSetup(configuration);
+
+// jobs
+builder.Services.AddQuartz(cfg =>
+{
+    JobKey jobKey = new(nameof(ClearUserRegistrationJob));
+
+    cfg.AddJob<ClearUserRegistrationJob>(jobKey)
+        .AddTrigger(cfg =>
+            cfg.ForJob(jobKey)
+                .WithSimpleSchedule(
+                    schedule => schedule.WithIntervalInHours(12)
+                        .RepeatForever()));
+});
+
+builder.Services.AddQuartzHostedService();
 // configure options binding
 
 

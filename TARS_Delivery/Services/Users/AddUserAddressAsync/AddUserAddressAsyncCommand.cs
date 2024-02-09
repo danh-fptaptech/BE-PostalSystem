@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Shared;
 
 namespace TARS_Delivery.Services.Users.AddUserAddressAsync;
 
@@ -11,4 +12,4 @@ internal sealed record AddUserAddressAsyncCommand(
     string City,
     string District,
     string Ward,
-    ETypeInfo TypeInfo) : IRequest<bool>;
+    ETypeInfo TypeInfo) : IRequest<Result>;

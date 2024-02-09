@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
+using TARS_Delivery.Shared;
 using TARS_Delivery.UnitOfWork;
 
 namespace TARS_Delivery.Services.Users.RevokeTokenAsync;
@@ -11,21 +12,17 @@ internal class RevokeTokenAsyncHandler(
     IHttpContextAccessor httpContextAccessor,
     IUserRepository userRepository,
     IUnitOfWork unitOfWork)
-    : IRequestHandler<RevokeTokenAsyncCommand, bool>
+    : IRequestHandler<RevokeTokenAsyncCommand, Result>
 {
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<bool> Handle(RevokeTokenAsyncCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(
+        RevokeTokenAsyncCommand command, 
+        CancellationToken cancellationToken)
     {
-        var httpContext = _httpContextAccessor.HttpContext;
-
-        if (httpContext == null)
-        {
-            // 500
-            return false;
-        }
+        var httpContext = _httpContextAccessor.HttpContext!;
 
         string? userId = httpContext
             .User
@@ -33,8 +30,7 @@ internal class RevokeTokenAsyncHandler(
 
         if (userId is null)
         {
-            //Unauthorized
-            return false;
+            return Result.Failure(VerifyUserMailAsyncErrors.Unauthorized);
         }
 
         User? user = await _userRepository.GetUserByIdAsync(
@@ -42,12 +38,13 @@ internal class RevokeTokenAsyncHandler(
 
         if (user is null)
         {
-            //Unauthorized
-            return false;
+            return Result.Failure(VerifyUserMailAsyncErrors.Unauthorized);
         }
+
+        user.RevokeToken();
 
         await _unitOfWork.SaveChangeAsync(cancellationToken);
 
-        return true;
+        return Result.Success();
     }
 }

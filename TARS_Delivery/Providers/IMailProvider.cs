@@ -2,5 +2,5 @@
 
 internal interface IMailProvider
 {
-    public void Send();
+    public Task Send(string receiver, string subject, string body, CancellationToken cancellationToken);
 }

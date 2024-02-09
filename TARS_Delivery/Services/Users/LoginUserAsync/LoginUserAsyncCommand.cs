@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using TARS_Delivery.Shared;
 
 namespace TARS_Delivery.Services.Users.LoginUserAsync;
 
 internal sealed class LoginUserAsyncCommand(string userId, string password) 
-    : IRequest<string>
+    : IRequest<Result<string>>
 {
     public Type Type { get; private init; } = userId.Contains('@') 
         ? Type.Email 

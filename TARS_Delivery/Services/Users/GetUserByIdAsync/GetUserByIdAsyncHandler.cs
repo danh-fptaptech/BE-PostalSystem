@@ -3,33 +3,30 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
+using TARS_Delivery.Shared;
 
 namespace TARS_Delivery.Services.Users.GetUserByIdAsync;
 
 internal sealed class GetUserByIdAsyncHandler(
     IUserRepository userRepository,
     IHttpContextAccessor httpContextAccessor) 
-    : IRequestHandler<GetUserByIdAsyncQuery, RegisterUserAsyncResponse>
+    : IRequestHandler<GetUserByIdAsyncQuery, Result<GetUserByIdAsyncResponse>>
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<RegisterUserAsyncResponse> Handle(
+    public async Task<Result<GetUserByIdAsyncResponse>> Handle(
         GetUserByIdAsyncQuery query, 
         CancellationToken cancellationToken)
     {
-        var httpContext = _httpContextAccessor.HttpContext;
-        string? subClaim = string.Empty;
+        var httpContext = _httpContextAccessor.HttpContext!;
 
-        if (httpContext is not null)
-        {
-            subClaim = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-        }
+        string? subClaim = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
         // check not have policy, role, permission and check sub claim in jwt is diff from query params
         if (true && subClaim != query.Id.ToString())
         {
-            return null;
+            return Result.Failure<GetUserByIdAsyncResponse>(GetUserAddressListByIdAsyncErrors.Unauthorized);
         }
 
         User? user = await _userRepository
@@ -37,14 +34,16 @@ internal sealed class GetUserByIdAsyncHandler(
 
         if (user is null)
         {
-            // notfound
-            return null;
+            return Result.Failure<GetUserByIdAsyncResponse>(GetUserAddressListByIdAsyncErrors.NotFound);
         }
 
-        return new RegisterUserAsyncResponse(
-            user.Fullname, 
+        GetUserByIdAsyncResponse response = new(
+            user.Fullname,
             user.Email, 
             user.Phone, 
             user.Avatar);
+
+        return Result.Success(response);
+            
     }
 }

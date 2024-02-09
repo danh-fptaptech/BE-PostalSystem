@@ -3,36 +3,32 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
+using TARS_Delivery.Services.Users.GetUserAddressListByIdAsync;
 using TARS_Delivery.Services.Users.GetUserByIdWithAddressListByIdAsync;
+using TARS_Delivery.Shared;
 
 namespace TARS_Delivery.Services.Users.GetUserByIdWithAddressListAsync;
 
 internal sealed class GetUserAddressListByIdAsyncHandler(
     IUserRepository userRepository,
     IHttpContextAccessor httpContextAccessor)
-    : IRequestHandler<
-        GetUserAddressListByIdAsyncQuery,
-        IReadOnlyCollection<AddressList>>
+    : IRequestHandler<GetUserAddressListByIdAsyncQuery, Result<IReadOnlyCollection<AddressList>>>
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<IReadOnlyCollection<AddressList>> Handle(
+    public async Task<Result<IReadOnlyCollection<AddressList>>> Handle(
         GetUserAddressListByIdAsyncQuery query, 
         CancellationToken cancellationToken)
     {
-        var httpContext = _httpContextAccessor.HttpContext;
-        string? subClaim = string.Empty;
-
-        if (httpContext is not null)
-        {
-            subClaim = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-        }
+        var httpContext = _httpContextAccessor.HttpContext!;
+       
+        string? subClaim = subClaim = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
         // check not have policy, role, permission and check sub claim in jwt is diff from query params
         if (true && subClaim != query.Id.ToString())
         {
-            return null;
+            return Result.Failure<IReadOnlyCollection<AddressList>>(GetUserAddressListByIdAsyncErrors.Unauthorized);
         }
 
         User? user = await _userRepository
@@ -40,7 +36,7 @@ internal sealed class GetUserAddressListByIdAsyncHandler(
 
         if (user == null)
         {
-            return null;
+            return Result.Failure<IReadOnlyCollection<AddressList>>(GetUserAddressListByIdAsyncErrors.NotFound);
         }
 
         IReadOnlyCollection<AddressList> addressList = user
@@ -55,6 +51,6 @@ internal sealed class GetUserAddressListByIdAsyncHandler(
                 c.TypeInfo))
             .ToList();
 
-        return addressList;
+        return Result.Success(addressList);
     }
 }

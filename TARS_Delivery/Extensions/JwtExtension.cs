@@ -5,7 +5,7 @@ using TARS_Delivery.Options;
 
 namespace TARS_Delivery.Extensions;
 
-internal static class JwtExtensions
+internal static class JwtExtension
 {
     public static IServiceCollection ConfigureJwtSetup(
         this IServiceCollection services, IConfiguration configuration)

@@ -8,6 +8,7 @@ using TARS_Delivery.Services.Users.GetUserByIdWithAddressListAsync;
 using TARS_Delivery.Services.Users.LoginUserAsync;
 using TARS_Delivery.Services.Users.RegisterUserAsync;
 using TARS_Delivery.Services.Users.RefreshTokenAsync;
+using TARS_Delivery.Services.Users.VerifyUserMailAsync;
 
 namespace TARS_Delivery.Controllers;
 
@@ -29,12 +30,36 @@ public class UsersController(ISender sender)
         var result = await Sender.Send(
             command, cancellationToken);
 
-        if (result is null)
+        if (result.IsFailure)
         {
-            return BadRequest();
+            if (result.Error.Code == "UniqueUser")
+            {
+                return Conflict(result.Error.Message);
+            }
         }
 
-        return Ok(result);
+        return Ok();
+    }
+
+    [HttpPost("Verify-email")]
+    public async Task<IActionResult> VerifyUserEmailAsync(
+        [FromBody] VerifyUserMailAsyncRequest request,
+        CancellationToken cancellationToken)
+    {
+        VerifyUserMailAsyncCommand command = new(request.Otp);
+
+        var result = await Sender.Send(
+            command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            if (result.Error.Code == "IncorectOtp")
+            {
+                return Unauthorized(result.Error.Message);
+            }
+        }
+
+        return Ok(result.Value);
     }
 
     [HttpPost("Login")]
@@ -49,12 +74,20 @@ public class UsersController(ISender sender)
         var result = await Sender.Send(
             command, cancellationToken);
 
-        if (result is null)
+        if (result.IsFailure)
         {
-            return BadRequest();
+            if (result.Error.Code is "Unauthorized" or "IncorrectPassword")
+            {
+                return Unauthorized(result.Error.Message);
+            }
+            
+            if (result.Error.Code == "NotFound")
+            {
+                return NotFound(result.Error.Message);
+            }
         }
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [Authorize]
@@ -72,12 +105,20 @@ public class UsersController(ISender sender)
         var result = await Sender.Send(
             command, cancellationToken);
 
-        if (!result)
+        if (result.IsFailure)
         {
-            return BadRequest();
+            if (result.Error.Code is "Unauthorized" or "IncorrectPassword")
+            {
+                return Unauthorized(result.Error.Message);
+            }
+
+            if (result.Error.Code == "NotFound")
+            {
+                return NotFound(result.Error.Message);
+            }
         }
 
-        return Ok(result);
+        return Ok();
     }
 
     [HttpPost("Refresh-token")]
@@ -86,15 +127,18 @@ public class UsersController(ISender sender)
     {
         RefreshTokenAsyncCommand command = new();
 
-        string? result = await Sender.Send(
+        var result = await Sender.Send(
             command, cancellationToken);
-        
-        if (result is null)
+
+        if (result.IsFailure)
         {
-            return Unauthorized();
+            if (result.Error.Code == "Unauthorized")
+            {
+                return Unauthorized(result.Error.Message);
+            }
         }
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [Authorize]
@@ -104,15 +148,18 @@ public class UsersController(ISender sender)
     {
         RefreshTokenAsyncCommand command = new();
 
-        string? result = await Sender.Send(
+        var result = await Sender.Send(
             command, cancellationToken);
-        //
-        if (result is null)
+
+        if (result.IsFailure)
         {
-            return Unauthorized();
+            if (result.Error.Code == "Unauthorized")
+            {
+                return Unauthorized(result.Error.Message);
+            }
         }
 
-        return Ok(result);
+        return Ok();
     }
 
     [Authorize]
@@ -126,7 +173,20 @@ public class UsersController(ISender sender)
         var result = await Sender.Send(
             query, cancellationToken);
 
-        return Ok(result);
+        if (result.IsFailure)
+        {
+            if (result.Error.Code == "Unauthorized")
+            {
+                return Unauthorized(result.Error.Message);
+            }
+
+            if (result.Error.Code == "NotFound")
+            {
+                return NotFound(result.Error.Message);
+            }
+        }
+
+        return Ok(result.Value);
     }
 
     [Authorize]
@@ -140,12 +200,20 @@ public class UsersController(ISender sender)
         var result = await Sender.Send(
             query, cancellationToken);
 
-        if (result is null)
+        if (result.IsFailure)
         {
-            return BadRequest();
+            if (result.Error.Code == "Unauthorized")
+            {
+                return Unauthorized(result.Error.Message);
+            }
+
+            if (result.Error.Code == "NotFound")
+            {
+                return NotFound(result.Error.Message);
+            }
         }
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [Authorize]
@@ -168,11 +236,19 @@ public class UsersController(ISender sender)
         var result = await Sender.Send(
             command, cancellationToken);
 
-        if (!result)
+        if (result.IsFailure)
         {
-            return BadRequest();
+            if (result.Error.Code == "Unauthorized")
+            {
+                return Unauthorized(result.Error.Message);
+            }
+
+            if (result.Error.Code == "NotFound")
+            {
+                return NotFound(result.Error.Message);
+            }
         }
 
-        return Ok(result);
+        return Created();
     }
 }

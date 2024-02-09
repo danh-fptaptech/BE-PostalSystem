@@ -172,7 +172,9 @@ public class DatabaseContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Customer> Customers { get; set; }
 
+    public DbSet<UserRegistrationInfo> UserRegistrations { get; set; }
+
     #endregion
 
-    
+
 }

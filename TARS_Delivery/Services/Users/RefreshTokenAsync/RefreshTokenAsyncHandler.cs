@@ -5,6 +5,7 @@ using System.Security.Claims;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Providers;
 using TARS_Delivery.Repositories;
+using TARS_Delivery.Shared;
 
 namespace TARS_Delivery.Services.Users.RefreshTokenAsync;
 
@@ -12,31 +13,23 @@ internal sealed class RefreshTokenAsyncHandler(
     IHttpContextAccessor httpContextAccessor,
     IUserRepository userRepository,
     IJwtProvider jwtProvider) 
-    : IRequestHandler<RefreshTokenAsyncCommand, string>
+    : IRequestHandler<RefreshTokenAsyncCommand, Result<string>>
 {
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
 
-    public async Task<string> Handle(
+    public async Task<Result<string>> Handle(
         RefreshTokenAsyncCommand command, 
         CancellationToken cancellationToken)
     {
-        var httpContext = _httpContextAccessor.HttpContext;
-
-        if (httpContext is null)
-        {
-            return null;
-        }
-
-        //httpContext.Request.Headers.TryGetValue("Authorization", out var token);
+        var httpContext = _httpContextAccessor.HttpContext!;
 
         var oldToken = await httpContext.GetTokenAsync("access_token");
 
         if (oldToken is null)
         {
-            // unauthorized
-            return null;
+            return Result.Failure<string>(RefreshTokenAsyncErrors.Unauthorized);
         }
 
         ClaimsPrincipal claimPrincipal = _jwtProvider.GetClaimsPrincipalFromExpiredToken(oldToken);
@@ -45,8 +38,7 @@ internal sealed class RefreshTokenAsyncHandler(
 
         if (userId is null)
         {
-            // unauthorized
-            return null;
+            return Result.Failure<string>(RefreshTokenAsyncErrors.Unauthorized);
         }
 
         User? user = await _userRepository
@@ -58,14 +50,13 @@ internal sealed class RefreshTokenAsyncHandler(
             user.RefreshToken != httpContext.Request.Cookies["refresh-token"] ||
             user.RefreshTokenExpires < DateTime.Now)
         {
-            // unauthorized
-            return null;
+            return Result.Failure<string>(RefreshTokenAsyncErrors.Unauthorized);
         }
 
         string newToken = _jwtProvider.Generate(user);
 
         user.GenerateRefreshToken(httpContext);
 
-        return newToken;
+        return Result.Success(newToken);
     }
 }

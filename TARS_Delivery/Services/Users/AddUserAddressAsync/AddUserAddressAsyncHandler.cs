@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
+using TARS_Delivery.Shared;
 using TARS_Delivery.UnitOfWork;
 
 namespace TARS_Delivery.Services.Users.AddUserAddressAsync;
@@ -11,29 +12,25 @@ internal sealed class AddUserAddressAsyncHandler(
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     IHttpContextAccessor httpContextAccessor) 
-    : IRequestHandler<AddUserAddressAsyncCommand, bool>
+    : IRequestHandler<AddUserAddressAsyncCommand, Result>
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<bool> Handle(
+    public async Task<Result> Handle(
         AddUserAddressAsyncCommand command,
         CancellationToken cancellationToken)
     {
-        var httpContext = _httpContextAccessor.HttpContext;
-        string? subClaim = string.Empty;
-
-        if (httpContext is not null)
-        {
-            subClaim = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-        }
+        var httpContext = _httpContextAccessor.HttpContext!;
+        
+        string? subClaim = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
         // check not have policy, role, permission
         // check not have policy, role, permission and check sub claim in jwt is diff from query params
         if (true && subClaim != command.UserId.ToString())
         {
-            return false;
+            return Result.Failure(ChangeUserPasswordAsyncErrors.Unauthorized);
         }
 
         User? user = await _userRepository
@@ -43,8 +40,7 @@ internal sealed class AddUserAddressAsyncHandler(
 
         if (user is null)
         {
-            // notfound
-            return false;
+            return Result.Failure(ChangeUserPasswordAsyncErrors.NotFound);
         }
 
         // tim postal code
@@ -62,6 +58,6 @@ internal sealed class AddUserAddressAsyncHandler(
 
         await _unitOfWork.SaveChangeAsync(cancellationToken);
 
-        return true;
+        return Result.Success();
     }
 }
