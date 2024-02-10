@@ -8,21 +8,15 @@ using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories.imp
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository(DatabaseContext context, IMapper mapper) : IEmployeeRepository
     {
-        private readonly DatabaseContext _context;
-        private readonly IMapper mapper;
-        public EmployeeRepository(DatabaseContext context, IMapper mapper)
-        {
-            _context = context;
-            this.mapper = mapper;
-        }
-
+        private readonly DatabaseContext _context = context;
+        private readonly IMapper _mapper = mapper;
 
         public async Task<IEnumerable<SDTOEmployee>> GetEmployees()
         {
             IEnumerable<Employee> employees = await _context.Employees.ToListAsync();
-            return mapper.Map<IEnumerable<SDTOEmployee>>(employees);
+            return _mapper.Map<IEnumerable<SDTOEmployee>>(employees);
         }    
 
         public async Task<Employee> GetEmployee(int id)
@@ -72,7 +66,8 @@ namespace TARS_Delivery.Repositories.imp
                 {
                     if (!string.IsNullOrEmpty(updatedEmployee.Password))
                     {
-                        updatedEmployee.Password = employee.Password;
+                        var hashedPassword = PasswordHasher.HashPassword(employee.Password);
+                        updatedEmployee.Password = hashedPassword;
                     }
 
                     updatedEmployee.UpdatedAt = DateTime.Now;
@@ -81,7 +76,7 @@ namespace TARS_Delivery.Repositories.imp
                     return updatedEmployee;
                 }
 
-                throw new Exception("Employee not found !");
+                throw new Exception("The employee does not exist !");
             }
             catch (Exception ex)
             {
@@ -89,30 +84,39 @@ namespace TARS_Delivery.Repositories.imp
             }
         }
 
-        private static string GenerateSubmittedInfo(RDTOEmployee employee)
+        public async Task<Employee> UpdateInfoAsync(int id, EmployeeUpdateInfo employee)
         {
-            string submitedInfo = 
+            try
+            {
+                Employee updatedEmployee = await _context.Employees.FindAsync(id);
+                if (updatedEmployee != null)
+                {
+                    updatedEmployee.SubmitedInfo = GenerateSubmitedInfo(employee);
+
+                    await _context.SaveChangesAsync();
+                    return updatedEmployee;
+                }
+                throw new Exception("The employee does not exist !");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private static string? GenerateSubmitedInfo(EmployeeUpdateInfo employee)
+        {
+            string submitedInfo =
+                $"Email: {employee.Email}, " +
                 $"Address: {employee.Address}, " +
                 $"Province: {employee.Province}, " +
                 $"District: {employee.District}, " +
                 $"PhoneNumber: {employee.PhoneNumber}, " +
-                $"BranchId: {employee.BranchId}, ";
+                $"Avatar: {employee.Avatar}, ";
 
             return submitedInfo;
         }
 
-        public Task<Employee> UpdateInfo(int id, EmployeeUpdateInfo employee)
-        {
-            try
-            {
-                return null;
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
-        }
 
         public async Task<Employee> CheckLogin(RDTOEmployeeLogin employee)
         {
@@ -122,14 +126,14 @@ namespace TARS_Delivery.Repositories.imp
 
                 if (existedEmployee != null)
                 {
-                    var checkPassword = AccountSecurity.VerifyPassword(employee.Password, existedEmployee.Password);
-                    if (checkPassword)
+                    var checkPassword = await _context.Employees.FirstOrDefaultAsync(e => e.Password == employee.Password);
+                    if (checkPassword != null)
                     {
                         return existedEmployee;
                     }
                     return null;
                 }
-                throw new Exception("The employee does not exist !");
+                throw new Exception("The employee does not exist!");
             }
             catch (Exception ex)
             {

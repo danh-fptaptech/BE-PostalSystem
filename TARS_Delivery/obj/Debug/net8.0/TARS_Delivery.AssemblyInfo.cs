@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TARS_Delivery")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c4c148b0a6ac36b7308e6bae5d59dc27b2b5d213")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+af3dfb35ab262768d5b56f3f9d97d67cf57fa8af")]
 [assembly: System.Reflection.AssemblyProductAttribute("TARS_Delivery")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TARS_Delivery")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

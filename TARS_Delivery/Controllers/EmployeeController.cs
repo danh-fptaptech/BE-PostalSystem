@@ -79,7 +79,7 @@ namespace TARS_Delivery.Controllers
         }
 
         
-        [HttpPut("{id}")]
+        [HttpPut("{id}/ChangePassword")]
         public async Task<ActionResult> UpdatePassword(int id, [FromForm] UpdatePassword employee)
         {
             try
@@ -103,8 +103,8 @@ namespace TARS_Delivery.Controllers
         }
 
 
-        [HttpPatch("{id}")]
-        public async Task<ActionResult> UpdateInfo(int id, [FromForm] EmployeeUpdateInfo employee)
+        [HttpPut("{id}/UpdateInfo")]
+        public async Task<ActionResult> UpdateInfoAsync(int id, [FromForm] EmployeeUpdateInfo employee)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace TARS_Delivery.Controllers
                     var updatedEmployee = await _service.GetEmployee(id);
                     if (updatedEmployee != null)
                     {
-                        await _service.UpdateInfo(id, employee);
+                        await _service.UpdateInfoAsync(id, employee);
                         return Ok(updatedEmployee);
                     }
                     return NotFound("This employee does not exist !");
@@ -144,35 +144,6 @@ namespace TARS_Delivery.Controllers
                 throw new Exception(ex.Message);
             }
         }
-
-        /*public async Task<ActionResult<Employee>> CheckLogin(RDTOEmployeeLogin employee)
-        {
-            try
-            {
-                var existedEmployee = await _context.Employees.FirstOrDefaultAsync(a => a.Email.Equals(employee.Email));
-                if (existedEmployee != null)
-                {
-                    var checkMatchPass = await _context.Employees.FirstOrDefaultAsync(a => a.Password.Equals(employee.Password));
-                    if (checkMatchPass != null)
-                    {
-                        return existedEmployee;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }*/
 
     }
 }

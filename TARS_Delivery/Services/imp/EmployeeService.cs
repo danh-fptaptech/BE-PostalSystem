@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
@@ -31,7 +32,7 @@ namespace TARS_Delivery.Services.imp
             {
                 EmployeeCode = employee.EmployeeCode,
                 Email = employee.Email,
-                Password = employee.Password,
+                Password = PasswordHasher.HashPassword(employee.Password),
                 Fullname = employee.Fullname,
                 Address = employee.Address,
                 Province = employee.Province,
@@ -61,9 +62,9 @@ namespace TARS_Delivery.Services.imp
             }
         }
 
-        public Task<Employee> UpdateInfo(int id, EmployeeUpdateInfo employee)
+        public async Task<Employee> UpdateInfoAsync(int id, EmployeeUpdateInfo employee)
         {
-            throw new NotImplementedException();
+            return await _repository.UpdateInfoAsync(id, employee);
         }
 
         public async Task<Employee> CheckLogin(RDTOEmployeeLogin employee)

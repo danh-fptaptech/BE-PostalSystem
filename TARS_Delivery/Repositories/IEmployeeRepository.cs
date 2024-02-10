@@ -11,7 +11,7 @@ namespace TARS_Delivery.Repositories
         Task<Employee> GetEmployee(int id);
         Task<Employee> Create(Employee employee);
         Task<Employee> UpdatePassword(int id, UpdatePassword employee);
-        Task<Employee> UpdateInfo(int id, EmployeeUpdateInfo employee);
+        Task<Employee> UpdateInfoAsync(int id, EmployeeUpdateInfo employee);
         Task<Employee> CheckLogin(RDTOEmployeeLogin employee);
 
     }

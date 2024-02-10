@@ -10,7 +10,7 @@ namespace TARS_Delivery.Services
         Task<Employee> GetEmployee(int id);
         Task<Employee> Create(RDTOEmployee employee);
         Task<Employee> UpdatePassword(int id, UpdatePassword employee);
-        Task<Employee> UpdateInfo(int id, EmployeeUpdateInfo employee);
+        Task<Employee> UpdateInfoAsync(int id, EmployeeUpdateInfo employee);
         Task<Employee> CheckLogin(RDTOEmployeeLogin employee);
     }
 }
