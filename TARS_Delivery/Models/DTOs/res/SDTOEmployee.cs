@@ -20,5 +20,8 @@ namespace TARS_Delivery.Models.DTOs.res
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         public EStatusData Status { get; set; }
+        public int BranchId { get; set; }
+        public int RoleId { get; set; }
+        
     }
 }

@@ -10,8 +10,9 @@ namespace TARS_Delivery.Repositories
         Task<IEnumerable<SDTOEmployee>> GetEmployees();
         Task<Employee> GetEmployee(int id);
         Task<Employee> Create(Employee employee);
-        Task<Employee> UpdatePassword(int id, UpdatePassword employee);
-        Task<Employee> UpdateInfoAsync(int id, EmployeeUpdateInfo employee);
+        Task<Employee> UpdatePassword(int id, RDTOChangePassword employee);
+        Task<Employee> UpdateInfoAsync(int id, UpdateInfoAsync employee);
+        Task<Employee> AcceptUpdateInfo(int id);
         Task<Employee> CheckLogin(RDTOEmployeeLogin employee);
 
     }

@@ -12,7 +12,7 @@ using TARS_Delivery.Models;
 namespace TARS_Delivery.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240207152223_TARS_Delivery")]
+    [Migration("20240211171548_TARS_Delivery")]
     partial class TARS_Delivery
     {
         /// <inheritdoc />

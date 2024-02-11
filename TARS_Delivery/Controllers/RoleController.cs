@@ -49,7 +49,7 @@ namespace TARS_Delivery.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateRole([FromForm] Role role)
+        public async Task<ActionResult> CreateRole([FromForm] RDTORole role)
         {
             try
             {

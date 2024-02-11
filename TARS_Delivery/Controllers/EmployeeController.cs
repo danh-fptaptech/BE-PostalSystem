@@ -80,7 +80,7 @@ namespace TARS_Delivery.Controllers
 
         
         [HttpPut("{id}/ChangePassword")]
-        public async Task<ActionResult> UpdatePassword(int id, [FromForm] UpdatePassword employee)
+        public async Task<ActionResult> UpdatePassword(int id, [FromForm] RDTOChangePassword employee)
         {
             try
             {
@@ -103,8 +103,8 @@ namespace TARS_Delivery.Controllers
         }
 
 
-        [HttpPut("{id}/UpdateInfo")]
-        public async Task<ActionResult> UpdateInfoAsync(int id, [FromForm] EmployeeUpdateInfo employee)
+        [HttpPut("{id}/UpdateInfoAsync")]
+        public async Task<ActionResult> UpdateInfoAsync(int id, [FromForm] UpdateInfoAsync employee)
         {
             try
             {
@@ -125,6 +125,22 @@ namespace TARS_Delivery.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+
+        [HttpPut("{id}/AcceptUpdateInfo")]
+        public async Task<ActionResult> AcceptSumitedInfo(int id)
+        {
+            try
+            {
+                await _service.AcceptUpdateInfo(id);
+                return Ok("The employee information was updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
         // Check Login
         [HttpPost("login")]

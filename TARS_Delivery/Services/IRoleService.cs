@@ -9,7 +9,7 @@ namespace TARS_Delivery.Services
     {
         Task<IEnumerable<SDTORole>> GetRoles();
         Task<Role> GetRole(int id);
-        Task<Role> Create(Role role);
+        Task<Role> Create(RDTORole role);
         Task<Role> Update(int id, RDTORole role);
         Task<Role> Delete(int id);
         Task<IEnumerable<Employee>> GetEmployeesById(int id);

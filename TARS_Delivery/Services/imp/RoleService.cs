@@ -24,7 +24,7 @@ namespace TARS_Delivery.Services.imp
             return await _repository.GetRole(id);
         }
 
-        public async Task<Role> Create(Role role)
+        public async Task<Role> Create(RDTORole role)
         {
             Role newRole = new()
             {

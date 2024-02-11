@@ -2,7 +2,7 @@
 
 namespace TARS_Delivery.Models.DTOs.req
 {
-    public class UpdatePassword
+    public class RDTOChangePassword
     {
         [Required(ErrorMessage = "Password is required.")]
         public string Password { get; set; }

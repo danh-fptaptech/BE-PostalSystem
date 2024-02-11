@@ -9,14 +9,17 @@ namespace TARS_Delivery.Models;
 public class DtoProfile : Profile
 {
     public DtoProfile() {
-      
+
         #region Request DTOs
-        
-        
+
+
         CreateMap<Branch, RDTOBranch>().ReverseMap();
+        //Employee
         CreateMap<Employee, RDTOEmployeeLogin>().ReverseMap();
         CreateMap<Employee, RDTOEmployee>().ReverseMap();
-        CreateMap<Employee, UpdatePassword>().ReverseMap();
+        CreateMap<Employee, RDTOChangePassword>().ReverseMap();
+        CreateMap<Employee, UpdateInfoAsync>().ReverseMap();
+
         CreateMap<Role, RDTORole>().ReverseMap();
         CreateMap<Permission, RDTOPermisson>().ReverseMap();
 

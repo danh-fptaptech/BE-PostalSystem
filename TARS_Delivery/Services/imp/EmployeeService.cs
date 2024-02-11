@@ -49,7 +49,7 @@ namespace TARS_Delivery.Services.imp
             return await _repository.Create(newEmployee);
         }
 
-        public async Task<Employee> UpdatePassword(int id, UpdatePassword employee)
+        public async Task<Employee> UpdatePassword(int id, RDTOChangePassword employee)
         {
             var updatedEmployee = await _repository.GetEmployee(id);
             if (updatedEmployee == null)
@@ -62,14 +62,21 @@ namespace TARS_Delivery.Services.imp
             }
         }
 
-        public async Task<Employee> UpdateInfoAsync(int id, EmployeeUpdateInfo employee)
+        public async Task<Employee> UpdateInfoAsync(int id, UpdateInfoAsync employee)
         {
             return await _repository.UpdateInfoAsync(id, employee);
+        }
+
+        public Task<Employee> AcceptUpdateInfo(int id)
+        {
+            return _repository.AcceptUpdateInfo(id);
         }
 
         public async Task<Employee> CheckLogin(RDTOEmployeeLogin employee)
         {
             return await _repository.CheckLogin(employee);
         }
+
+        
     }
 }
