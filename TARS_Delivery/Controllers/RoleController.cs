@@ -77,8 +77,12 @@ namespace TARS_Delivery.Controllers
                     var updatedRole = await _service.GetRole(id);
                     if (updatedRole != null)
                     {
-                        await _service.Update(id, role);
-                        return Ok(updatedRole);
+                        if(updatedRole.Id > 3)
+                        {
+                            await _service.Update(id, role);
+                            return Ok(updatedRole);
+                        }
+                        return Content("It's system role. You can not edit it.");
                     }
                     return NotFound("This role does not exist !");
                 }
@@ -98,14 +102,18 @@ namespace TARS_Delivery.Controllers
                 var removedRole = await _service.GetRole(id);
                 if(removedRole != null)
                 {
-                    await _service.Delete(id);
-                    return Ok("Delete successfully.");
+                    if(removedRole.Id > 3)
+                    {
+                        await _service.Delete(id);
+                        return Ok("Delete role successfully.");
+                    }
+                    return Content("It's system role. You can not delete.");
                 }
                 return NotFound("This role does not exist !");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
     }

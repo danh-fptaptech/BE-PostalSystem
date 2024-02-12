@@ -56,8 +56,12 @@ namespace TARS_Delivery.Repositories.imp
                 Role updatedRole = await _context.Roles.FindAsync(id);
                 if (updatedRole != null)
                 {
-                    updatedRole.Status = role.Status;
-                    await _context.SaveChangesAsync();
+                    if(updatedRole.Id > 3)
+                    {
+                        updatedRole.RoleName = role.RoleName;
+                        updatedRole.Status = role.Status;
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 return null;
             }
@@ -74,8 +78,11 @@ namespace TARS_Delivery.Repositories.imp
                 var removedRole = await _context.Roles.FindAsync(id);
                 if (removedRole != null)
                 {
-                    _context.Roles.Remove(removedRole);
-                    await _context.SaveChangesAsync();
+                    if (removedRole.Id > 3)
+                    {
+                        _context.Roles.Remove(removedRole);
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 return null;
             }

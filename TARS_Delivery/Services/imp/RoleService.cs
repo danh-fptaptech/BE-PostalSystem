@@ -39,11 +39,6 @@ namespace TARS_Delivery.Services.imp
             return await _repository.Update(id, role);
         }
 
-        public Task<IEnumerable<Employee>> GetEmployeesById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<Role> Delete(int id)
         {
             return _repository.Delete(id);

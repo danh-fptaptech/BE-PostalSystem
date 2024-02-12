@@ -8,8 +8,7 @@ namespace TARS_Delivery.Services
     {
         Task<IEnumerable<Permission>> GetPermissions();
         Task<Permission> GetPermission(int id);
-        Task<Permission> Create(Permission permission);
-        Task<Permission> Update(int id, RDTOPermisson permission);
-        Task<Permission> Delete(int id);
+        Task<Permission> Create(RDTOPermission permission);
+        Task<Permission> Update(int id, RDTOPermission permission);
     }
 }

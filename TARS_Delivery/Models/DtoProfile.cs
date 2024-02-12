@@ -21,7 +21,7 @@ public class DtoProfile : Profile
         CreateMap<Employee, UpdateInfoAsync>().ReverseMap();
 
         CreateMap<Role, RDTORole>().ReverseMap();
-        CreateMap<Permission, RDTOPermisson>().ReverseMap();
+        CreateMap<Permission, RDTOPermission>().ReverseMap();
 
 
         #endregion

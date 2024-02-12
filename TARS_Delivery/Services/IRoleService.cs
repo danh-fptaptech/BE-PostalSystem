@@ -12,6 +12,5 @@ namespace TARS_Delivery.Services
         Task<Role> Create(RDTORole role);
         Task<Role> Update(int id, RDTORole role);
         Task<Role> Delete(int id);
-        Task<IEnumerable<Employee>> GetEmployeesById(int id);
     }
 }

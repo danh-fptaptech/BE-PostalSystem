@@ -52,7 +52,7 @@ namespace TARS_Delivery.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> CreatePermission([FromForm] Permission permission)
+        public async Task<ActionResult> CreatePermission([FromForm] RDTOPermission permission)
         {
             try
             {
@@ -72,7 +72,7 @@ namespace TARS_Delivery.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdatePermission(int id, [FromForm] RDTOPermisson permission)
+        public async Task<ActionResult> UpdatePermission(int id, [FromForm] RDTOPermission permission)
         {
             try
             {
@@ -87,26 +87,6 @@ namespace TARS_Delivery.Controllers
                     return NotFound("This permission does not exist !");
                 }
                 return BadRequest();
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message);
-            }
-        }
-
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> RemovePermission(int id)
-        {
-            try
-            {
-                Permission permission = await _service.GetPermission(id);
-                if (permission != null)
-                {
-                    await _service.Delete(id);
-                    return Ok("Delete Successfully.");
-                }
-                return NotFound("This permission does not exist !");
             }
             catch (Exception ex)
             {

@@ -23,7 +23,7 @@ namespace TARS_Delivery.Services.imp
             return await _repository.GetPermission(id);
         }
 
-        public async Task<Permission> Create(Permission permission)
+        public async Task<Permission> Create(RDTOPermission permission)
         {
             Permission newPermission = new()
             {
@@ -32,14 +32,9 @@ namespace TARS_Delivery.Services.imp
             return await _repository.Create(newPermission);
         }
 
-        public Task<Permission> Update(int id, RDTOPermisson permission)
+        public Task<Permission> Update(int id, RDTOPermission permission)
         {
             return _repository.Update(id, permission);
-        }
-
-        public async Task<Permission> Delete(int id)
-        {
-            return await _repository.Delete(id);
         }
     }
 }

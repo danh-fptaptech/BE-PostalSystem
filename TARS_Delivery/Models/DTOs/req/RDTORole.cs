@@ -6,7 +6,7 @@ namespace TARS_Delivery.Models.DTOs.req
 {
     public class RDTORole
     {
-        [Required(ErrorMessage = "The role name is required.")]
+        [Required(ErrorMessage = "The role name is required and exclude Admin | Warehouse | Delivery")]
         public string RoleName { get; set; }
         public EStatusData Status { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Linq;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
@@ -9,9 +10,9 @@ namespace TARS_Delivery.Repositories.imp
     public class PermissionRepository : IPermissionRepository
     {
         private readonly DatabaseContext _context;
-        public PermissionRepository(DatabaseContext databaseContext)
+        public PermissionRepository(DatabaseContext context)
         {
-            _context = databaseContext;
+            _context = context;
         }
 
 
@@ -46,35 +47,27 @@ namespace TARS_Delivery.Repositories.imp
             }
         }
 
-        public async Task<Permission> Update(int id, RDTOPermisson permission)
+        public async Task<Permission> Update(int id, RDTOPermission permission)
         {
             try
             {
                 var updatedPermission = await _context.Permissions.FindAsync(id);
                 if (updatedPermission != null)
                 {
-                    updatedPermission.PermissionName = permission.PermissionName;
-                    await _context.SaveChangesAsync();
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+                    var existingPermission = await _context.Permissions
+                        .FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName && p.Id != id);
 
-        public async Task<Permission> Delete(int id)
-        {
-            try
-            {
-                var existedPermission = await _context.Permissions.FindAsync(id);
-                if (existedPermission != null)
-                {
-                    _context.Permissions.Remove(existedPermission);
+                    if (existingPermission != null)
+                    {
+                        throw new Exception("The permission name already exists.");
+                    }
+
+                    _context.Entry(updatedPermission).CurrentValues.SetValues(permission);
                     await _context.SaveChangesAsync();
+
+                    return updatedPermission;
                 }
-                return null;
+                throw new Exception("This permission does not exist!");
             }
             catch (Exception ex)
             {

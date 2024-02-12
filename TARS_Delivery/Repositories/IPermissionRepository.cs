@@ -8,7 +8,7 @@ namespace TARS_Delivery.Repositories
         Task<IEnumerable<Permission>> GetPermissions();
         Task<Permission> GetPermission(int id);
         Task<Permission> Create(Permission permission);
-        Task<Permission> Update(int id, RDTOPermisson permission);
-        Task<Permission> Delete(int id);
+        Task<Permission> Update(int id, RDTOPermission permission);
+        //Task<Permission> SetPermission(RDTOSetPermission permission);
     }
 }
