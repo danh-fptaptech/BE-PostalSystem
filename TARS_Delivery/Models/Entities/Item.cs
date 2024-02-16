@@ -24,16 +24,11 @@ namespace TARS_Delivery.Models.Entities
         public decimal ItemValue { get; set; }
         [Required]
         public EItemType ItemType { get; set; }
-        [Required]
-        public int BranchId { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        [DefaultValue(EStatusData.Active)]
+        public DateTime? CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         public EStatusData Status { get; set; }
         
         [ForeignKey("PackageId")]
-        public virtual Package? Package { get; set; }
-        [ForeignKey("BranchId")]
-        public virtual Branch? Branch { get; set; }
+        public virtual Package Package { get; set; }
     }
 }

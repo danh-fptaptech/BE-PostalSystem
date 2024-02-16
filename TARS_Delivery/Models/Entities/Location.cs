@@ -10,16 +10,16 @@ namespace TARS_Delivery.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string LocationName { get; set; }
-        public int PostalCode { get; set; }
+        public string? PostalCode { get; set; }
         public ELocationLevel LocationLevel { get; set; }
         public int? LocationOf { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public DateTime? CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         
         public EStatusData Status { get; set; }
 
         [ForeignKey("LocationOf")]
-        public virtual Location ParentLocation { get; set; }
-        public virtual ICollection<Location> ChildLocations { get; set; }
+        public virtual Location? ParentLocation { get; set; }
+        public virtual ICollection<Location>? ChildLocations { get; set; }
     }
 }
