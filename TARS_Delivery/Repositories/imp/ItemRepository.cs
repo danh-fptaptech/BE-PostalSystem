@@ -26,9 +26,8 @@ namespace TARS_Delivery.Repositories.imp
                     ItemQuantity = x.ItemQuantity,
                     ItemValue = x.ItemValue,
                     ItemType = x.ItemType,
-                    BranchId = x.BranchId,
-                    CreatedAt = x.CreatedAt,
-                    UpdatedAt = x.UpdatedAt
+                    CreatedAt = (DateTime)x.CreatedAt,
+                    UpdatedAt = (DateTime)x.UpdatedAt
                 })
                 .ToListAsync();
         }
@@ -50,7 +49,6 @@ namespace TARS_Delivery.Repositories.imp
                 ItemQuantity = item.ItemQuantity,
                 ItemValue = item.ItemValue,
                 ItemType = item.ItemType,
-                BranchId = item.BranchId,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 Status = EStatusData.Active
@@ -70,7 +68,6 @@ namespace TARS_Delivery.Repositories.imp
             itemToUpdate.ItemQuantity = item.ItemQuantity;
             itemToUpdate.ItemValue = item.ItemValue;
             itemToUpdate.ItemType = item.ItemType;
-            itemToUpdate.BranchId = item.BranchId;
             itemToUpdate.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return itemToUpdate;

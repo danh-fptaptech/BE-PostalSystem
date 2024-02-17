@@ -27,8 +27,8 @@ namespace TARS_Delivery.Repositories.imp
                     Step = hl.Step,
                     HistoryNote = hl.HistoryNote,
                     Photos = hl.Photos,
-                    CreatedAt = hl.CreatedAt,
-                    UpdatedAt = hl.UpdatedAt,
+                    CreatedAt = (DateTime)hl.CreatedAt,
+                    UpdatedAt = (DateTime)hl.UpdatedAt,
                     Status = hl.Status
                 })
                 .ToListAsync();
