@@ -7,11 +7,11 @@ namespace TARS_Delivery.Services
     public interface IEmployeeService
     {
         Task<IEnumerable<SDTOEmployee>> GetEmployees();
-        Task<Employee> GetEmployee(int id);
-        Task<Employee> Create(RDTOEmployee employee);
+        Task<SDTOEmployee> GetEmployee(int id);
+        Task<Employee> CreateEmployeeAsync(RDTOEmployee employee);
         Task<Employee> UpdatePassword(int id, RDTOChangePassword employee);
         Task<Employee> UpdateInfoAsync(int id, UpdateInfoAsync employee);
         Task<Employee> AcceptUpdateInfo(int id);
-        Task<Employee> CheckLogin(RDTOEmployeeLogin employee);
+        Task<Employee> ChangeStatus (int id, RDTOChangeStatus employee);
     }
 }

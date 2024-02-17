@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
@@ -13,31 +14,35 @@ namespace TARS_Delivery.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly EmployeeService _service;
-        private readonly DatabaseContext _context;
 
-        public EmployeeController(EmployeeService service, DatabaseContext context)
+        public EmployeeController(EmployeeService service)
         {
             _service = service;
-            _context = context;
         }
 
 
-        [HttpGet]
-        public async Task<ActionResult> GetEmployees()
+        [HttpGet] // done
+        //[Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetEmployees(int id)
         {
             try
             {
-                var employees = await _service.GetEmployees();
-                return Ok(employees);
+                var adminCredential = await _service.GetEmployee(id);
+                if(adminCredential != null && adminCredential.RoleName == "Admin")
+                {
+                    var employees = await _service.GetEmployees();
+                    return Ok(employees);
+                }
+                return Content("The employee doesn't have right to access.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] // done
         public async Task<ActionResult> GetEmployee(int id)
         {
             try
@@ -56,30 +61,28 @@ namespace TARS_Delivery.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost] // done
         public async Task<ActionResult> CreateEmployee([FromForm] RDTOEmployee employee)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await _service.Create(employee);
-                    return Ok(employee);
+                    var createdEmployee = await _service.CreateEmployeeAsync(employee);
+                    return Ok(createdEmployee);
                 }
-                return BadRequest();
+
+                return BadRequest(ModelState);
             }
             catch (Exception ex)
             {
-
-                ModelState.AddModelError("EmployeeCode", ex.Message);
-                ModelState.AddModelError("Email", ex.Message);
-                ModelState.AddModelError("PhoneNumber", ex.Message);
-                return Problem(ex.Message);
+                ModelState.AddModelError("Error: ", ex.Message);
+                return BadRequest(ModelState);
             }
         }
 
-        
-        [HttpPut("{id}/ChangePassword")]
+
+        [HttpPut("{id}/ChangePassword")] // done
         public async Task<ActionResult> UpdatePassword(int id, [FromForm] RDTOChangePassword employee)
         {
             try
@@ -90,11 +93,41 @@ namespace TARS_Delivery.Controllers
                     if (updatedEmployee != null)
                     {
                         await _service.UpdatePassword(id, employee);
-                        return Ok(updatedEmployee);
+                        return Ok("Change password successfully.");
                     }
                     return NotFound("This employee does not exist !");
                 }
-                return BadRequest();
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error: ", ex.Message);
+                return BadRequest(ModelState);
+            }
+        }
+
+
+        [HttpPut("{id}/ChangeStatus")] // still fix
+        public async Task<ActionResult> ChangeStatus(int id, [FromForm] RDTOChangeStatus employee)
+        {
+            try
+            {
+                var adminCredential = await _service.GetEmployee(id);
+                if (adminCredential != null && adminCredential.Role.RoleName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (ModelState.IsValid)
+                    {
+                        var updatedEmployee = await _service.GetEmployee(id);
+                        if (updatedEmployee != null)
+                        {
+                            await _service.ChangeStatus(id, employee);
+                            return Ok(updatedEmployee);
+                        }
+                        return NotFound("This employee does not exist !");
+                    }
+                    return BadRequest();
+                }
+                return Problem("It is possible for the admin to change status.");
             }
             catch (Exception ex)
             {
@@ -103,7 +136,7 @@ namespace TARS_Delivery.Controllers
         }
 
 
-        [HttpPut("{id}/UpdateInfoAsync")]
+        [HttpPut("{id}/UpdateInfoAsync")] // done
         public async Task<ActionResult> UpdateInfoAsync(int id, [FromForm] UpdateInfoAsync employee)
         {
             try
@@ -114,7 +147,7 @@ namespace TARS_Delivery.Controllers
                     if (updatedEmployee != null)
                     {
                         await _service.UpdateInfoAsync(id, employee);
-                        return Ok(updatedEmployee);
+                        return Ok("Send updated request successfully. Please wait for the admin accept.");
                     }
                     return NotFound("This employee does not exist !");
                 }
@@ -127,33 +160,19 @@ namespace TARS_Delivery.Controllers
         }
 
 
-        [HttpPut("{id}/AcceptUpdateInfo")]
+        [HttpPut("{id}/AcceptUpdateInfo")] // done
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult> AcceptSumitedInfo(int id)
         {
             try
             {
-                await _service.AcceptUpdateInfo(id);
-                return Ok("The employee information was updated successfully.");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-
-        // Check Login
-        [HttpPost("login")]
-        public async Task<ActionResult<Employee>> CheckLogin([FromForm] RDTOEmployeeLogin employee)
-        {
-            try
-            {
-                if (ModelState.IsValid)
+                var employee = await _service.GetEmployee(id);
+                if (employee != null)
                 {
-                    await _service.CheckLogin(employee);
-                    return Ok(employee);
+                    var updatedEmployee = await _service.AcceptUpdateInfo(id);
+                    return Ok(updatedEmployee);
                 }
-                return BadRequest();
+                return NotFound("The employee does not exist !");
             }
             catch (Exception ex)
             {

@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
@@ -11,61 +12,117 @@ namespace TARS_Delivery.Repositories.imp
     public class EmployeeRepository(DatabaseContext context, IMapper mapper) : IEmployeeRepository
     {
         private readonly DatabaseContext _context = context;
-        private readonly IMapper _mapper = mapper;
+        //private readonly IMapper _mapper = mapper;
 
-        public async Task<Employee> CheckLogin(RDTOEmployeeLogin employee)
-        {
-            try
-            {
-                var existedEmployee = await _context.Employees.FirstOrDefaultAsync(e => e.Email == employee.Email);
-
-                if (existedEmployee != null)
-                {
-                    var checkPassword = await _context.Employees.FirstOrDefaultAsync(e => e.Password == employee.Password);
-                    if (checkPassword != null)
-                    {
-                        return existedEmployee;
-                    }
-                    return null;
-                }
-                throw new Exception("The employee does not exist!");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
 
         public async Task<IEnumerable<SDTOEmployee>> GetEmployees()
         {
-            IEnumerable<Employee> employees = await _context.Employees.ToListAsync();
-            return _mapper.Map<IEnumerable<SDTOEmployee>>(employees);
+            IEnumerable<Employee> employees = await _context.Employees
+                .Include(e => e.Role) // get all information from Entity<Role>
+                .Include(e => e.Branch)
+                .Include(e => e.HistoryLogs)
+                .ToListAsync();
+
+            IEnumerable<SDTOEmployee> dtoEmployees = employees.Select(e => new SDTOEmployee
+            {
+                Id = e.Id,
+                EmployeeCode = e.EmployeeCode,
+                Email = e.Email,
+                Password = e.Password,
+                Fullname = e.Fullname,
+                Address = e.Address,
+                Province = e.Province,
+                District = e.District,
+                PhoneNumber = e.PhoneNumber,
+                Avatar = e.Avatar,
+                SubmitedInfo = e.SubmitedInfo,
+                CreatedAt = e.CreatedAt,
+                UpdatedAt = e.UpdatedAt,
+                Status = e.Status,
+                BranchId = e.BranchId,
+                BranchName = e.Branch.BranchName,
+                RoleId = e.RoleId,
+                RoleName = e.Role.RoleName, // get RoleName
+                HistoryLogs = e.HistoryLogs.Select(h => new HistoryLog
+                {
+                    Id = h.Id,
+                    PackageId = h.PackageId,
+                    Package = h.Package,
+                    Step = h.Step,
+                    HistoryNote = h.HistoryNote,
+                    Photos = h.Photos,
+                    Status = h.Status,
+                    CreatedAt = h.CreatedAt,
+                }).ToList()
+            });
+
+            return dtoEmployees;
         }
 
-        public async Task<Employee> GetEmployee(int id)
+        public async Task<SDTOEmployee> GetEmployee(int id)
         {
-            return await _context.Employees.FindAsync(id);
+            var employee = await _context.Employees
+            .Include(e => e.Role)
+            .Include(e => e.Branch)
+            .Include(e => e.HistoryLogs)
+            .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (employee != null)
+            {
+                SDTOEmployee dtoEmployee = new()
+                {
+                    Id = employee.Id,
+                    EmployeeCode = employee.EmployeeCode,
+                    Fullname = employee.Fullname,
+                    Email = employee.Email,
+                    Password = employee.Password,
+                    PhoneNumber = employee.PhoneNumber,
+                    Address = employee.Address,
+                    Province = employee.Province,
+                    District = employee.District,
+                    Avatar = employee.Avatar,
+                    SubmitedInfo = employee.SubmitedInfo,
+                    CreatedAt = employee.CreatedAt,
+                    BranchId = employee.BranchId,
+                    BranchName = employee.Branch.BranchName,
+                    RoleId = employee.RoleId,
+                    RoleName = employee.Role.RoleName,
+                    HistoryLogs = employee.HistoryLogs.Select(h => new HistoryLog
+                    {
+                        Id = h.Id,
+                        PackageId = h.PackageId,
+                        Package = h.Package,
+                        EmployeeId = h.EmployeeId,
+                        Step = h.Step,
+                        HistoryNote = h.HistoryNote,
+                        Photos = h.Photos,
+                        Status = h.Status
+                    }).ToList()
+                };
+                return dtoEmployee;
+            }
+            throw new Exception("The employee does not exist !");
         }
 
-        public async Task<Employee> Create(Employee employee)
+        public async Task<Employee> CreateEmployeeAsync(Employee employee)
         {
             try
             {
                 var duplicatedCode = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeCode == employee.EmployeeCode);
                 var existedEmail = await _context.Employees.FirstOrDefaultAsync(e => e.Email == employee.Email);
                 var existedPhone = await _context.Employees.FirstOrDefaultAsync(e => e.PhoneNumber == employee.PhoneNumber);
-                
+
                 if (duplicatedCode != null)
                 {
                     throw new Exception("The employee code has already existed.");
                 }
 
-                if(existedEmail != null)
+                if (existedEmail != null)
                 {
                     throw new Exception("The email address has already been used.");
                 }
 
-                if(existedPhone != null)
+                if (existedPhone != null)
                 {
                     throw new Exception("The phone number has already been used.");
                 }
@@ -76,6 +133,8 @@ namespace TARS_Delivery.Repositories.imp
             }
             catch (Exception ex)
             {
+                // Log the exception for debugging purposes
+                Console.WriteLine(ex);
                 throw new Exception(ex.Message);
             }
         }
@@ -103,6 +162,29 @@ namespace TARS_Delivery.Repositories.imp
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<Employee> ChangeStatus(int id, RDTOChangeStatus employee)
+        {
+            try
+            {
+                var UpdatedEmployee = await _context.Employees.FindAsync(id);
+                if (UpdatedEmployee != null)
+                {
+                    UpdatedEmployee.Status = employee.Status;
+
+                    UpdatedEmployee.UpdatedAt = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                    return UpdatedEmployee;
+                }
+                throw new Exception("The employee does not exist !");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
                 throw new Exception(ex.Message);
             }
         }
@@ -111,10 +193,19 @@ namespace TARS_Delivery.Repositories.imp
         {
             try
             {
-                Employee updatedEmployee = await _context.Employees.FindAsync(id);
+                var updatedEmployee = await _context.Employees.FindAsync(id);
                 if (updatedEmployee != null)
-                {
-                    updatedEmployee.SubmitedInfo = GenerateSubmitedInfo(employee);
+                {   
+                    // get oldValue 
+                    string oldEmail = updatedEmployee.Email;
+                    string oldAddress = updatedEmployee.Address;
+                    string oldProvince = updatedEmployee.Province;
+                    string oldDistrict = updatedEmployee.District;
+                    string oldPhoneNumber = updatedEmployee.PhoneNumber;
+                    string oldAvatar = updatedEmployee.Avatar;
+
+                    // If SubmitedInfo have any unchange field, it hold oldValue of that field.
+                    updatedEmployee.SubmitedInfo = GenerateSubmitedInfo(employee, oldEmail, oldAddress, oldProvince, oldDistrict, oldPhoneNumber, oldAvatar);
 
                     await _context.SaveChangesAsync();
                     return updatedEmployee;
@@ -158,103 +249,49 @@ namespace TARS_Delivery.Repositories.imp
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 throw new Exception(ex.Message);
             }
         }
 
-
-        //public async Task<Employee> AcceptUpdateInfo(int id)
-        //{
-        //    try
-        //    {
-        //        var updatedEmployee = await _context.Employees.FindAsync(id);
-        //        if (updatedEmployee != null)
-        //        {
-        //            var submitedInfo = updatedEmployee.SubmitedInfo;
-        //            if (submitedInfo != null)
-        //            {
-        //                var parsedInfo = ParseSubmitedInfo(submitedInfo);
-        //                if (parsedInfo != null)
-        //                {
-        //                    // check the sumitedInfo in `UpdateInfoAsync` method 
-        //                    if (!string.IsNullOrEmpty(updatedEmployee.Email))
-        //                        updatedEmployee.Email = parsedInfo.Email;
-
-        //                    if (!string.IsNullOrEmpty(updatedEmployee.Address))
-        //                        updatedEmployee.Address = parsedInfo.Address;
-
-        //                    if (!string.IsNullOrEmpty(updatedEmployee.Province))
-        //                        updatedEmployee.Province = parsedInfo.Province;
-
-        //                    if (!string.IsNullOrEmpty(updatedEmployee.District))
-        //                        updatedEmployee.District = parsedInfo.District;
-
-        //                    if (!string.IsNullOrEmpty(updatedEmployee.PhoneNumber))
-        //                        updatedEmployee.PhoneNumber = parsedInfo.PhoneNumber;
-
-        //                    if (!string.IsNullOrEmpty(updatedEmployee.Avatar))
-        //                        updatedEmployee.Avatar = parsedInfo.Avatar;
-
-        //                    // Update sumitedInfo into employee object
-        //                    //updatedEmployee.Email = parsedInfo.Email;
-        //                    //updatedEmployee.Address = parsedInfo.Address;
-        //                    //updatedEmployee.Province = parsedInfo.Province;
-        //                    //updatedEmployee.District = parsedInfo.District;
-        //                    //updatedEmployee.PhoneNumber = parsedInfo.PhoneNumber;
-        //                    //updatedEmployee.Avatar = parsedInfo.Avatar;
-
-        //                    updatedEmployee.SubmitedInfo = null;
-        //                    updatedEmployee.UpdatedAt = DateTime.Now;
-        //                    await _context.SaveChangesAsync();
-        //                }
-        //            }
-        //            return updatedEmployee;
-        //        }
-        //        return null;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //}
-
-        private static string GenerateSubmitedInfo(UpdateInfoAsync employee)
+        private static string GenerateSubmitedInfo(UpdateInfoAsync updatedInfo, 
+            string oldEmail, string oldAddress, string oldProvince, string oldDistrict, 
+            string oldPhoneNumber, string oldAvatar)
         {
-            string submitedInfo =
-            $"Email: {employee.Email}, " +
-            $"Address: {employee.Address}, " +
-            $"Province: {employee.Province}, " +
-            $"District: {employee.District}, " +
-            $"PhoneNumber: {employee.PhoneNumber}, " +
-            $"Avatar: {employee.Avatar} ";
+            StringBuilder submittedInfoBuilder = new();
 
-            return submitedInfo;
+            if (updatedInfo.Email != null && updatedInfo.Email != oldEmail)
+                submittedInfoBuilder.Append($"Email: {updatedInfo.Email}, ");
+            else
+                submittedInfoBuilder.Append($"Email: {oldEmail}, ");
+
+            if (updatedInfo.Address != null && updatedInfo.Address != oldAddress)
+                submittedInfoBuilder.Append($"Address: {updatedInfo.Address}, ");
+            else
+                submittedInfoBuilder.Append($"Address: {oldAddress}, ");
+
+            if (updatedInfo.Province != null && updatedInfo.Province != oldProvince)
+                submittedInfoBuilder.Append($"Province: {updatedInfo.Province}, ");
+            else
+                submittedInfoBuilder.Append($"Province: {oldProvince}, ");
+
+            if (updatedInfo.District != null && updatedInfo.District != oldDistrict)
+                submittedInfoBuilder.Append($"District: {updatedInfo.District}, ");
+            else
+                submittedInfoBuilder.Append($"District: {oldDistrict}, ");
+
+            if (updatedInfo.PhoneNumber != null && updatedInfo.PhoneNumber != oldPhoneNumber)
+                submittedInfoBuilder.Append($"PhoneNumber: {updatedInfo.PhoneNumber}, ");
+            else
+                submittedInfoBuilder.Append($"PhoneNumber: {oldPhoneNumber}, ");
+
+            if (updatedInfo.Avatar != null && updatedInfo.Avatar != oldAvatar)
+                submittedInfoBuilder.Append($"Avatar: {updatedInfo.Avatar}");
+            else
+                submittedInfoBuilder.Append($"Avatar: {oldAvatar}");
+
+            return submittedInfoBuilder.ToString();
         }
-
-        //private static string GenerateSubmitedInfo(UpdateInfoAsync employee)
-            //{
-            //    var submittedInfo = new List<string>();
-
-            //    if (!string.IsNullOrEmpty(employee.Email))
-            //        submittedInfo.Add($"Email: {employee.Email}");
-
-            //    if (!string.IsNullOrEmpty(employee.Address))
-            //        submittedInfo.Add($"Address: {employee.Address}");
-
-            //    if (!string.IsNullOrEmpty(employee.Province))
-            //        submittedInfo.Add($"Province: {employee.Province}");
-
-            //    if (!string.IsNullOrEmpty(employee.District))
-            //        submittedInfo.Add($"District: {employee.District}");
-
-            //    if (!string.IsNullOrEmpty(employee.PhoneNumber))
-            //        submittedInfo.Add($"PhoneNumber: {employee.PhoneNumber}");
-
-            //    if (!string.IsNullOrEmpty(employee.Avatar))
-            //        submittedInfo.Add($"Avatar: {employee.Avatar}");
-
-            //    return string.Join(", ", submittedInfo);
-            //}
 
         private static SubmitedInfo ParseSubmitedInfo(string submittedInfo)
         {

@@ -30,7 +30,8 @@ namespace TARS_Delivery.Repositories.imp
         {
             try
             {
-                var duplicatedName = await _context.Permissions.FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName);
+                var duplicatedName = await _context.Permissions.
+                    FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName);
                 if (duplicatedName != null)
                 {
                     throw new Exception("The permission name has already existed.");

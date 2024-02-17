@@ -21,7 +21,12 @@ namespace TARS_Delivery.Models.DTOs.res
         public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         public EStatusData Status { get; set; }
         public int BranchId { get; set; }
+        public string BranchName { get; set; }
         public int RoleId { get; set; }
-        
+        public string RoleName { get; set; }
+        public virtual Role? Role { get; set; }
+        public virtual Branch? Branch { get; set; }
+        public virtual ICollection<HistoryLog>? HistoryLogs { get; set; }
+
     }
 }

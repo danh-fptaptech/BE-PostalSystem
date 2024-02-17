@@ -16,7 +16,7 @@ namespace TARS_Delivery.Controllers
             _service = service;
         }
 
-        [HttpGet]
+        [HttpGet] // done
         public async Task<ActionResult> GetRoles()
         {
             try
@@ -30,7 +30,7 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] // done
         public async Task<ActionResult> GetRole(int id)
         {
             try
@@ -48,7 +48,7 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost] // done
         public async Task<ActionResult> CreateRole([FromForm] RDTORole role)
         {
             try
@@ -67,7 +67,7 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}")] // done
         public async Task<ActionResult> UpdateRole(int id, [FromForm] RDTORole role)
         {
             try
@@ -94,7 +94,7 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")] // done
         public async Task<ActionResult> DeleteRole(int id)
         {
             try

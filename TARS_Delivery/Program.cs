@@ -1,7 +1,11 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 using TARS_Delivery.Models;
+using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
 using TARS_Delivery.Repositories.imp;
 using TARS_Delivery.Services;
@@ -59,6 +63,38 @@ builder.Services.AddAutoMapper(typeof(DtoProfile));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = true,
+                //IssuerSigningKey duoc tao tu mot chuoi bi mat
+                //dam bao rang chi nhung token duoc ky boi server cua ban moi duoc
+                //he thong cham nhan
+                IssuerSigningKey = new SymmetricSecurityKey
+                (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            };
+        });
+
+
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("AdminOnly", policy =>
+//        policy.RequireRole("Admin"));
+//});
+
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 

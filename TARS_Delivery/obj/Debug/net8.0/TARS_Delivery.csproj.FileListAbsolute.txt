@@ -280,3 +280,4 @@ C:\Users\84909\source\repos\eProject\TARS_Delivery\obj\Debug\net8.0\TARS_Deliver
 C:\Users\84909\source\repos\eProject\TARS_Delivery\obj\Debug\net8.0\TARS_Delivery.genruntimeconfig.cache
 C:\Users\84909\source\repos\eProject\TARS_Delivery\obj\Debug\net8.0\ref\TARS_Delivery.dll
 C:\Users\84909\source\repos\eProject\TARS_Delivery\bin\Debug\net8.0\BCrypt.Net-Next.dll
+C:\Users\84909\source\repos\eProject\TARS_Delivery\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

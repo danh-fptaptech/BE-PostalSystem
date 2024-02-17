@@ -17,7 +17,7 @@ namespace TARS_Delivery.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet] // done
         public async Task<ActionResult> GetPermissions()
         {
             try
@@ -32,7 +32,7 @@ namespace TARS_Delivery.Controllers
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}")] // done
         public async Task<ActionResult> GetPermission(int id)
         {
             try
@@ -51,7 +51,7 @@ namespace TARS_Delivery.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost] // done
         public async Task<ActionResult> CreatePermission([FromForm] RDTOPermission permission)
         {
             try
@@ -71,7 +71,7 @@ namespace TARS_Delivery.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}")] // done
         public async Task<ActionResult> UpdatePermission(int id, [FromForm] RDTOPermission permission)
         {
             try

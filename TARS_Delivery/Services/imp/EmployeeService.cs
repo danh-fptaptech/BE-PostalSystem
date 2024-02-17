@@ -21,12 +21,12 @@ namespace TARS_Delivery.Services.imp
             return await _repository.GetEmployees();
         }
 
-        public async Task<Employee> GetEmployee(int id)
+        public async Task<SDTOEmployee> GetEmployee(int id)
         {
             return await _repository.GetEmployee(id);
         }
 
-        public async Task<Employee> Create(RDTOEmployee employee)
+        public async Task<Employee> CreateEmployeeAsync(RDTOEmployee employee)
         {
             Employee newEmployee = new()
             {
@@ -46,7 +46,7 @@ namespace TARS_Delivery.Services.imp
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
-            return await _repository.Create(newEmployee);
+            return await _repository.CreateEmployeeAsync(newEmployee);
         }
 
         public async Task<Employee> UpdatePassword(int id, RDTOChangePassword employee)
@@ -72,11 +72,14 @@ namespace TARS_Delivery.Services.imp
             return _repository.AcceptUpdateInfo(id);
         }
 
-        public async Task<Employee> CheckLogin(RDTOEmployeeLogin employee)
+        public async Task<Employee> ChangeStatus(int id, RDTOChangeStatus employee)
         {
-            return await _repository.CheckLogin(employee);
+            var updateedEmployee = await _repository.GetEmployee(id);
+            if (updateedEmployee == null)
+            {
+                throw new Exception("The employee does not exist !");
+            }
+            return await _repository.ChangeStatus(id, employee);
         }
-
-        
     }
 }

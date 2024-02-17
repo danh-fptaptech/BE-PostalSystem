@@ -20,8 +20,8 @@ namespace TARS_Delivery.Models.Entities
 
         // Navigation properties
         [ForeignKey("PackageId")]
-        public virtual Package Package { get; set; }
+        public virtual Package? Package { get; set; }
         [ForeignKey("EmployeeId")]
-        public virtual Employee Employee { get; set; }
+        public virtual Employee? Employee { get; set; }
     }
 }

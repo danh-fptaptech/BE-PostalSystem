@@ -15,7 +15,7 @@ public class DtoProfile : Profile
 
         CreateMap<Branch, RDTOBranch>().ReverseMap();
         //Employee
-        CreateMap<Employee, RDTOEmployeeLogin>().ReverseMap();
+        CreateMap<Employee, EmployeeCredentials>().ReverseMap();
         CreateMap<Employee, RDTOEmployee>().ReverseMap();
         CreateMap<Employee, RDTOChangePassword>().ReverseMap();
         CreateMap<Employee, UpdateInfoAsync>().ReverseMap();
