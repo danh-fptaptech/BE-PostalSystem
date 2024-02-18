@@ -15,7 +15,15 @@ builder.Services.Scan(scan =>
     scan.FromAssemblyOf<IBranchRepository>().AddClasses().AsMatchingInterface().WithScopedLifetime());
 builder.Services.Scan(scan => 
     scan.FromAssemblyOf<IBranchService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-
+// Cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder => builder
+           .AllowAnyMethod()
+                  .AllowAnyHeader()
+                         .SetIsOriginAllowed((host) => true)
+                                .AllowCredentials());
+});
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(DtoProfile));
 
@@ -31,6 +39,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 

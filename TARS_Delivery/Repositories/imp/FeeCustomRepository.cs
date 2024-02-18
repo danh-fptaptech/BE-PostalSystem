@@ -61,13 +61,14 @@ namespace TARS_Delivery.Repositories.imp
         public async Task<FeeCustom> GetFeeByPostalCode(string postalCodeFrom, string postalCodeTo)
         {
             var postalCodeFromItem = await _context.Locations
-                .FirstOrDefaultAsync(l => l.PostalCode == postalCodeFrom && l.LocationLevel == ELocationLevel.Ward);
+                .FirstOrDefaultAsync(l => l.PostalCode.Equals(postalCodeFrom));
             var postalCodeToItem = await _context.Locations
-                .FirstOrDefaultAsync(l => l.PostalCode == postalCodeTo && l.LocationLevel == ELocationLevel.Ward);
-            if (postalCodeFromItem != null || postalCodeToItem != null)
+                .FirstOrDefaultAsync(l => l.PostalCode.Equals(postalCodeTo));
+
+            if (postalCodeFromItem != null && postalCodeToItem != null)
             {
                 var feeCustom = await _context.FeeCustoms
-                    .FirstOrDefaultAsync(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdFrom == postalCodeToItem.Id);
+                    .FirstOrDefaultAsync(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdTo == postalCodeToItem.Id);
                 return feeCustom;
             }
             return null;

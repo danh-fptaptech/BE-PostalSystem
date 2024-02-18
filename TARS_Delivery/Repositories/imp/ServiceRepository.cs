@@ -73,24 +73,29 @@ namespace TARS_Delivery.Repositories
         }
         public async Task<List<Service>> GetServicesByWeight(int weight)
         {
-            ETypeService TypeService = ETypeService.kl_0_500;
+            /*ETypeService TypeService = ETypeService.kl_0_500;
             if (weight > 500 && weight <= 1000)
             {
                 TypeService = ETypeService.kl_501_1000;
-            }else if (weight > 1000 && weight <= 5000)
+            }
+            else if (weight > 1000 && weight <= 5000)
             {
                 TypeService = ETypeService.kl_1001_5000;
-            }else if (weight > 5000 && weight <= 10000)
+            }
+            else if (weight > 5000 && weight <= 10000)
             {
                 TypeService = ETypeService.kl_5001_10000;
-            }else if (weight > 10000 && weight <= 20000)
+            }
+            else if (weight > 10000 && weight <= 20000)
             {
                 TypeService = ETypeService.kl_10001_20000;
-            }else if (weight > 20000)
+            }
+            else if (weight > 20000)
             {
                 TypeService = ETypeService.kl_ovver_20000;
             }
-            var services = await _context.Services.Where(s => s.TypeService == TypeService).ToListAsync();
+            var services = await _context.Services.Where(s => s.TypeService == TypeService).ToListAsync();*/
+            var services = await _context.Services.Where(s => s.WeighFrom <= weight && s.WeighTo >= weight).ToListAsync();
             return services;
         }
     }

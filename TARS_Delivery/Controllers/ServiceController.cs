@@ -51,8 +51,8 @@ namespace TARS_Delivery.Controllers
             {
                 try
                 {
-                    await _iServiceRepository.CreateService(service);
-                    return Ok("Service added successfully");
+                    var newService = await _iServiceRepository.CreateService(service);
+                    return Ok(newService);
                 }
                 catch (Exception ex)
                 {
