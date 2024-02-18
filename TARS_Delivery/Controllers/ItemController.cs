@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using TARS_Delivery.Models.DTOs.req.Item;
 using TARS_Delivery.Models.Entities;
-using TARS_Delivery.Services.imp;
+using TARS_Delivery.Services;
 
 namespace TARS_Delivery.Controllers
 {
@@ -10,8 +10,9 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class ItemController : ControllerBase
     {
-        private readonly ItemService _itemService;
-        public ItemController(ItemService itemService)
+        private readonly IItemService _itemService;
+
+        public ItemController(IItemService itemService)
         {
             _itemService = itemService;
         }
@@ -19,7 +20,8 @@ namespace TARS_Delivery.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ListItemDTO>>> GetAllItems()
         {
-            return Ok(await _itemService.GetAllItems());
+            var items = await _itemService.GetAllItems();
+            return Ok(items);
         }
 
         [HttpGet("{id}")]
@@ -36,58 +38,26 @@ namespace TARS_Delivery.Controllers
         [HttpPost]
         public async Task<ActionResult<Item>> AddItem(ItemCreateDTO item)
         {
-            try
-            {
-                var newItem = await _itemService.AddItem(item);
-                return CreatedAtAction("GetItemById", new { id = newItem.Id }, newItem);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            var newItem = await _itemService.AddItem(item);
+            return CreatedAtAction(nameof(GetItemById), new { id = newItem.Id }, newItem);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateItem(int id, ItemUpdateDTO item)
         {
-            try
+            if (id != item.Id)
             {
-                await _itemService.UpdateItem(id, item);
+                return BadRequest();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _itemService.ItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _itemService.UpdateItem(id, item);
             return NoContent();
         }
 
         [HttpPut("{id}/status/{status}")]
-        public async Task<IActionResult> ChangeStatusItem(int id, int status)
+        public IActionResult ChangeStatusItem(int id, int status)
         {
-            try
-            {
-                _itemService.ChangeStatusItem(id, status);
-                return Ok();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _itemService.ItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _itemService.ChangeStatusItem(id, status);
+            return NoContent();
         }
-
     }
 }

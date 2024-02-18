@@ -4,9 +4,10 @@ using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Services.imp
 {
-    public class ItemService
+    public class ItemService : IItemService
     {
         private readonly IItemRepository _itemRepository;
+
         public ItemService(IItemRepository itemRepository)
         {
             _itemRepository = itemRepository;

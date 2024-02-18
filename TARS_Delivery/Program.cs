@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using TARS_Delivery.Models;
+using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
 using TARS_Delivery.Repositories.imp;
 using TARS_Delivery.Services;
@@ -20,10 +21,15 @@ builder.Services.Scan(scan =>
     scan.FromAssemblyOf<IBranchService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
 
 
-builder.Services.AddScoped<IItemRepository, ItemRepository>();
-builder.Services.AddScoped<ItemService>();
-builder.Services.AddScoped< IHistoryLogRepository, HistoryLogRepository > ();
-builder.Services.AddScoped<HistoryLogService>();
+// Cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder => builder
+           .AllowAnyMethod()
+                  .AllowAnyHeader()
+                         .SetIsOriginAllowed((host) => true)
+                                .AllowCredentials());
+});
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(DtoProfile));
 
@@ -43,6 +49,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 

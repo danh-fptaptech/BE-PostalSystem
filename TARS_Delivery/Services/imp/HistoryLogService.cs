@@ -1,19 +1,16 @@
-﻿using AutoMapper;
-using TARS_Delivery.Models.DTOs.req.HistoryLog;
+﻿using TARS_Delivery.Models.DTOs.req.HistoryLog;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Services.imp
 {
-    public class HistoryLogService
+    public class HistoryLogService : IHistoryLogService
     {
         private readonly IHistoryLogRepository _historyLogRepository;
-        private readonly IMapper _mapper;
 
-        public HistoryLogService(IHistoryLogRepository historyLogRepository, IMapper mapper)
+        public HistoryLogService(IHistoryLogRepository historyLogRepository)
         {
             _historyLogRepository = historyLogRepository;
-            _mapper = mapper;
         }
 
         public async Task<IEnumerable<ListHistoryLogDTO>> GetAllHistoryLogs()

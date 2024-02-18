@@ -17,17 +17,18 @@ namespace TARS_Delivery.Repositories.imp
         public async Task<IEnumerable<ListItemDTO>> GetAllItems()
         {
             return await _context.Items
-                .Where(x => x.Status == EStatusData.Active)
                 .Select(x => new ListItemDTO
                 {
                     Id = x.Id,
+                    PackageId = x.PackageId,
                     ItemName = x.ItemName,
                     ItemWeight = x.ItemWeight,
                     ItemQuantity = x.ItemQuantity,
                     ItemValue = x.ItemValue,
                     ItemType = x.ItemType,
                     CreatedAt = (DateTime)x.CreatedAt,
-                    UpdatedAt = (DateTime)x.UpdatedAt
+                    UpdatedAt = (DateTime)x.UpdatedAt,
+                    Status = x.Status
                 })
                 .ToListAsync();
         }

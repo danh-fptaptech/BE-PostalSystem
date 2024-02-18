@@ -15,7 +15,6 @@ namespace TARS_Delivery.Models.Entities
         [Required]
         public int EmployeeId { get; set; }
         [Required]
-        [DefaultValue(EPackageStatus.WaitingForPickup)]
         public EPackageStatus Step { get; set; }
         public string? HistoryNote { get; set; }
         public string? Photos { get; set; }

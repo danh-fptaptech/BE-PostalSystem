@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using TARS_Delivery.Models.DTOs.req.Location;
 using TARS_Delivery.Models.DTOs.req;
-using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Models.DTOs.res;
 
 namespace TARS_Delivery.Models;
 
@@ -21,7 +22,8 @@ public class DtoProfile : Profile
 
         
         CreateMap<Branch, SDTOBranch>().ReverseMap();
-        
+        CreateMap<Location, RDTOLocation>().ReverseMap();
+        CreateMap<Location, RDTOLocationByZipcode>().ReverseMap();
         CreateMap<Package, SDTOPackage>().ReverseMap();
 
         #endregion
