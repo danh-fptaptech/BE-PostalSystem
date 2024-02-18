@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Models.DTOs.req.HistoryLog
 {

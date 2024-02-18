@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req.HistoryLog;
 using TARS_Delivery.Models.Entities;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Repositories.imp
 {
