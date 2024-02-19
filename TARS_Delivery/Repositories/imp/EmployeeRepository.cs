@@ -47,12 +47,13 @@ namespace TARS_Delivery.Repositories.imp
                 {
                     Id = h.Id,
                     PackageId = h.PackageId,
-                    Package = h.Package,
+                    EmployeeId = h.EmployeeId,
                     Step = h.Step,
                     HistoryNote = h.HistoryNote,
                     Photos = h.Photos,
-                    Status = h.Status,
                     CreatedAt = h.CreatedAt,
+                    UpdatedAt = h.UpdatedAt,
+                    Status = h.Status,
                 }).ToList()
             });
 
@@ -83,6 +84,7 @@ namespace TARS_Delivery.Repositories.imp
                     Avatar = employee.Avatar,
                     SubmitedInfo = employee.SubmitedInfo,
                     CreatedAt = employee.CreatedAt,
+                    Status = employee.Status,
                     BranchId = employee.BranchId,
                     BranchName = employee.Branch.BranchName,
                     RoleId = employee.RoleId,
@@ -91,12 +93,13 @@ namespace TARS_Delivery.Repositories.imp
                     {
                         Id = h.Id,
                         PackageId = h.PackageId,
-                        Package = h.Package,
                         EmployeeId = h.EmployeeId,
                         Step = h.Step,
                         HistoryNote = h.HistoryNote,
                         Photos = h.Photos,
-                        Status = h.Status
+                        CreatedAt = h.CreatedAt,
+                        UpdatedAt = h.UpdatedAt,
+                        Status = h.Status,
                     }).ToList()
                 };
                 return dtoEmployee;
@@ -332,7 +335,6 @@ namespace TARS_Delivery.Repositories.imp
 
             return submitedInfo;
         }
-
         public class SubmitedInfo
         {
             public string? Email { get; set; }

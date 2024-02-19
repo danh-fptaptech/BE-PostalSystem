@@ -1,11 +1,14 @@
 ﻿
+using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Services.imp;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TARS_Delivery.Controllers
 {
@@ -20,20 +23,14 @@ namespace TARS_Delivery.Controllers
             _service = service;
         }
 
-
-        [HttpGet] // done
-        //[Authorize(Roles = "Admin")]
-        public async Task<ActionResult> GetEmployees(int id)
+        // GET: api/Employees => done
+        [HttpGet]
+        public async Task<ActionResult> GetEmployees()
         {
             try
             {
-                var adminCredential = await _service.GetEmployee(id);
-                if(adminCredential != null && adminCredential.RoleName == "Admin")
-                {
-                    var employees = await _service.GetEmployees();
-                    return Ok(employees);
-                }
-                return Content("The employee doesn't have right to access.");
+                var employees = await _service.GetEmployees();
+                return Ok(employees);
             }
             catch (Exception ex)
             {
@@ -41,7 +38,7 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-
+        // GET: api/Employees/{employeeId}
         [HttpGet("{id}")] // done
         public async Task<ActionResult> GetEmployee(int id)
         {
@@ -54,14 +51,15 @@ namespace TARS_Delivery.Controllers
                 }
                 return NotFound("This employee does not exist !");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                ModelState.AddModelError("Error: ", ex.Message);
+                throw new Exception(ex.Message);
             }
         }
 
-
-        [HttpPost] // done
+        // POST: api/Employees/employee => done
+        [HttpPost]
         public async Task<ActionResult> CreateEmployee([FromForm] RDTOEmployee employee)
         {
             try
@@ -81,8 +79,8 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-
-        [HttpPut("{id}/ChangePassword")] // done
+        // PUT: api/Employees/{employeeId}/ChangePassword => done
+        [HttpPut("{id}/ChangePassword")]
         public async Task<ActionResult> UpdatePassword(int id, [FromForm] RDTOChangePassword employee)
         {
             try
@@ -106,37 +104,32 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-
-        [HttpPut("{id}/ChangeStatus")] // still fix
+        // PUT: api/Employees/{employeeId}/ChangeStatus => done
+        [HttpPut("{id}/ChangeStatus")]
         public async Task<ActionResult> ChangeStatus(int id, [FromForm] RDTOChangeStatus employee)
         {
             try
             {
-                var adminCredential = await _service.GetEmployee(id);
-                if (adminCredential != null && adminCredential.Role.RoleName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                if (ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
+                    var existedEmployee = await _service.GetEmployee(id);
+                    if(existedEmployee != null)
                     {
-                        var updatedEmployee = await _service.GetEmployee(id);
-                        if (updatedEmployee != null)
-                        {
-                            await _service.ChangeStatus(id, employee);
-                            return Ok(updatedEmployee);
-                        }
-                        return NotFound("This employee does not exist !");
+                        return Ok(await  _service.ChangeStatus(id, employee));
                     }
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
-                return Problem("It is possible for the admin to change status.");
+                return BadRequest();
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                ModelState.AddModelError("Error: ", ex.Message);
+                return BadRequest(ModelState);
             }
         }
 
-
-        [HttpPut("{id}/UpdateInfoAsync")] // done
+        // PUT: api/Employees/{employeeId}/UpdateInfoAsync => done
+        [HttpPut("{id}/UpdateInfoAsync")]
         public async Task<ActionResult> UpdateInfoAsync(int id, [FromForm] UpdateInfoAsync employee)
         {
             try
@@ -159,26 +152,28 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-
-        [HttpPut("{id}/AcceptUpdateInfo")] // done
-        //[Authorize(Roles = "Admin")]
+        // PUT: api/Employees/{employeeId}/AcceptUpdateInfo => done
+        [HttpPut("{id}/AcceptUpdateInfo")]
         public async Task<ActionResult> AcceptSumitedInfo(int id)
         {
             try
-            {
-                var employee = await _service.GetEmployee(id);
+            {   var employee = await _service.GetEmployee(id);
                 if (employee != null)
                 {
-                    var updatedEmployee = await _service.AcceptUpdateInfo(id);
-                    return Ok(updatedEmployee);
+                    if(employee.SubmitedInfo != null)
+                    {
+                        var updatedEmployee = await _service.AcceptUpdateInfo(id);
+                        return Ok(updatedEmployee);
+                    }
+                    return Content("Don't have updated request.");
                 }
-                return NotFound("The employee does not exist !");
+                return NotFound("The employee doesn't exist !");
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-
+ 
     }
 }

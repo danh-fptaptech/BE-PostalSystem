@@ -7,7 +7,7 @@ namespace TARS_Delivery.Repositories
     public interface IRoleRepository
     {
         Task<IEnumerable<SDTORole>> GetRoles();
-        Task<Role> GetRole(int id);
+        Task<SDTORole> GetRole(int id);
         Task<Role> Create(Role role );
         Task<Role> Update(int id, RDTORole role );
         Task<Role> Delete(int id);

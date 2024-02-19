@@ -7,6 +7,7 @@ namespace TARS_Delivery.Models.DTOs.res
     {
         public int Id { get; set; }
         public string RoleName { get; set; }
+        public virtual ICollection<RoleHasPermission>? RoleHasPermissions { get; set; }
         public EStatusData Status { get; set; }      
     }
 }

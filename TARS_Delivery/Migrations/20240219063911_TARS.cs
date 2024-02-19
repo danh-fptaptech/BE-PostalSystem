@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TARS_Delivery.Migrations
 {
     /// <inheritdoc />
-    public partial class TARS_Delivery : Migration
+    public partial class TARS : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -182,8 +182,8 @@ namespace TARS_Delivery.Migrations
                 {
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     PermissionId = table.Column<int>(type: "int", nullable: false),
-                    RoleId1 = table.Column<int>(type: "int", nullable: false),
-                    RoleId2 = table.Column<int>(type: "int", nullable: false)
+                    RoleId1 = table.Column<int>(type: "int", nullable: true),
+                    RoleId2 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

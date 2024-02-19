@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Security;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
@@ -19,13 +20,46 @@ namespace TARS_Delivery.Repositories.imp
 
         public async Task<IEnumerable<SDTORole>> GetRoles()
         {
-            IEnumerable<Role> roles = await _context.Roles.ToListAsync();
-            return _mapper.Map<IEnumerable<SDTORole>>(roles);
+            IEnumerable<Role> roles = await _context.Roles
+                .Include(r => r.RoleHasPermissions)
+                .ToListAsync();
+
+            IEnumerable<SDTORole> dtoRoles = roles.Select(r => new SDTORole
+            {
+                Id = r.Id,
+                RoleName = r.RoleName,
+                Status = r.Status,
+                RoleHasPermissions = r.RoleHasPermissions.Select(rhp => new RoleHasPermission
+                {
+                    RoleId = rhp.RoleId,
+                    PermissionId = rhp.PermissionId,
+                }).ToList(),
+            });
+
+            return dtoRoles;
         }
 
-        public async Task<Role> GetRole(int id)
+        public async Task<SDTORole> GetRole(int id)
         {
-            return await _context.Roles.FindAsync(id);
+            var role = await _context.Roles
+                .Include(r => r.RoleHasPermissions)
+                .FirstOrDefaultAsync(r => r.Id == id);
+            if(role != null)
+            {
+                SDTORole dtoRole = new()
+                {
+                    Id = role.Id,
+                    RoleName = role.RoleName,
+                    Status = role.Status,
+                    RoleHasPermissions = role.RoleHasPermissions.Select(rhp => new RoleHasPermission 
+                    { 
+                        RoleId = rhp.RoleId,
+                        PermissionId = rhp.PermissionId 
+                    }).ToList(),
+                };
+                return dtoRole;
+            }
+            throw new Exception("The role does not exist !");
         }
 
         public async Task<Role> Create(Role role)
@@ -53,20 +87,27 @@ namespace TARS_Delivery.Repositories.imp
         {
             try
             {
-                Role updatedRole = await _context.Roles.FindAsync(id);
+                var updatedRole = await _context.Roles.FindAsync(id);
                 if (updatedRole != null)
                 {
-                    if(updatedRole.Id > 3)
+                    var existingRole = await _context.Roles
+                        .FirstOrDefaultAsync(r => r.RoleName == role.RoleName && r.Id != id);
+
+                    if (existingRole != null)
                     {
-                        updatedRole.RoleName = role.RoleName;
-                        updatedRole.Status = role.Status;
-                        await _context.SaveChangesAsync();
+                        throw new Exception("The role name already exists.");
                     }
+
+                    _context.Entry(updatedRole).CurrentValues.SetValues(role);
+                    await _context.SaveChangesAsync();
+
+                    return updatedRole;
                 }
-                return null;
+                throw new Exception("This role does not exist!");
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error: ", ex.Message);
                 throw new Exception(ex.Message);
             }
         }

@@ -12,10 +12,5 @@ namespace TARS_Delivery.Models.Entities
         public string RoleName { get; set; }
         public virtual ICollection<RoleHasPermission>? RoleHasPermissions { get; set; }
         public EStatusData Status { get; set; }
-
-        public static implicit operator Role(List<Role> v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

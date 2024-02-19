@@ -19,7 +19,7 @@ namespace TARS_Delivery.Services.imp
             return await _repository.GetRoles();
         }
 
-        public async Task<Role> GetRole(int id)
+        public async Task<SDTORole> GetRole(int id)
         {
             return await _repository.GetRole(id);
         }

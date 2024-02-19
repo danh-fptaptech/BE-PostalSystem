@@ -8,9 +8,9 @@ namespace TARS_Delivery.Models.Entities
         public int PermissionId { get; set; }
 
         [ForeignKey(nameof(RoleId))]
-        public virtual Role Role { get; set; }
+        public virtual Role? Role { get; set; }
 
         [ForeignKey(nameof(PermissionId))]
-        public virtual Permission Permission { get; set; }
+        public virtual Permission? Permission { get; set; }
     }
 }
