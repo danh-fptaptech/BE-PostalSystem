@@ -60,8 +60,6 @@ namespace TARS_Delivery.Controllers
                     return Ok(roleHasPermission);
                 }
 
-                
-
             }
             catch (Exception ex)
             {
