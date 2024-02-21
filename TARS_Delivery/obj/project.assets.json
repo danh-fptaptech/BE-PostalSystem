@@ -4579,19 +4579,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ptrnv\\.nuget\\packages\\": {}
+    "C:\\Users\\lkvu9\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Aptech\\Sem03\\eProject_Online Post Office Management System\\src\\BE\\BE-PostalSystem\\TARS_Delivery\\TARS_Delivery.csproj",
+      "projectUniqueName": "D:\\eProject-Sem3\\TARS_Delivery\\TARS_Delivery.csproj",
       "projectName": "TARS_Delivery",
-      "projectPath": "D:\\Aptech\\Sem03\\eProject_Online Post Office Management System\\src\\BE\\BE-PostalSystem\\TARS_Delivery\\TARS_Delivery.csproj",
-      "packagesPath": "C:\\Users\\ptrnv\\.nuget\\packages\\",
-      "outputPath": "D:\\Aptech\\Sem03\\eProject_Online Post Office Management System\\src\\BE\\BE-PostalSystem\\TARS_Delivery\\obj\\",
+      "projectPath": "D:\\eProject-Sem3\\TARS_Delivery\\TARS_Delivery.csproj",
+      "packagesPath": "C:\\Users\\lkvu9\\.nuget\\packages\\",
+      "outputPath": "D:\\eProject-Sem3\\TARS_Delivery\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ptrnv\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lkvu9\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

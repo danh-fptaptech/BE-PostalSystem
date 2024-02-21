@@ -11,5 +11,6 @@ namespace TARS_Delivery.Repositories
         Task<FeeCustom> UpdateFee(int id, FeeCustom fee);
         Task ChangeStatus(int id);
         Task<FeeCustom> GetFeeByPostalCode(string postalCodeFrom, string postalCodeTo);
+        Task<FeeCustom> GetFeeByPostalCodeWeight(string postalCodeFrom, string postalCodeTo,int weight);
     }
 }
