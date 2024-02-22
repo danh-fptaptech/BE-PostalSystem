@@ -42,7 +42,8 @@ namespace TARS_Delivery.Repositories.imp
 
         public async Task<Location> GetLocationById(int id)
         {
-            var location = await _context.Locations.FindAsync(id);
+            var location = await _context.Locations.Include(l=>l.ChildLocations).Include(l=>l.ParentLocation).FirstAsync(l=>l.Id == id);
+            
             if (location == null)
             {
                 return null;

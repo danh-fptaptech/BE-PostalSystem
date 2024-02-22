@@ -110,5 +110,23 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Get Fee by Postal Code and Weight
+        [HttpGet("GetFeeByPostalCodeWeight/{postalCodeFrom}/{postalCodeTo}/{weight}")]
+        public async Task<IActionResult> GetFeeByPostalCodeWeight(string postalCodeFrom, string postalCodeTo, int weight)
+        {
+            try
+            {
+                var fee = await _feeCustomRepository.GetFeeByPostalCodeWeight(postalCodeFrom, postalCodeTo, weight);
+                if (fee != null)
+                {
+                    return Ok(fee);
+                }
+                return NotFound("Fee not found");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 }
