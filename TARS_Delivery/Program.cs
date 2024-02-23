@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
 using TARS_Delivery.Repositories;
@@ -24,6 +23,16 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.WriteIndented = true;
 });
 
+
+// Cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder => builder
+           .AllowAnyMethod()
+                  .AllowAnyHeader()
+                         .SetIsOriginAllowed((host) => true)
+                                .AllowCredentials());
+});
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(DtoProfile));
 
@@ -39,6 +48,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 

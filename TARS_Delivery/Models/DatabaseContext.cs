@@ -135,13 +135,13 @@ public class DatabaseContext : DbContext
             .IsUnique();
 
         #endregion
-        
+
         #region modelBuilder for Seeders
 
         new ApplicationSeeders().OnModelSeeders(modelBuilder);
 
         #endregion
-        
+
     }
 
     #region DbSet
