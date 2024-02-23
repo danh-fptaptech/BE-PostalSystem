@@ -9,6 +9,8 @@ using TARS_Delivery.Services.Users.LoginUserAsync;
 using TARS_Delivery.Services.Users.RegisterUserAsync;
 using TARS_Delivery.Services.Users.RefreshTokenAsync;
 using TARS_Delivery.Services.Users.VerifyUserMailAsync;
+using System.Security.Claims;
+using TARS_Delivery.Shared;
 
 namespace TARS_Delivery.Controllers;
 
@@ -32,9 +34,14 @@ public class UsersController(ISender sender)
 
         if (result.IsFailure)
         {
+            if (result.Error.Code is "ValidationError")
+            {
+                return HandleFailure(result);
+            }
+
             if (result.Error.Code == "UniqueUser")
             {
-                return Conflict(result.Error.Message);
+                return Conflict(result.Error);
             }
         }
 
@@ -53,9 +60,14 @@ public class UsersController(ISender sender)
 
         if (result.IsFailure)
         {
+            if (result.Error.Code is "ValidationError")
+            {
+                return HandleFailure(result);
+            }
+
             if (result.Error.Code == "IncorectOtp")
             {
-                return Unauthorized(result.Error.Message);
+                return Unauthorized(result.Error);
             }
         }
 
@@ -76,14 +88,19 @@ public class UsersController(ISender sender)
 
         if (result.IsFailure)
         {
+            if (result.Error.Code is "ValidationError")
+            {
+                return HandleFailure(result);
+            }
+
             if (result.Error.Code is "Unauthorized" or "IncorrectPassword")
             {
-                return Unauthorized(result.Error.Message);
+                return Unauthorized(result.Error);
             }
             
             if (result.Error.Code == "NotFound")
             {
-                return NotFound(result.Error.Message);
+                return NotFound(result.Error);
             }
         }
 
@@ -107,14 +124,19 @@ public class UsersController(ISender sender)
 
         if (result.IsFailure)
         {
+            if (result.Error.Code is "ValidationError")
+            {
+                return HandleFailure(result);
+            }
+
             if (result.Error.Code is "Unauthorized" or "IncorrectPassword")
             {
-                return Unauthorized(result.Error.Message);
+                return Unauthorized(result.Error);
             }
 
             if (result.Error.Code == "NotFound")
             {
-                return NotFound(result.Error.Message);
+                return NotFound(result.Error);
             }
         }
 
@@ -219,9 +241,9 @@ public class UsersController(ISender sender)
     [Authorize]
     [HttpPost("Addresses/{userId:int}")]
     public async Task<IActionResult> AddUserAddressAsync(
-    int userId,
-    [FromBody] AddUserAddressAsyncRequest request,
-    CancellationToken cancellationToken)
+        int userId,
+        [FromBody] AddUserAddressAsyncRequest request,
+        CancellationToken cancellationToken)
     {
         AddUserAddressAsyncCommand command = new(
             userId,
@@ -238,6 +260,11 @@ public class UsersController(ISender sender)
 
         if (result.IsFailure)
         {
+            if (result.Error.Code is "ValidationError")
+            {
+                return HandleFailure(result);
+            }
+
             if (result.Error.Code == "Unauthorized")
             {
                 return Unauthorized(result.Error.Message);

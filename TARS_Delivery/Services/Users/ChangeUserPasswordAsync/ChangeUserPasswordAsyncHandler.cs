@@ -21,7 +21,7 @@ internal sealed class ChangeUserPasswordAsyncHandler(
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<Result> Handle(ChangeUserPasswordAsyncCommand command, 
+    public async Task<Result> Handle(ChangeUserPasswordAsyncCommand command,
         CancellationToken cancellationToken)
     {
         var httpContext = _httpContextAccessor.HttpContext;

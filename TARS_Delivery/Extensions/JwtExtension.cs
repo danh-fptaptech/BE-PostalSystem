@@ -31,9 +31,8 @@ internal static class JwtExtension
                 ClockSkew = new TimeSpan(0, 0, 5)
             };
 
-            options.MapInboundClaims = false;
+            options.MapInboundClaims = false;        
         });
-
 
         return services;
     }

@@ -13,7 +13,7 @@ internal class VerifyUserMailAsyncHandler(
     IUnitOfWork unitOfWork,
     IUserRegistrationInfoRepository userRegistrationInfoRepository,
     IHttpContextAccessor httpContextAccessor) 
-    : IRequestHandler<VerifyUserMailAsyncCommand, Result<string>>
+    : IRequestHandler<VerifyUserMailAsyncCommand, Result<VerifyUserMailAsyncResponse>>
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
@@ -21,7 +21,7 @@ internal class VerifyUserMailAsyncHandler(
     private readonly IUserRegistrationInfoRepository _userRegistrationInfoRepository = userRegistrationInfoRepository;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<Result<string>> Handle(
+    public async Task<Result<VerifyUserMailAsyncResponse>> Handle(
         VerifyUserMailAsyncCommand command, 
         CancellationToken cancellationToken)
     {
@@ -33,7 +33,7 @@ internal class VerifyUserMailAsyncHandler(
 
         if (userInfo == null)
         {
-            return Result.Failure<string>(VerifyUserMailAsyncErrors.IncorectOtp);
+            return Result.Failure<VerifyUserMailAsyncResponse>(VerifyUserMailAsyncErrors.IncorectOtp);
         }
 
         User user = userInfo.Register();
@@ -48,6 +48,8 @@ internal class VerifyUserMailAsyncHandler(
 
         string token = _jwtProvider.Generate(user);
 
-        return Result.Success(token);
+        VerifyUserMailAsyncResponse res = new(token);
+
+        return Result.Success(res);
     }
 }

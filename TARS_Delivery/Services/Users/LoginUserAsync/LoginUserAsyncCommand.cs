@@ -4,7 +4,7 @@ using TARS_Delivery.Shared;
 namespace TARS_Delivery.Services.Users.LoginUserAsync;
 
 internal sealed class LoginUserAsyncCommand(string userId, string password) 
-    : IRequest<Result<string>>
+    : IRequest<Result<LoginUserAsyncResponse>>
 {
     public Type Type { get; private init; } = userId.Contains('@') 
         ? Type.Email 

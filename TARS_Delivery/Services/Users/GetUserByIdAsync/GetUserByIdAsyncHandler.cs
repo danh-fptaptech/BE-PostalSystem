@@ -41,7 +41,9 @@ internal sealed class GetUserByIdAsyncHandler(
             user.Fullname,
             user.Email, 
             user.Phone, 
-            user.Avatar);
+            user.Avatar,
+            user.Id,
+            user.Status);
 
         return Result.Success(response);
             

@@ -7,5 +7,7 @@ internal interface IJwtProvider
 {
     string Generate(User user);
 
+    ///string Generate(Employee employee);
+
     ClaimsPrincipal GetClaimsPrincipalFromExpiredToken(string token);
 }

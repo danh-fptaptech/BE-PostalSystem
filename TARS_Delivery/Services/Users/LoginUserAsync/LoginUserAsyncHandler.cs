@@ -7,13 +7,13 @@ using TARS_Delivery.UnitOfWork;
 
 namespace TARS_Delivery.Services.Users.LoginUserAsync;
 
-internal sealed class LoginUserAsynsHandler(
+internal sealed class LoginUserAsyncHandler(
     IUserRepository userRepository,
     IUnitOfWork unitOfWork,
     IHashProvider hashProvider,
     IJwtProvider jwtProvider,
     IHttpContextAccessor httpContextAccessor)
-    : IRequestHandler<LoginUserAsyncCommand, Result<string>>
+    : IRequestHandler<LoginUserAsyncCommand, Result<LoginUserAsyncResponse>>
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
@@ -21,7 +21,7 @@ internal sealed class LoginUserAsynsHandler(
     private readonly IJwtProvider _jwtProvider = jwtProvider;
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-    public async Task<Result<string>> Handle(
+    public async Task<Result<LoginUserAsyncResponse>> Handle(
         LoginUserAsyncCommand command, 
         CancellationToken cancellationToken)
     {
@@ -40,12 +40,12 @@ internal sealed class LoginUserAsynsHandler(
 
         if (user is null)
         {
-            return Result.Failure<string>(LoginUserAsyncErrors.NotFound);
+            return Result.Failure<LoginUserAsyncResponse>(LoginUserAsyncErrors.NotFound);
         }
 
         if (!_hashProvider.Verify(command.Password, user.Password))
         {
-            return Result.Failure<string>(LoginUserAsyncErrors.IncorrectPassword);
+            return Result.Failure<LoginUserAsyncResponse>(LoginUserAsyncErrors.IncorrectPassword);
         }
 
         string token = _jwtProvider.Generate(user);
@@ -55,7 +55,9 @@ internal sealed class LoginUserAsynsHandler(
         user.GenerateRefreshToken(httpContext);
 
         await _unitOfWork.SaveChangeAsync(cancellationToken);
-        
-        return Result.Success(token);
+
+        LoginUserAsyncResponse res = new(token);
+
+        return Result.Success(res);
     }
 }
