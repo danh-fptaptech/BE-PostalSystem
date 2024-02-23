@@ -116,10 +116,10 @@ namespace TARS_Delivery.Controllers
         {
             try
             {
-                var fee = await _feeCustomRepository.GetFeeByPostalCodeWeight(postalCodeFrom, postalCodeTo, weight);
-                if (fee != null)
+                var fees = await _feeCustomRepository.GetFeeByPostalCodeWeight(postalCodeFrom, postalCodeTo, weight);
+                if (fees != null)
                 {
-                    return Ok(fee);
+                    return Ok(fees);
                 }
                 return NotFound("Fee not found");
             }
@@ -127,6 +127,24 @@ namespace TARS_Delivery.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
+        }
+        //Add or Update Fee
+        [HttpPost("CreateUpdateFee/{postalCodeFrom}/{postalCodeTo}")]
+        public async Task<IActionResult> CreateUpdateFee(string postalCodeFrom, string postalCodeTo, FeeCustom fee)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _feeCustomRepository.CreateUpdateFee(postalCodeFrom, postalCodeTo, fee);
+                    return Ok("Fee added/updated successfully");
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                }
+            }
+            return BadRequest("Invalid model");
         }
     }
 }
