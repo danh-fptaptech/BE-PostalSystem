@@ -14,21 +14,8 @@ namespace TARS_Delivery.Services.imp
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim>();
 
-            if (!string.IsNullOrEmpty(employee.Email))
-            {
-                claims.Add(new Claim("Email", employee.Email));
-            }
-
-            if (!string.IsNullOrEmpty(employee.EmployeeCode))
-            {
-                claims.Add(new Claim("EmployeeCode", employee.EmployeeCode));
-            }
-
-            if (employee.Role != null && !string.IsNullOrEmpty(employee.Role.RoleName))
-            {
-                claims.Add(new Claim("Role", employee.Role.RoleName));
-                claims.Add(new Claim(ClaimTypes.Role, employee.Role.RoleName));
-            }
+            claims.Add(new Claim("Id", employee.Id.ToString()));
+            claims.Add(new Claim("Role", employee.RoleId.ToString()));
 
             var token = new JwtSecurityToken(
                 configuration["Jwt:Key"],

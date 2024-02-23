@@ -82,5 +82,10 @@ namespace TARS_Delivery.Services.imp
             return await _repository.ChangeStatus(id, employee);
         }
 
+        public async Task<IEnumerable<SDTOEmployee>> GetSubmitedInfoEmployees()
+        {
+            return await _repository.GetSubmitedInfoEmployees();
+        }
+
     }
 }

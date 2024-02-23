@@ -13,5 +13,6 @@ namespace TARS_Delivery.Services
         Task<Employee> UpdateInfoAsync(int id, UpdateInfoAsync employee);
         Task<Employee> AcceptUpdateInfo(int id);
         Task<Employee> ChangeStatus (int id, RDTOChangeStatus employee);
+        Task<IEnumerable<SDTOEmployee>> GetSubmitedInfoEmployees();
     }
 }

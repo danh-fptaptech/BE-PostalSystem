@@ -197,7 +197,7 @@ namespace TARS_Delivery.Repositories.imp
             try
             {
                 var updatedEmployee = await _context.Employees.FindAsync(id);
-                if (updatedEmployee != null)
+                if (updatedEmployee != null && updatedEmployee.Role.RoleName != "Admin")
                 {   
                     // get oldValue 
                     string oldEmail = updatedEmployee.Email;
@@ -207,7 +207,6 @@ namespace TARS_Delivery.Repositories.imp
                     string oldPhoneNumber = updatedEmployee.PhoneNumber;
                     string oldAvatar = updatedEmployee.Avatar;
 
-                    // If SubmitedInfo have any unchange field, it hold oldValue of that field.
                     updatedEmployee.SubmitedInfo = GenerateSubmitedInfo(employee, oldEmail, oldAddress, oldProvince, oldDistrict, oldPhoneNumber, oldAvatar);
 
                     await _context.SaveChangesAsync();
@@ -219,6 +218,52 @@ namespace TARS_Delivery.Repositories.imp
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<IEnumerable<SDTOEmployee>> GetSubmitedInfoEmployees()
+        {
+            IEnumerable<Employee> employees = await _context.Employees
+                .Where(e => e.SubmitedInfo != null)
+                .Include(e => e.Role) // get all information from Entity<Role>
+                .Include(e => e.Branch)
+                .Include(e => e.HistoryLogs)
+                .ToListAsync();
+
+            IEnumerable<SDTOEmployee> dtoEmployees = employees.Select(e => new SDTOEmployee
+            {
+                Id = e.Id,
+                EmployeeCode = e.EmployeeCode,
+                Email = e.Email,
+                Password = e.Password,
+                Fullname = e.Fullname,
+                Address = e.Address,
+                Province = e.Province,
+                District = e.District,
+                PhoneNumber = e.PhoneNumber,
+                Avatar = e.Avatar,
+                SubmitedInfo = e.SubmitedInfo,
+                CreatedAt = e.CreatedAt,
+                UpdatedAt = e.UpdatedAt,
+                Status = e.Status,
+                BranchId = e.BranchId,
+                BranchName = e.Branch.BranchName,
+                RoleId = e.RoleId,
+                RoleName = e.Role.RoleName, // get RoleName
+                HistoryLogs = e.HistoryLogs.Select(h => new HistoryLog
+                {
+                    Id = h.Id,
+                    PackageId = h.PackageId,
+                    EmployeeId = h.EmployeeId,
+                    Step = h.Step,
+                    HistoryNote = h.HistoryNote,
+                    Photos = h.Photos,
+                    CreatedAt = h.CreatedAt,
+                    UpdatedAt = h.UpdatedAt,
+                    Status = h.Status,
+                }).ToList()
+            });
+
+            return dtoEmployees;
         }
 
         public async Task<Employee> AcceptUpdateInfo(int id)
@@ -335,6 +380,7 @@ namespace TARS_Delivery.Repositories.imp
 
             return submitedInfo;
         }
+
         public class SubmitedInfo
         {
             public string? Email { get; set; }

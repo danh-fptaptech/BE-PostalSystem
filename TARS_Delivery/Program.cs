@@ -79,15 +79,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             };
         });
 
-
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.AddPolicy("AdminOnly", policy =>
-//        policy.RequireRole("Admin"));
-//});
-
-
-
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

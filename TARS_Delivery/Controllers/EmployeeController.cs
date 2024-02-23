@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Services;
 using TARS_Delivery.Services.imp;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TARS_Delivery.Controllers
 {
@@ -16,7 +16,7 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly EmployeeService _service;
+        private readonly IEmployeeService _service;
 
         public EmployeeController(EmployeeService service)
         {
@@ -60,7 +60,7 @@ namespace TARS_Delivery.Controllers
 
         // POST: api/Employees/employee => done
         [HttpPost]
-        public async Task<ActionResult> CreateEmployee([FromForm] RDTOEmployee employee)
+        public async Task<ActionResult> CreateEmployee([FromBody] RDTOEmployee employee)
         {
             try
             {
@@ -174,6 +174,20 @@ namespace TARS_Delivery.Controllers
                 throw new Exception(ex.Message);
             }
         }
- 
+
+        [HttpGet("SubmitedInfo")]
+        public async Task<ActionResult> GetSubmitedInfoEmployees()
+        {
+            try
+            {
+                var employees = await _service.GetSubmitedInfoEmployees();
+                return Ok(employees);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }
