@@ -23,6 +23,10 @@ public class DtoProfile : Profile
         CreateMap<Branch, SDTOBranch>().ReverseMap();
         
         CreateMap<Package, SDTOPackage>().ReverseMap();
+        
+        CreateMap<Package, SDTOPackageList>()
+            .AfterMap((src, dest) => dest.CounterItem = src.Items.Count)
+            .ReverseMap();
 
         #endregion
         

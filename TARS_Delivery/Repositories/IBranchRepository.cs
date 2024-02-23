@@ -6,9 +6,12 @@ namespace TARS_Delivery.Repositories;
 
 public interface IBranchRepository
 {
-    public Task<ICollection<SDTOBranch>> GetAllBranches();
+    public Task<ICollection<Branch>> GetAllBranches();
     public Task<Branch> GetBranchById(int id);
     public Task<Branch> AddBranch(Branch branch);
     public Task<Branch> UpdateBranch(int id, RDTOBranch branch);
-    public bool ToggleBranchStatus(int id);
+    public Task<ICollection<Package>> GetAllPackagesByBranchId(int id);
+    public Task<ICollection<Item>> GetAllItemsByBranchId(int id);
+    public Task<bool> ToggleBranchStatus(int id);
+    public Task<bool> NameExists(string name, int? id = null);
 }

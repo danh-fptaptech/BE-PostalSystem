@@ -9,8 +9,9 @@ public class RoleSeeders
     {
         modelBuilder.Entity<Role>().HasData(
             new Role { Id = 1, RoleName = "Admin"},
-            new Role { Id = 2, RoleName = "Warehouse"},
-            new Role { Id = 3, RoleName = "Delivery"}
+            new Role { Id = 2, RoleName = "Branch Manager"},
+            new Role { Id = 3, RoleName = "Warehouse"},
+            new Role { Id = 4, RoleName = "Delivery"}
         );
     }
 }

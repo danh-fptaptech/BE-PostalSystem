@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Models.Entities
 {

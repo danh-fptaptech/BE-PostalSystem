@@ -1,7 +1,9 @@
-﻿namespace TARS_Delivery.Models.Enum;
-
-public enum EStatusData
+﻿namespace TARS_Delivery.Models.Enums
 {
-    Inactive = 0,
-    Active = 1,
+    public enum EStatusData
+    {
+        Inactive = 0,
+        Active = 1,
+    }
 }
+

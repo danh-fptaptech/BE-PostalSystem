@@ -1,13 +1,13 @@
-﻿namespace TARS_Delivery.Models.Enum
+﻿namespace TARS_Delivery.Models.Enums
 {
     public enum EPackageStatus
     {
         WaitingForPickup = 0,
-        Pending = 1,
-        Created = 2,
-        WarehouseFrom = 3,
-        InTransit = 4,
-        WarehouseTo = 5,
+        Created = 1,
+        WarehouseFrom = 2,
+        InTransit = 3,
+        WarehouseTo = 4,
+        Shipping = 5,
         Delivered = 6,
         Cancelled = 7,
         Returned = 8,

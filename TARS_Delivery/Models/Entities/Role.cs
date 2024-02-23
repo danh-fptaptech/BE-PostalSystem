@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Models.Entities
 {
@@ -11,7 +11,7 @@ namespace TARS_Delivery.Models.Entities
         public int Id { get; set; }
         public string RoleName { get; set; }
         public virtual ICollection<RoleHasPermission>? RoleHasPermissions { get; set; }
-        
+
         public EStatusData Status { get; set; }
     }
 }

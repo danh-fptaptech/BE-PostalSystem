@@ -138,7 +138,7 @@ public class DatabaseContext : DbContext
         
         #region modelBuilder for Seeders
 
-        /*new ApplicationSeeders().OnModelSeeders(modelBuilder);*/
+        new ApplicationSeeders().OnModelSeeders(modelBuilder);
 
         #endregion
         
