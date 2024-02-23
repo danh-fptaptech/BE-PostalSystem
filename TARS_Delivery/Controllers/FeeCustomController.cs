@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Controllers
@@ -132,19 +134,41 @@ namespace TARS_Delivery.Controllers
         [HttpPost("CreateUpdateFee/{postalCodeFrom}/{postalCodeTo}")]
         public async Task<IActionResult> CreateUpdateFee(string postalCodeFrom, string postalCodeTo, FeeCustom fee)
         {
-            if (ModelState.IsValid)
+/*            var listFeeCustomCreated = await GetFeeByPostalCode(postalCodeFrom, postalCodeTo);*/
+            List<FeeCustom> listFeeCustomCreated = await _feeCustomRepository.GetFeeByPostalCode(postalCodeFrom, postalCodeTo);
+            var newItem = new FeeCustom
             {
-                try
+                ServiceId = fee.ServiceId,
+                LocationIdFrom = fee.LocationIdFrom,
+                LocationIdTo = fee.LocationIdTo,
+                Distance = fee.Distance,
+                FeeCharge = fee.FeeCharge,
+                TimeProcess = fee.TimeProcess,
+                Status = EStatusData.Active
+            };
+
+            if (listFeeCustomCreated.Count > 0)
+            {
+                
+                foreach (var item in listFeeCustomCreated)
                 {
-                    await _feeCustomRepository.CreateUpdateFee(postalCodeFrom, postalCodeTo, fee);
-                    return Ok("Fee added/updated successfully");
+                    if (item.ServiceId == fee.ServiceId)
+                    {
+                        item.FeeCharge = fee.FeeCharge;
+                        item.TimeProcess = fee.TimeProcess;
+                        await _feeCustomRepository.UpdateFee(item.Id, item);
+                        return Ok("Fee updated successfully");
+                    }
                 }
-                catch (Exception ex)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-                }
+
+                await _feeCustomRepository.CreateFee(newItem);
+                return Ok("Fee added successfully");
             }
-            return BadRequest("Invalid model");
+            else
+            {
+                await _feeCustomRepository.CreateFee(newItem);
+                return Ok("Fee added successfully");
+            }
         }
     }
 }
