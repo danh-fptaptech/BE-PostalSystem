@@ -2,7 +2,6 @@
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Models.Enums;
-using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Repositories
 {

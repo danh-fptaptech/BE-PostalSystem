@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Services.Users.GetUserByIdAsync;
 
 namespace TARS_Delivery.Controllers;

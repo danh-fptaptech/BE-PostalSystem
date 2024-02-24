@@ -27,7 +27,8 @@ public class UsersController(ISender sender)
             request.FullName, 
             request.Email, 
             request.Phone,
-            request.Password);
+            request.Password,
+            request.Avatar);
 
         var result = await Sender.Send(
             command, cancellationToken);

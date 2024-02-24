@@ -43,7 +43,7 @@ internal class RegisterUserAsyncHandler(
         string otp = _otpProvider.Generate("0123456789", 6);
 
         UserRegistrationInfo userInfo = UserRegistrationInfo.Create(
-            command.FullName, command.Email, hashedPassword, command.Phone, otp);
+            command.FullName, command.Email, hashedPassword, command.Phone, command.Avatar, otp);
 
         await Task.WhenAll(
             _userRegistrationInfoRepository.AddUserRegistrationInfo(userInfo, cancellationToken), 

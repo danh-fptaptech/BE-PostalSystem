@@ -7,5 +7,6 @@ internal sealed record RegisterUserAsyncCommand(
     string FullName, 
     string Email, 
     string Phone,
-    string Password) 
+    string Password,
+    string Avatar) 
         : IRequest<Result>;

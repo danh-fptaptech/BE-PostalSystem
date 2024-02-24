@@ -73,22 +73,6 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddValidatorsFromAssembly(AssemblyReference.Assembly, includeInternalTypes: true);
-    scan.FromAssemblyOf<IBranchService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-    /* Employee */
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IEmployeeRepository>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IEmployeeService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-    /* Role */
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IRoleRepository>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IRoleService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-    /* Permission */
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IPermissionRepository>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IPermissionService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
 
 // JSON Serializer
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -142,13 +126,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options =>
+/*builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
         policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
     });
-});
+});*/
 
 var app = builder.Build();
 
@@ -161,7 +145,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("CorsPolicy");
 
-app.UseCors();
+//app.UseCors();
 
 app.UseAuthentication();
 

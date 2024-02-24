@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Cryptography;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Models.Entities;
 
@@ -14,12 +14,14 @@ public class User
         string fullname, 
         string email, 
         string phone,
-        string password) 
+        string password,
+        string avatar) 
         {
             Fullname = fullname;
             Email = email;
             Phone = phone;
             Password = password;
+            Avatar = avatar;
             CreatedAt = DateTime.Now;
             Status = EStatusData.Active;
         }
@@ -61,12 +63,14 @@ public class User
         string fullname,
         string email,
         string phone,
-        string password) => 
+        string password,
+        string avatar) => 
             new(
                 fullname,
                 email,
                 phone,
-                password);
+                password,
+                avatar);
 
     public void ChangePassword(string password)
     {

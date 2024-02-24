@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Shared;
 
 namespace TARS_Delivery.Services.Users.AddUserAddressAsync;
