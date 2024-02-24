@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Models.Entities
 {
@@ -9,10 +9,9 @@ namespace TARS_Delivery.Models.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
         public int ServiceId { get; set; }
-        public int PostalCodeFrom { get; set; }
-        public int PostalCodeTo { get; set; }
+        public int LocationIdFrom { get; set; }
+        public int LocationIdTo { get; set; }
         [Column(TypeName = "decimal(12,2)")]
         public decimal Distance { get; set; }
         [Column(TypeName = "decimal(12,2)")]
@@ -23,10 +22,10 @@ namespace TARS_Delivery.Models.Entities
         public EStatusData Status { get; set; }
 
         [ForeignKey("ServiceId")]
-        public Service Service { get; set; }
-        [ForeignKey("PostalCodeFrom")]
-        public Location LocationFrom { get; set; }
-        [ForeignKey("PostalCodeTo")]
-        public Location LocationTo { get; set; }
+        public Service? Service { get; set; }
+        [ForeignKey("LocationIdFrom")]
+        public Location? LocationFrom { get; set; }
+        [ForeignKey("LocationIdTo")]
+        public Location? LocationTo { get; set; }
     }
 }

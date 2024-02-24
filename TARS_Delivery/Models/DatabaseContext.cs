@@ -17,12 +17,12 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<FeeCustom>()
             .HasOne<Location>(fc => fc.LocationTo)
             .WithMany()
-            .HasForeignKey(fc => fc.PostalCodeTo)
+            .HasForeignKey(fc => fc.LocationIdTo)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<FeeCustom>()
             .HasOne<Location>(fc => fc.LocationFrom)
             .WithMany()
-            .HasForeignKey(fc=>fc.PostalCodeFrom)
+            .HasForeignKey(fc=>fc.LocationIdFrom)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<FeeCustom>()
             .HasOne<Service>(fc => fc.Service)
@@ -118,16 +118,6 @@ public class DatabaseContext : DbContext
             .HasForeignKey(c=>c.UserId);
 
         #endregion
-        
-        #region ModelBuilder for Branch
-
-        modelBuilder.Entity<Branch>()
-            .HasMany<Item>(b=>b.Items)
-            .WithOne(i=>i.Branch)
-            .HasForeignKey(e=>e.BranchId)
-            .OnDelete(DeleteBehavior.Restrict);
-        
-        #endregion
 
         #region ModelBuilder Unique
 
@@ -146,13 +136,12 @@ public class DatabaseContext : DbContext
 
         #endregion
 
-        
         #region modelBuilder for Seeders
 
-        /*new ApplicationSeeders().OnModelSeeders(modelBuilder);*/
+        new ApplicationSeeders().OnModelSeeders(modelBuilder);
 
         #endregion
-        
+
     }
 
     #region DbSet
