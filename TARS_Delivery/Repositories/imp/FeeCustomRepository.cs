@@ -15,7 +15,8 @@ namespace TARS_Delivery.Repositories.imp
 
         public async Task<FeeCustom> CreateFee(FeeCustom fee)
         {
-            if(fee != null)
+
+            if (fee != null)
             {
                 _context.FeeCustoms.Add(fee);
                 await _context.SaveChangesAsync();
@@ -121,7 +122,6 @@ namespace TARS_Delivery.Repositories.imp
             var feeCustom = await _context.FeeCustoms.Include(l =>l.LocationFrom).Include(l=>l.LocationTo).FirstOrDefaultAsync(fee => fee.Id == id);
             if (feeCustom != null)
             {
-                // Mapping lại dữ liệu từ anonymous type sang FeeCustom
                 var mappedFeeCustoms = new FeeCustom
                 {
                     Id = feeCustom.Id,
@@ -172,7 +172,7 @@ namespace TARS_Delivery.Repositories.imp
             await _context.SaveChangesAsync();
             return feeCustom;
         }
-        public async Task<FeeCustom> GetFeeByPostalCode(string postalCodeFrom, string postalCodeTo)
+        public async Task<List<FeeCustom>> GetFeeByPostalCode(string postalCodeFrom, string postalCodeTo)
         {
             var postalCodeFromItem = await _context.Locations
                 .FirstOrDefaultAsync(l => l.PostalCode.Equals(postalCodeFrom));
@@ -182,12 +182,15 @@ namespace TARS_Delivery.Repositories.imp
             if (postalCodeFromItem != null && postalCodeToItem != null)
             {
                 var feeCustom = await _context.FeeCustoms
-                    .FirstOrDefaultAsync(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdTo == postalCodeToItem.Id);
+                    .Where(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdTo == postalCodeToItem.Id)
+                    .ToListAsync();
+
                 return feeCustom;
             }
             return null;
         }
-        public async Task<FeeCustom> GetFeeByPostalCodeWeight(string postalCodeFrom, string postalCodeTo, int weight)
+       
+        public async Task<List<FeeCustom>> GetFeeByPostalCodeWeight(string postalCodeFrom, string postalCodeTo, int weight)
         {
             var postalCodeFromItem = await _context.Locations
                 .FirstOrDefaultAsync(l => l.PostalCode.Equals(postalCodeFrom));
@@ -197,18 +200,13 @@ namespace TARS_Delivery.Repositories.imp
             if (postalCodeFromItem != null && postalCodeToItem != null)
             {
                 var feeCustom = await _context.FeeCustoms
-                    .FirstOrDefaultAsync(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdTo == postalCodeToItem.Id);
+                    .Where(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdTo == postalCodeToItem.Id)
+                    .Include(s => s.Service)
+                    .Where(s=> s.Service.WeighFrom <= weight && s.Service.WeighTo >= weight)
+                    .ToListAsync();
                 if (feeCustom != null)
                 {
-                    var service = await _context.Services
-                        .FirstOrDefaultAsync(s => s.Id == feeCustom.ServiceId);
-                    if (service != null)
-                    {
-                        if (weight >= service.WeighFrom && weight <= service.WeighTo)
-                        {
-                            return feeCustom;
-                        }
-                    }
+                   return feeCustom;
                 }
             }
             return null;

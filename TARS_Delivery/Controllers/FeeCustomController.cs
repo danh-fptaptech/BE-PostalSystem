@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Controllers
@@ -116,16 +118,56 @@ namespace TARS_Delivery.Controllers
         {
             try
             {
-                var fee = await _feeCustomRepository.GetFeeByPostalCodeWeight(postalCodeFrom, postalCodeTo, weight);
-                if (fee != null)
+                var fees = await _feeCustomRepository.GetFeeByPostalCodeWeight(postalCodeFrom, postalCodeTo, weight);
+                if (fees != null)
                 {
-                    return Ok(fee);
+                    return Ok(fees);
                 }
                 return NotFound("Fee not found");
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        //Add or Update Fee
+        [HttpPost("CreateUpdateFee/{postalCodeFrom}/{postalCodeTo}")]
+        public async Task<IActionResult> CreateUpdateFee(string postalCodeFrom, string postalCodeTo, FeeCustom fee)
+        {
+/*            var listFeeCustomCreated = await GetFeeByPostalCode(postalCodeFrom, postalCodeTo);*/
+            List<FeeCustom> listFeeCustomCreated = await _feeCustomRepository.GetFeeByPostalCode(postalCodeFrom, postalCodeTo);
+            var newItem = new FeeCustom
+            {
+                ServiceId = fee.ServiceId,
+                LocationIdFrom = fee.LocationIdFrom,
+                LocationIdTo = fee.LocationIdTo,
+                Distance = fee.Distance,
+                FeeCharge = fee.FeeCharge,
+                TimeProcess = fee.TimeProcess,
+                Status = EStatusData.Active
+            };
+
+            if (listFeeCustomCreated.Count > 0)
+            {
+                
+                foreach (var item in listFeeCustomCreated)
+                {
+                    if (item.ServiceId == fee.ServiceId)
+                    {
+                        item.FeeCharge = fee.FeeCharge;
+                        item.TimeProcess = fee.TimeProcess;
+                        await _feeCustomRepository.UpdateFee(item.Id, item);
+                        return Ok("Fee updated successfully");
+                    }
+                }
+
+                await _feeCustomRepository.CreateFee(newItem);
+                return Ok("Fee added successfully");
+            }
+            else
+            {
+                await _feeCustomRepository.CreateFee(newItem);
+                return Ok("Fee added successfully");
             }
         }
     }
