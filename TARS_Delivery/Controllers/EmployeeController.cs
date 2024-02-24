@@ -58,6 +58,26 @@ namespace TARS_Delivery.Controllers
             }
         }
 
+        // GET: api/Employees/{employeeId}
+        [HttpGet("code/{code}")] // done
+        public async Task<ActionResult> GetEmployeeByCode(string code)
+        {
+            try
+            {
+                var employee = await _service.GetEmployeeByCode(code);
+                if (employee != null)
+                {
+                    return Ok(employee);
+                }
+                return NotFound("This employee does not exist !");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error: ", ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         // POST: api/Employees/employee => done
         [HttpPost]
         public async Task<ActionResult> CreateEmployee([FromBody] RDTOEmployee employee)
@@ -70,6 +90,30 @@ namespace TARS_Delivery.Controllers
                     return Ok(createdEmployee);
                 }
 
+                return BadRequest(ModelState);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Error: ", ex.Message);
+                return BadRequest(ModelState);
+            }
+        }
+
+        // PUT: api/Employees/{employeeId} => done
+        [HttpPut]
+        public async Task<ActionResult> UpdateEmployee(int id, RDTOEmployee employee)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var updatedEmployee = await _service.GetEmployee(id);
+                    if(updatedEmployee != null)
+                    {
+                        return Ok(await _service.UpdateEmployee(id, employee));
+                    }
+                    return NotFound();
+                }
                 return BadRequest(ModelState);
             }
             catch (Exception ex)

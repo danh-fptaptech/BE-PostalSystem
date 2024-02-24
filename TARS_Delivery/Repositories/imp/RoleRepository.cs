@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Security;
+using System.Data;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
@@ -18,46 +18,22 @@ namespace TARS_Delivery.Repositories.imp
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<SDTORole>> GetRoles()
+        public async Task<IEnumerable<Role>> GetRoles()
         {
             IEnumerable<Role> roles = await _context.Roles
-                .Include(r => r.RoleHasPermissions)
                 .ToListAsync();
 
-            IEnumerable<SDTORole> dtoRoles = roles.Select(r => new SDTORole
-            {
-                Id = r.Id,
-                RoleName = r.RoleName,
-                Status = r.Status,
-                RoleHasPermissions = r.RoleHasPermissions.Select(rhp => new RoleHasPermission
-                {
-                    RoleId = rhp.RoleId,
-                    PermissionId = rhp.PermissionId,
-                }).ToList(),
-            });
 
-            return dtoRoles;
+            return roles;
         }
 
-        public async Task<SDTORole> GetRole(int id)
+        public async Task<Role> GetRole(int id)
         {
-            var role = await _context.Roles
-                .Include(r => r.RoleHasPermissions)
+            var role = await _context.Roles     
                 .FirstOrDefaultAsync(r => r.Id == id);
             if(role != null)
             {
-                SDTORole dtoRole = new()
-                {
-                    Id = role.Id,
-                    RoleName = role.RoleName,
-                    Status = role.Status,
-                    RoleHasPermissions = role.RoleHasPermissions.Select(rhp => new RoleHasPermission 
-                    { 
-                        RoleId = rhp.RoleId,
-                        PermissionId = rhp.PermissionId 
-                    }).ToList(),
-                };
-                return dtoRole;
+                return role;
             }
             throw new Exception("The role does not exist !");
         }
@@ -131,6 +107,104 @@ namespace TARS_Delivery.Repositories.imp
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<SDTORole> GetRoleWithPermissions(int id)
+        {
+            var role = await _context.Roles
+                .Include(r => r.RoleHasPermissions)
+                .ThenInclude(rhp => rhp.Permission)
+                .FirstOrDefaultAsync(r => r.Id == id);
+            if (role != null)
+            {
+                SDTORole dtoRole = new()
+                {
+                    Id = role.Id,
+                    Name = role.RoleName,
+                    Status = role.Status,
+                    RoleHasPermissions = role.RoleHasPermissions.Select(rhp => new SDTORoleHasPermission
+                    {
+                        Id = rhp.PermissionId,
+                        Name = rhp.Permission.PermissionName
+                    }).ToList(),
+                };
+                return dtoRole;
+            }
+            throw new Exception("The role does not exist !");
+        }
+
+        public async Task<SDTORole> AddPermission(int roleId, int permissionId)
+        {
+            var role = await _context.Roles
+                .Include(r => r.RoleHasPermissions)
+                .FirstOrDefaultAsync(r => r.Id == roleId);
+
+            if (role != null)
+            {
+                // Thêm mới
+                var roleHasPermission = new RoleHasPermission
+                {
+                    RoleId = roleId,
+                    PermissionId = permissionId
+                };
+
+                role.RoleHasPermissions.Add(roleHasPermission);
+
+                await _context.SaveChangesAsync();
+
+                SDTORole dtoRole = new()
+                {
+                    Id = role.Id,
+                    Name = role.RoleName,
+                    Status = role.Status,
+                    RoleHasPermissions = role.RoleHasPermissions.Select(rhp => new SDTORoleHasPermission
+                    {
+                        Id = rhp.PermissionId,
+                        Name = rhp.Permission.PermissionName
+                    }).ToList(),
+                };
+                return dtoRole;
+            }
+            throw new Exception("The role does not exist !");
+        }
+
+        public async Task<IEnumerable<SDTORole>> GetRolesWithPermissions()
+        {
+            IEnumerable<Role> roles = await _context.Roles
+                .Include(r => r.RoleHasPermissions)
+                .ThenInclude(rhp => rhp.Permission)
+                .ToListAsync();
+
+            IEnumerable<SDTORole> dtoRoles = roles.Select(r => new SDTORole
+            {
+                Id = r.Id,
+                Name = r.RoleName,
+                Status = r.Status,
+                RoleHasPermissions = r.RoleHasPermissions.Select(rhp => new SDTORoleHasPermission
+                {
+                    Id = rhp.PermissionId,
+                    Name = rhp.Permission.PermissionName
+                }).ToList(),
+            });
+
+            return dtoRoles;
+        }
+
+        public async Task DeletePermission(int roleId, int permissionId)
+        {
+            var rhp = await _context.RoleHasPermissions
+            .FirstOrDefaultAsync(rhp => rhp.PermissionId == permissionId && rhp.RoleId == roleId); ;
+
+            if (rhp != null)
+            {
+                _context.RoleHasPermissions.Remove(rhp);
+
+                await _context.SaveChangesAsync();
+
+                return;
+            }
+
+            throw new Exception("The role or permission does not exist !");
         }
     }
 }

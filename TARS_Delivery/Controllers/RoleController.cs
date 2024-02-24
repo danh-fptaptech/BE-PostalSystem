@@ -1,7 +1,11 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Services;
 using TARS_Delivery.Services.imp;
 
 namespace TARS_Delivery.Controllers
@@ -10,26 +14,29 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
-        private readonly RoleService _service;
-        public RoleController(RoleService service)
+        private readonly IRoleService _roleService;
+        private readonly IPermissionService _permissionService;
+
+        public RoleController(IRoleService roleService, IPermissionService permissionService)
         {
-            _service = service;
+            _roleService = roleService;
+            _permissionService = permissionService;
         }
 
         // GET: api/Roles => done
-        [HttpGet] 
-        public async Task<ActionResult> GetRoles()
-        {
-            try
-            {
-                var roles = await _service.GetRoles();
-                return Ok(roles);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        /*        [HttpGet] 
+                public async Task<ActionResult> GetRoles()
+                {
+                    try
+                    {
+                        var roles = await _roleService.GetRoles();
+                        return Ok(roles);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }*/
 
         // GET: api/Roles/{roleId} => done
         [HttpGet("{id}")] 
@@ -37,7 +44,7 @@ namespace TARS_Delivery.Controllers
         {
             try
             {
-                var role = await _service.GetRole(id);
+                var role = await _roleService.GetRole(id);
                 if (role != null)
                 {
                     return Ok(role);
@@ -58,7 +65,7 @@ namespace TARS_Delivery.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    await _service.Create(role);
+                    await _roleService.Create(role);
                     return Ok(role);
                 }
                 return BadRequest();
@@ -78,12 +85,12 @@ namespace TARS_Delivery.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var updatedRole = await _service.GetRole(id);
+                    var updatedRole = await _roleService.GetRole(id);
                     if (updatedRole != null)
                     {
                         if(updatedRole.Id > 3)
                         {
-                            await _service.Update(id, role);
+                            await _roleService.Update(id, role);
                             return Ok(updatedRole);
                         }
                         return Content("It's system role. You can not edit it.");
@@ -104,12 +111,12 @@ namespace TARS_Delivery.Controllers
         {
             try
             {
-                var removedRole = await _service.GetRole(id);
+                var removedRole = await _roleService.GetRole(id);
                 if(removedRole != null)
                 {
                     if(removedRole.Id > 3)
                     {
-                        await _service.Delete(id);
+                        await _roleService.Delete(id);
                         return Ok("Delete role successfully.");
                     }
                     return Content("It's system role. You can not delete.");
@@ -121,5 +128,80 @@ namespace TARS_Delivery.Controllers
                 throw new Exception(ex.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Role>>> GetRoles()
+        {
+            IEnumerable<Role> roles = await _roleService.GetRoles();
+            return Ok(roles);
+        }
+
+        [HttpGet("Permissions")]
+        public async Task<ActionResult<IEnumerable<SDTORole>>> GetRolesWithPermissions()
+        {
+            IEnumerable<SDTORole> roles = await _roleService.GetRolesWithPermissions();
+            return Ok(roles);
+        }
+
+        [HttpGet("{id}/Permissions")]
+        public async Task<ActionResult<SDTORole>> GetRoleWithPermissions(int id)
+        {
+            SDTORole roleWithPermission = await _roleService.GetRoleWithPermissions(id);
+            return Ok(roleWithPermission);
+        }
+
+        [HttpPost("{roleId}/Permission/{permissionId}")]
+        public async Task<ActionResult<RoleHasPermission>> AddPermissionToRole(int roleId, int permissionId)
+        {
+            try
+            {
+                // Are role and permission valid ? 
+                var existRole = await _roleService.GetRoleWithPermissions(roleId);
+                var existPermission = await _permissionService.GetPermission(permissionId);
+                if (existRole == null || existPermission == null)
+                {
+                    return NotFound("The role or the permission doesn't exist !");
+                }
+                if (existRole.RoleHasPermissions.Any(rhp => rhp.Id == permissionId))
+                {
+                    return Conflict("Permission already assigned to role.");
+                }
+
+                var role = await _roleService.AddPermission(roleId, permissionId);
+
+                return Ok(role);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: ", ex.Message);
+                throw;
+            }
+
+        }
+
+        // DELETE: api/Roles/{roleId}/Permissions/{permissionId} => done
+        [HttpDelete("{roleId}/Permission/{permissionId}")]
+        public async Task<IActionResult> RemovePermissionFromRole(int roleId, int permissionId)
+        {
+            try
+            {
+                var existRole = await _roleService.GetRole(roleId);
+                var existPermission = await _permissionService.GetPermission(permissionId);
+                if (existRole == null || existPermission == null)
+                {
+                    return NotFound("The role or the permission doesn't exist !");
+                }
+
+                await _roleService.DeletePermission(roleId, permissionId);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }

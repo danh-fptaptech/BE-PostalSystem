@@ -142,6 +142,35 @@ namespace TARS_Delivery.Repositories.imp
             }
         }
 
+        public async Task<Employee> UpdateEmployee(int id, RDTOEmployee employee)
+        {
+            try
+            {
+                var updatedEmployee = await _context.Employees.FindAsync(id);
+                if (updatedEmployee != null)
+                {
+                    updatedEmployee.Fullname = employee.Fullname;
+                    updatedEmployee.Email = employee.Email;
+                    updatedEmployee.Password = employee.Password;
+                    updatedEmployee.Address = employee.Address;
+                    updatedEmployee.District = employee.District;
+                    updatedEmployee.Province = employee.Province;
+                    updatedEmployee.PhoneNumber = employee.PhoneNumber;
+                    updatedEmployee.BranchId = employee.BranchId;
+                    updatedEmployee.RoleId = employee.RoleId;
+
+                    await _context.SaveChangesAsync();
+                    return updatedEmployee;
+                }
+                throw new Exception("The employee doesn't exist !");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<Employee> UpdatePassword(int id, RDTOChangePassword employee)
         {
             try
@@ -379,6 +408,53 @@ namespace TARS_Delivery.Repositories.imp
             }
 
             return submitedInfo;
+        }
+
+        public async Task<SDTOEmployee> GetEmployeeByCode(string code)
+        {
+            var employee = await _context.Employees
+            .Include(e => e.Role)
+            .Include(e => e.Branch)
+            .Include(e => e.HistoryLogs)
+            .FirstOrDefaultAsync(e => e.EmployeeCode == code);
+
+            if (employee != null)
+            {
+                SDTOEmployee dtoEmployee = new()
+                {
+                    Id = employee.Id,
+                    EmployeeCode = employee.EmployeeCode,
+                    Fullname = employee.Fullname,
+                    Email = employee.Email,
+                    Password = employee.Password,
+                    PhoneNumber = employee.PhoneNumber,
+                    Address = employee.Address,
+                    Province = employee.Province,
+                    District = employee.District,
+                    Avatar = employee.Avatar,
+                    SubmitedInfo = employee.SubmitedInfo,
+                    CreatedAt = employee.CreatedAt,
+                    Status = employee.Status,
+                    BranchId = employee.BranchId,
+                    BranchName = employee.Branch.BranchName,
+                    RoleId = employee.RoleId,
+                    RoleName = employee.Role.RoleName,
+                    HistoryLogs = employee.HistoryLogs.Select(h => new HistoryLog
+                    {
+                        Id = h.Id,
+                        PackageId = h.PackageId,
+                        EmployeeId = h.EmployeeId,
+                        Step = h.Step,
+                        HistoryNote = h.HistoryNote,
+                        Photos = h.Photos,
+                        CreatedAt = h.CreatedAt,
+                        UpdatedAt = h.UpdatedAt,
+                        Status = h.Status,
+                    }).ToList()
+                };
+                return dtoEmployee;
+            }
+            throw new Exception("The employee does not exist !");
         }
 
         public class SubmitedInfo

@@ -35,7 +35,6 @@ builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<PermissionService>();
 
 
-
 // Auto Dependency Injection
 builder.Services.Scan(scan =>
     scan.FromAssemblyOf<IBranchRepository>().AddClasses().AsMatchingInterface().WithScopedLifetime());

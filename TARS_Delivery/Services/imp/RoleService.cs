@@ -14,12 +14,12 @@ namespace TARS_Delivery.Services.imp
             _repository = repository;
         }
 
-        public async Task<IEnumerable<SDTORole>> GetRoles()
+        public async Task<IEnumerable<Role>> GetRoles()
         {
             return await _repository.GetRoles();
         }
 
-        public async Task<SDTORole> GetRole(int id)
+        public async Task<Role> GetRole(int id)
         {
             return await _repository.GetRole(id);
         }
@@ -42,6 +42,26 @@ namespace TARS_Delivery.Services.imp
         public Task<Role> Delete(int id)
         {
             return _repository.Delete(id);
+        }
+
+        public Task<SDTORole> GetRoleWithPermissions(int id)
+        {
+            return _repository.GetRoleWithPermissions(id);
+        }
+
+        public Task<IEnumerable<SDTORole>> GetRolesWithPermissions()
+        {
+            return _repository.GetRolesWithPermissions();
+        }
+
+        public Task<SDTORole> AddPermission(int roleId, int permissionId)
+        {
+            return _repository.AddPermission(roleId, permissionId);
+        }
+
+        public Task DeletePermission(int roleId, int permissionId)
+        {
+            return _repository.DeletePermission(roleId, permissionId);
         }
     }
 }

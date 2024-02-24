@@ -8,7 +8,9 @@ namespace TARS_Delivery.Services
     {
         Task<IEnumerable<SDTOEmployee>> GetEmployees();
         Task<SDTOEmployee> GetEmployee(int id);
+        Task<SDTOEmployee> GetEmployeeByCode(string code);
         Task<Employee> CreateEmployeeAsync(RDTOEmployee employee);
+        Task<Employee> UpdateEmployee(int id, RDTOEmployee employee);
         Task<Employee> UpdatePassword(int id, RDTOChangePassword employee);
         Task<Employee> UpdateInfoAsync(int id, UpdateInfoAsync employee);
         Task<Employee> AcceptUpdateInfo(int id);

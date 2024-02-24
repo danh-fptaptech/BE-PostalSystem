@@ -87,5 +87,14 @@ namespace TARS_Delivery.Services.imp
             return await _repository.GetSubmitedInfoEmployees();
         }
 
+        public async Task<Employee> UpdateEmployee(int id, RDTOEmployee employee)
+        {
+            return await _repository.UpdateEmployee(id, employee);
+        }
+
+        public async Task<SDTOEmployee> GetEmployeeByCode(string code)
+        {
+            return await _repository.GetEmployeeByCode(code);
+        }
     }
 }

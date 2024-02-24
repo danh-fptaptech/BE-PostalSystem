@@ -17,7 +17,7 @@ namespace TARS_Delivery.Controllers
         }
 
         // GET: api/Roles/Permissions => done
-        [HttpGet("Permissions")]
+      /*  [HttpGet]
         public async Task<ActionResult<IEnumerable<Role>>> GetRolesWithPermission()
         {
             IEnumerable<Role> roles = await _context.Roles.Include(r => r.RoleHasPermissions).ToListAsync();
@@ -90,6 +90,6 @@ namespace TARS_Delivery.Controllers
                 throw new Exception(ex.Message);
             }
         }
-
+*/
     }
 }
