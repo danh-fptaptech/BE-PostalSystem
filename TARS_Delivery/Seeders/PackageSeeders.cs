@@ -20,10 +20,9 @@ namespace TARS_Delivery.Seeders
                 PostalCodeTo = "700000",
                 PackageNote = "Giao hàng cẩn thận",
                 TotalFee = 100000,
-                Photos = "photo1.jpg",
                 ServiceId = 1,
                 UserId = 1,
-                Step = Models.Enums.EPackageStatus.Pending,
+                Step = Models.Enums.EPackageStatus.WaitingForPickup,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 Status = Models.Enums.EStatusData.Active
@@ -40,10 +39,9 @@ namespace TARS_Delivery.Seeders
                 PostalCodeTo = "700000",
                 PackageNote = "Giao hàng cẩn thận",
                 TotalFee = 100000,
-                Photos = "photo2.jpg",
                 ServiceId = 1,
                 UserId = 2,
-                Step = Models.Enums.EPackageStatus.Pending,
+                Step = Models.Enums.EPackageStatus.WaitingForPickup,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 Status = Models.Enums.EStatusData.Active
