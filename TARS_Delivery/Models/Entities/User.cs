@@ -128,4 +128,18 @@ public class User
         RefreshToken = null;
         RefreshTokenExpires = null;
     }
+
+    internal static User Seed(
+        int id,
+        string fullname,
+        string email,
+        string phone,
+        string password,
+        string avatar)
+    {
+        User user = Register(fullname, email, phone, password, avatar);
+        user.Id = id;
+
+        return user;
+    }
 }

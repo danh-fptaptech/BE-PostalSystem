@@ -4,18 +4,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 using Scrutor;
+using System.Text.Json.Serialization;
 using TARS_Delivery;
 using TARS_Delivery.BackgroundJobs;
 using TARS_Delivery.Behaviors;
 using TARS_Delivery.Extensions;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json.Serialization;
 using TARS_Delivery.Models;
 using TARS_Delivery.Repositories;
 using TARS_Delivery.Repositories.imp;
 using TARS_Delivery.Services;
 using TARS_Delivery.Services.imp;
-using TARS_Delivery.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -40,14 +38,6 @@ builder.Services.AddScoped<RoleService>();
 
 builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<PermissionService>();
-
-
-
-// Auto Dependency Injection
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IBranchRepository>().AddClasses(action => action.NotInNamespaces("TARS_Delivery.Shared")).AsMatchingInterface().WithScopedLifetime());
-builder.Services.Scan(scan => 
-    scan.FromAssemblyOf<IBranchService>().AddClasses(action => action.NotInNamespaces("TARS_Delivery.Shared")).AsMatchingInterface().WithScopedLifetime());
 
 // scurtor register all services
 builder.Services.Scan(selector =>
@@ -126,14 +116,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-/*builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
-    });
-});*/
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -144,8 +126,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("CorsPolicy");
-
-//app.UseCors();
 
 app.UseAuthentication();
 

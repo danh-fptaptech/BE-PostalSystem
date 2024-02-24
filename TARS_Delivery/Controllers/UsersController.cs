@@ -6,11 +6,9 @@ using TARS_Delivery.Services.Users.ChangeUserPasswordAsync;
 using TARS_Delivery.Services.Users.GetUserByIdAsync;
 using TARS_Delivery.Services.Users.GetUserByIdWithAddressListAsync;
 using TARS_Delivery.Services.Users.LoginUserAsync;
-using TARS_Delivery.Services.Users.RegisterUserAsync;
 using TARS_Delivery.Services.Users.RefreshTokenAsync;
+using TARS_Delivery.Services.Users.RegisterUserAsync;
 using TARS_Delivery.Services.Users.VerifyUserMailAsync;
-using System.Security.Claims;
-using TARS_Delivery.Shared;
 
 namespace TARS_Delivery.Controllers;
 

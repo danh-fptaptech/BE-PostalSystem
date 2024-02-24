@@ -81,5 +81,24 @@ namespace TARS_Delivery.Models.Entities
                     postalCode,
                     typeInfo
                 );
+
+        internal static Customer Seed(
+            int id,
+            int userId,
+            string name,
+            string phoneNumber,
+            string address,
+            string city,
+            string district,
+            string ward,
+            int postalCode,
+            ETypeInfo typeInfo)
+        {
+            Customer customer = CreateCustomer(userId, name, phoneNumber, address, city, district, ward, postalCode, typeInfo );
+            customer.Id = id;
+
+            return customer;
+        }
+
     }
 }
