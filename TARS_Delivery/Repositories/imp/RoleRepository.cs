@@ -67,7 +67,7 @@ namespace TARS_Delivery.Repositories.imp
                 if (updatedRole != null)
                 {
                     var existingRole = await _context.Roles
-                        .FirstOrDefaultAsync(r => r.RoleName == role.RoleName && r.Id != id);
+                        .FirstOrDefaultAsync(r => r.RoleName == role.Name && r.Id != id);
 
                     if (existingRole != null)
                     {
@@ -92,14 +92,18 @@ namespace TARS_Delivery.Repositories.imp
         {
             try
             {
-                var removedRole = await _context.Roles.FindAsync(id);
+                var removedRole = await _context.Roles.Include(r => r.RoleHasPermissions).FirstOrDefaultAsync(r => r.Id == id);
                 if (removedRole != null)
                 {
                     if (removedRole.Id > 3)
                     {
-                        _context.Roles.Remove(removedRole);
-                        await _context.SaveChangesAsync();
-                    }
+                        if (removedRole.RoleHasPermissions != null)
+                        {
+                            _context.RoleHasPermissions.RemoveRange(removedRole.RoleHasPermissions);
+                            _context.Roles.Remove(removedRole);
+                            await _context.SaveChangesAsync();
+                        }
+                    }        
                 }
                 return null;
             }
@@ -122,33 +126,35 @@ namespace TARS_Delivery.Repositories.imp
                     Id = role.Id,
                     Name = role.RoleName,
                     Status = role.Status,
-                    RoleHasPermissions = role.RoleHasPermissions.Select(rhp => new SDTORoleHasPermission
-                    {
-                        Id = rhp.PermissionId,
-                        Name = rhp.Permission.PermissionName
-                    }).ToList(),
+                    RoleHasPermissions = role.RoleHasPermissions.Select(
+                        rhp => rhp.Permission.PermissionName).ToList(),
                 };
                 return dtoRole;
             }
             throw new Exception("The role does not exist !");
         }
 
-        public async Task<SDTORole> AddPermission(int roleId, int permissionId)
+        public async Task<SDTORole> AddPermission(int roleId, IEnumerable<string> permissionNames)
         {
             var role = await _context.Roles
                 .Include(r => r.RoleHasPermissions)
                 .FirstOrDefaultAsync(r => r.Id == roleId);
 
-            if (role != null)
+            var permissions = await _context.Permissions.Where(p 
+                => permissionNames.Contains(p.PermissionName)).ToListAsync();
+
+            if (role != null && permissions.Count() != 0)
             {
                 // Thêm mới
-                var roleHasPermission = new RoleHasPermission
+                foreach (var permission in permissions)
                 {
-                    RoleId = roleId,
-                    PermissionId = permissionId
-                };
-
-                role.RoleHasPermissions.Add(roleHasPermission);
+                    var roleHasPermission = new RoleHasPermission
+                    {
+                        RoleId = roleId,
+                        PermissionId = permission.Id
+                    };
+                    role.RoleHasPermissions.Add(roleHasPermission);
+                }
 
                 await _context.SaveChangesAsync();
 
@@ -157,11 +163,8 @@ namespace TARS_Delivery.Repositories.imp
                     Id = role.Id,
                     Name = role.RoleName,
                     Status = role.Status,
-                    RoleHasPermissions = role.RoleHasPermissions.Select(rhp => new SDTORoleHasPermission
-                    {
-                        Id = rhp.PermissionId,
-                        Name = rhp.Permission.PermissionName
-                    }).ToList(),
+                    RoleHasPermissions = role.RoleHasPermissions.Select(
+                        rhp => rhp.Permission.PermissionName).ToList(),
                 };
                 return dtoRole;
             }
@@ -180,20 +183,20 @@ namespace TARS_Delivery.Repositories.imp
                 Id = r.Id,
                 Name = r.RoleName,
                 Status = r.Status,
-                RoleHasPermissions = r.RoleHasPermissions.Select(rhp => new SDTORoleHasPermission
-                {
-                    Id = rhp.PermissionId,
-                    Name = rhp.Permission.PermissionName
-                }).ToList(),
+                RoleHasPermissions = r.RoleHasPermissions.Select(
+                        rhp => rhp.Permission.PermissionName).ToList(),
             });
 
             return dtoRoles;
         }
 
-        public async Task DeletePermission(int roleId, int permissionId)
+        public async Task DeletePermission(int roleId, string permissionName)
         {
+            var permission = await _context.Permissions
+            .FirstOrDefaultAsync(p => p.PermissionName == permissionName); ;
+
             var rhp = await _context.RoleHasPermissions
-            .FirstOrDefaultAsync(rhp => rhp.PermissionId == permissionId && rhp.RoleId == roleId); ;
+            .FirstOrDefaultAsync(rhp => rhp.PermissionId == permission.Id && rhp.RoleId == roleId); ;
 
             if (rhp != null)
             {

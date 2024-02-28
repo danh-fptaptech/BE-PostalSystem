@@ -28,8 +28,7 @@ namespace TARS_Delivery.Services.imp
         {
             Role newRole = new()
             {
-                RoleName = role.RoleName,
-                Status = role.Status,
+                RoleName = role.Name,
             };
             return await _repository.Create(newRole);
         }
@@ -54,14 +53,14 @@ namespace TARS_Delivery.Services.imp
             return _repository.GetRolesWithPermissions();
         }
 
-        public Task<SDTORole> AddPermission(int roleId, int permissionId)
+        public Task<SDTORole> AddPermission(int roleId, IEnumerable<string> permissionNames)
         {
-            return _repository.AddPermission(roleId, permissionId);
+            return _repository.AddPermission(roleId, permissionNames);
         }
 
-        public Task DeletePermission(int roleId, int permissionId)
+        public Task DeletePermission(int roleId, string permissionName)
         {
-            return _repository.DeletePermission(roleId, permissionId);
+            return _repository.DeletePermission(roleId, permissionName);
         }
     }
 }

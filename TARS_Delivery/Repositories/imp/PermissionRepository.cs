@@ -21,9 +21,10 @@ namespace TARS_Delivery.Repositories.imp
             return await _context.Permissions.ToListAsync();
         }
 
-        public async Task<Permission> GetPermission(int id)
+        public async Task<Permission> GetPermission(string permissionName)
         {
-            return await _context.Permissions.FindAsync(id);
+            return await _context.Permissions.FirstOrDefaultAsync(p => p.PermissionName == permissionName);
+
         }
 
         public async Task<Permission> Create(Permission permission)
@@ -48,15 +49,15 @@ namespace TARS_Delivery.Repositories.imp
             }
         }
 
-        public async Task<Permission> Update(int id, RDTOPermission permission)
+        public async Task<Permission> Update(string permissionName, RDTOPermission permission)
         {
             try
             {
-                var updatedPermission = await _context.Permissions.FindAsync(id);
+                var updatedPermission = await _context.Permissions.FirstOrDefaultAsync(p => p.PermissionName == permissionName);
                 if (updatedPermission != null)
                 {
                     var existingPermission = await _context.Permissions
-                        .FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName && p.Id != id);
+                        .FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName && p.Id != updatedPermission.Id);
 
                     if (existingPermission != null)
                     {
@@ -74,6 +75,11 @@ namespace TARS_Delivery.Repositories.imp
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<IEnumerable<Permission>> GetPermissionsByName(IEnumerable<string> permissionNames)
+        {
+            return await _context.Permissions.Where(p => permissionNames.Contains(p.PermissionName)).ToListAsync();
         }
     }
 }

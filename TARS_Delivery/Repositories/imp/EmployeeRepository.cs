@@ -6,12 +6,15 @@ using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Providers;
 
 namespace TARS_Delivery.Repositories.imp
 {
     public class EmployeeRepository(DatabaseContext context, IMapper mapper) : IEmployeeRepository
     {
         private readonly DatabaseContext _context = context;
+
         //private readonly IMapper _mapper = mapper;
 
 
@@ -142,20 +145,13 @@ namespace TARS_Delivery.Repositories.imp
             }
         }
 
-        public async Task<Employee> UpdateEmployee(int id, RDTOEmployee employee)
+        public async Task<Employee> UpdateEmployee(string code, RDTOUpdateEmployee employee)
         {
             try
             {
-                var updatedEmployee = await _context.Employees.FindAsync(id);
+                var updatedEmployee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeCode == code);
                 if (updatedEmployee != null)
                 {
-                    updatedEmployee.Fullname = employee.Fullname;
-                    updatedEmployee.Email = employee.Email;
-                    updatedEmployee.Password = employee.Password;
-                    updatedEmployee.Address = employee.Address;
-                    updatedEmployee.District = employee.District;
-                    updatedEmployee.Province = employee.Province;
-                    updatedEmployee.PhoneNumber = employee.PhoneNumber;
                     updatedEmployee.BranchId = employee.BranchId;
                     updatedEmployee.RoleId = employee.RoleId;
 
@@ -171,18 +167,15 @@ namespace TARS_Delivery.Repositories.imp
             }
         }
 
-        public async Task<Employee> UpdatePassword(int id, RDTOChangePassword employee)
+        public async Task<Employee> UpdatePassword(string code, string newPassword)
         {
             try
             {
-                Employee updatedEmployee = await _context.Employees.FindAsync(id);
+                var updatedEmployee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeCode == code);
                 if(updatedEmployee != null)
                 {
-                    if (!string.IsNullOrEmpty(updatedEmployee.Password))
-                    {
-                        var hashedPassword = PasswordHasher.HashPassword(employee.Password);
-                        updatedEmployee.Password = hashedPassword;
-                    }
+                    updatedEmployee.Password = newPassword;
+
 
                     updatedEmployee.UpdatedAt = DateTime.Now;
 
@@ -199,14 +192,14 @@ namespace TARS_Delivery.Repositories.imp
             }
         }
 
-        public async Task<Employee> ChangeStatus(int id, RDTOChangeStatus employee)
+        public async Task<Employee> ChangeStatus(int id)
         {
             try
             {
                 var UpdatedEmployee = await _context.Employees.FindAsync(id);
                 if (UpdatedEmployee != null)
                 {
-                    UpdatedEmployee.Status = employee.Status;
+                    UpdatedEmployee.Status = UpdatedEmployee.Status == EStatusData.Active ? EStatusData.Inactive : EStatusData.Active;
 
                     UpdatedEmployee.UpdatedAt = DateTime.Now;
                     await _context.SaveChangesAsync();
@@ -221,12 +214,12 @@ namespace TARS_Delivery.Repositories.imp
             }
         }
 
-        public async Task<Employee> UpdateInfoAsync(int id, UpdateInfoAsync employee)
+        public async Task<Employee> UpdateInfoAsync(string code, UpdateInfoAsync employee)
         {
             try
             {
-                var updatedEmployee = await _context.Employees.FindAsync(id);
-                if (updatedEmployee != null && updatedEmployee.Role.RoleName != "Admin")
+                var updatedEmployee = await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeCode == code);
+                if (updatedEmployee != null)
                 {   
                     // get oldValue 
                     string oldEmail = updatedEmployee.Email;
@@ -455,6 +448,35 @@ namespace TARS_Delivery.Repositories.imp
                 return dtoEmployee;
             }
             throw new Exception("The employee does not exist !");
+        }
+
+        public async Task<Employee> RejectUpdateInfo(int id)
+        {
+            try
+            {
+                var updatedEmployee = await _context.Employees.FindAsync(id);
+                if (updatedEmployee != null)
+                {
+                    var submitedInfo = updatedEmployee.SubmitedInfo;
+                    if (submitedInfo != null)
+                    {
+                        var parsedInfo = ParseSubmitedInfo(submitedInfo);
+                        if (parsedInfo != null)
+                        {
+                            updatedEmployee.SubmitedInfo = null;
+                            updatedEmployee.UpdatedAt = DateTime.Now;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    return updatedEmployee;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw new Exception(ex.Message);
+            }
         }
 
         public class SubmitedInfo

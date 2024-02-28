@@ -59,7 +59,7 @@ namespace TARS_Delivery.Controllers
 
         // POST: api/Roles => done
         [HttpPost] 
-        public async Task<ActionResult> CreateRole([FromForm] RDTORole role)
+        public async Task<ActionResult> CreateRole([FromBody] RDTORole role)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace TARS_Delivery.Controllers
 
         // PUT: api/Roles/{roleId} => done
         [HttpPut("{id}")] 
-        public async Task<ActionResult> UpdateRole(int id, [FromForm] RDTORole role)
+        public async Task<ActionResult> UpdateRole(int id, [FromBody] RDTORole role)
         {
             try
             {
@@ -150,24 +150,31 @@ namespace TARS_Delivery.Controllers
             return Ok(roleWithPermission);
         }
 
-        [HttpPost("{roleId}/Permission/{permissionId}")]
-        public async Task<ActionResult<RoleHasPermission>> AddPermissionToRole(int roleId, int permissionId)
+        [HttpPost("{roleId}/Permission")]
+        public async Task<ActionResult<RoleHasPermission>> AddPermissionToRole(
+            int roleId, [FromBody] RDTOPermissionNames permissionNames)
         {
             try
             {
                 // Are role and permission valid ? 
                 var existRole = await _roleService.GetRoleWithPermissions(roleId);
-                var existPermission = await _permissionService.GetPermission(permissionId);
-                if (existRole == null || existPermission == null)
+                var existPermissions = await _permissionService.GetPermissionsByName(permissionNames.PermissionNames);
+                if (existRole == null || existPermissions.Count() == 0)
                 {
                     return NotFound("The role or the permission doesn't exist !");
                 }
-                if (existRole.RoleHasPermissions.Any(rhp => rhp.Id == permissionId))
+                foreach(var permission in existRole.RoleHasPermissions)
                 {
-                    return Conflict("Permission already assigned to role.");
+                    foreach (var permissionName in permissionNames.PermissionNames)
+                    {
+                        if (permission == permissionName)
+                        {
+                            return Conflict("Permission already assigned to role.");
+                        }
+                    }
                 }
 
-                var role = await _roleService.AddPermission(roleId, permissionId);
+                var role = await _roleService.AddPermission(roleId, permissionNames.PermissionNames);
 
                 return Ok(role);
             }
@@ -180,19 +187,19 @@ namespace TARS_Delivery.Controllers
         }
 
         // DELETE: api/Roles/{roleId}/Permissions/{permissionId} => done
-        [HttpDelete("{roleId}/Permission/{permissionId}")]
-        public async Task<IActionResult> RemovePermissionFromRole(int roleId, int permissionId)
+        [HttpDelete("{roleId}/Permission/{permissionName}")]
+        public async Task<IActionResult> RemovePermissionFromRole(int roleId, string permissionName)
         {
             try
             {
                 var existRole = await _roleService.GetRole(roleId);
-                var existPermission = await _permissionService.GetPermission(permissionId);
+                var existPermission = await _permissionService.GetPermission(permissionName);
                 if (existRole == null || existPermission == null)
                 {
                     return NotFound("The role or the permission doesn't exist !");
                 }
 
-                await _roleService.DeletePermission(roleId, permissionId);
+                await _roleService.DeletePermission(roleId, permissionName);
 
                 return Ok();
             }

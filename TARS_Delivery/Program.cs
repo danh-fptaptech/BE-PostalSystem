@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Scrutor;
 using System.Text;
 using System.Text.Json.Serialization;
+using TARS_Delivery;
+using TARS_Delivery.Extensions;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
@@ -13,10 +17,11 @@ using TARS_Delivery.Services.imp;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = builder.Configuration;
 // Add services to the container.
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DBC")));
+    options.UseSqlServer(configuration.GetConnectionString("DBC")));
 
 // JSON Serializer
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -25,36 +30,21 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.WriteIndented = true;
 });
 
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<EmployeeService>();
 
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<RoleService>();
+// scurtor register all services
+builder.Services.Scan(selector =>
+    // transient
+    selector.FromAssemblies(AssemblyReference.Assembly)
+        .AddClasses(action => action.InNamespaces("TARS_Delivery.Providers"), false)
+        .AsMatchingInterface()
+        .WithTransientLifetime()
 
-builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
-builder.Services.AddScoped<PermissionService>();
-
-
-// Auto Dependency Injection
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IBranchRepository>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-builder.Services.Scan(scan => 
-    scan.FromAssemblyOf<IBranchService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-    /* Employee */
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IEmployeeRepository>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IEmployeeService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-    /* Role */
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IRoleRepository>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IRoleService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-    /* Permission */
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IPermissionRepository>().AddClasses().AsMatchingInterface().WithScopedLifetime());
-builder.Services.Scan(scan =>
-    scan.FromAssemblyOf<IPermissionService>().AddClasses().AsMatchingInterface().WithScopedLifetime());
+        //scoped
+        .FromAssemblies(AssemblyReference.Assembly)
+        .AddClasses(action => action.NotInNamespaces("TARS_Delivery.Shared"), false)
+        .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+        .AsMatchingInterface()
+        .WithScopedLifetime());
 
 // Auto Mapper
 builder.Services.AddAutoMapper(typeof(DtoProfile));
@@ -62,21 +52,10 @@ builder.Services.AddAutoMapper(typeof(DtoProfile));
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateIssuerSigningKey = true,
-                //IssuerSigningKey duoc tao tu mot chuoi bi mat
-                //dam bao rang chi nhung token duoc ky boi server cua ban moi duoc
-                //he thong cham nhan
-                IssuerSigningKey = new SymmetricSecurityKey
-                (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-            };
-        });
+builder.Services.ConfigureJwtSetup(configuration);
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer();
 
 builder.Services.AddCors(options =>
 {

@@ -5,16 +5,17 @@ using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeRepository 
     {
         Task<IEnumerable<SDTOEmployee>> GetEmployees();
         Task<SDTOEmployee> GetEmployee(int id);
         Task<Employee> CreateEmployeeAsync(Employee employee);
-        Task<Employee> UpdateEmployee(int id, RDTOEmployee employee);
-        Task<Employee> UpdatePassword(int id, RDTOChangePassword employee);
-        Task<Employee> UpdateInfoAsync(int id, UpdateInfoAsync employee);
+        Task<Employee> UpdateEmployee(string code, RDTOUpdateEmployee employee);
+        Task<Employee> UpdatePassword(string code, string newPassword);
+        Task<Employee> UpdateInfoAsync(string code, UpdateInfoAsync employee);
         Task<Employee> AcceptUpdateInfo(int id);
-        Task<Employee> ChangeStatus(int id, RDTOChangeStatus employee);
+        Task<Employee> RejectUpdateInfo(int id);
+        Task<Employee> ChangeStatus(int id);
         Task<IEnumerable<SDTOEmployee>> GetSubmitedInfoEmployees();
         Task<SDTOEmployee> GetEmployeeByCode(string code);
     }

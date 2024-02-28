@@ -13,7 +13,7 @@ namespace TARS_Delivery.Repositories
         Task<Role> Delete(int id);
         Task<SDTORole> GetRoleWithPermissions(int id);
         Task<IEnumerable<SDTORole>> GetRolesWithPermissions();
-        Task<SDTORole> AddPermission(int roleId, int permissionId);
-        Task DeletePermission(int roleId, int permissionId);
+        Task<SDTORole> AddPermission(int roleId, IEnumerable<string> permissionNames);
+        Task DeletePermission(int roleId, string permissionName);
     }
 }

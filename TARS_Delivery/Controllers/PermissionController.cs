@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Services;
 using TARS_Delivery.Services.imp;
 
 namespace TARS_Delivery.Controllers
@@ -10,7 +11,7 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class PermissionController : ControllerBase
     {
-        private readonly PermissionService _service;
+        private readonly IPermissionService _service;
         public PermissionController(PermissionService service)
         {
             _service = service;
@@ -32,12 +33,12 @@ namespace TARS_Delivery.Controllers
         }
 
         // GET: api/Permissions/{permissionId} => done
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetPermission(int id)
+        [HttpGet("{permissionName}")]
+        public async Task<ActionResult> GetPermission(string permissionName)
         {
             try
             {
-                Permission permission = await _service.GetPermission(id);
+                Permission permission = await _service.GetPermission(permissionName);
                 if (permission != null)
                 {
                     return Ok(permission);
@@ -71,17 +72,17 @@ namespace TARS_Delivery.Controllers
         }
 
         // PUT: api/Permissions/{permissionId} => done
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdatePermission(int id, [FromForm] RDTOPermission permission)
+        [HttpPut("{permissionName}")]
+        public async Task<ActionResult> UpdatePermission(string permissionName, [FromForm] RDTOPermission permission)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Permission updatedPermission = await _service.GetPermission(id);
+                    Permission updatedPermission = await _service.GetPermission(permissionName);
                     if(updatedPermission != null)
                     {
-                        await _service.Update(id, permission);
+                        await _service.Update(permissionName, permission);
                         return Ok(permission);
                     }
                     return NotFound("This permission does not exist !");

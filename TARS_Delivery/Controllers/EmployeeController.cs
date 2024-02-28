@@ -1,14 +1,6 @@
-﻿
-using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TARS_Delivery.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using TARS_Delivery.Models.DTOs.req;
-using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Services;
-using TARS_Delivery.Services.imp;
 
 namespace TARS_Delivery.Controllers
 {
@@ -18,7 +10,7 @@ namespace TARS_Delivery.Controllers
     {
         private readonly IEmployeeService _service;
 
-        public EmployeeController(EmployeeService service)
+        public EmployeeController(IEmployeeService service)
         {
             _service = service;
         }
@@ -100,17 +92,17 @@ namespace TARS_Delivery.Controllers
         }
 
         // PUT: api/Employees/{employeeId} => done
-        [HttpPut]
-        public async Task<ActionResult> UpdateEmployee(int id, RDTOEmployee employee)
+        [HttpPut("{code}")]
+        public async Task<ActionResult> UpdateEmployee(string code, RDTOUpdateEmployee employee)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var updatedEmployee = await _service.GetEmployee(id);
+                    var updatedEmployee = await _service.GetEmployeeByCode(code);
                     if(updatedEmployee != null)
                     {
-                        return Ok(await _service.UpdateEmployee(id, employee));
+                        return Ok(await _service.UpdateEmployee(code, employee));
                     }
                     return NotFound();
                 }
@@ -124,17 +116,17 @@ namespace TARS_Delivery.Controllers
         }
 
         // PUT: api/Employees/{employeeId}/ChangePassword => done
-        [HttpPut("{id}/ChangePassword")]
-        public async Task<ActionResult> UpdatePassword(int id, [FromForm] RDTOChangePassword employee)
+        [HttpPut("{code}/ChangePassword")]
+        public async Task<ActionResult> UpdatePassword(string code, RDTOChangePassword employee)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var updatedEmployee = await _service.GetEmployee(id);
+                    var updatedEmployee = await _service.GetEmployeeByCode(code);
                     if (updatedEmployee != null)
                     {
-                        await _service.UpdatePassword(id, employee);
+                        await _service.UpdatePassword(code, employee);
                         return Ok("Change password successfully.");
                     }
                     return NotFound("This employee does not exist !");
@@ -150,7 +142,7 @@ namespace TARS_Delivery.Controllers
 
         // PUT: api/Employees/{employeeId}/ChangeStatus => done
         [HttpPut("{id}/ChangeStatus")]
-        public async Task<ActionResult> ChangeStatus(int id, [FromForm] RDTOChangeStatus employee)
+        public async Task<ActionResult> ChangeStatus(int id)
         {
             try
             {
@@ -159,7 +151,7 @@ namespace TARS_Delivery.Controllers
                     var existedEmployee = await _service.GetEmployee(id);
                     if(existedEmployee != null)
                     {
-                        return Ok(await  _service.ChangeStatus(id, employee));
+                        return Ok(await  _service.ChangeStatus(id));
                     }
                     return BadRequest(ModelState);
                 }
@@ -173,17 +165,17 @@ namespace TARS_Delivery.Controllers
         }
 
         // PUT: api/Employees/{employeeId}/UpdateInfoAsync => done
-        [HttpPut("{id}/UpdateInfoAsync")]
-        public async Task<ActionResult> UpdateInfoAsync(int id, [FromForm] UpdateInfoAsync employee)
+        [HttpPut("{code}/UpdateInfoAsync")]
+        public async Task<ActionResult> UpdateInfoAsync(string code, [FromBody] UpdateInfoAsync employee)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var updatedEmployee = await _service.GetEmployee(id);
+                    var updatedEmployee = await _service.GetEmployeeByCode(code);
                     if (updatedEmployee != null)
                     {
-                        await _service.UpdateInfoAsync(id, employee);
+                        await _service.UpdateInfoAsync(code, employee);
                         return Ok("Send updated request successfully. Please wait for the admin accept.");
                     }
                     return NotFound("This employee does not exist !");
@@ -207,6 +199,29 @@ namespace TARS_Delivery.Controllers
                     if(employee.SubmitedInfo != null)
                     {
                         var updatedEmployee = await _service.AcceptUpdateInfo(id);
+                        return Ok(updatedEmployee);
+                    }
+                    return Content("Don't have updated request.");
+                }
+                return NotFound("The employee doesn't exist !");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}/RejectUpdateInfo")]
+        public async Task<ActionResult> RejectUpdateInfo(int id)
+        {
+            try
+            {
+                var employee = await _service.GetEmployee(id);
+                if (employee != null)
+                {
+                    if (employee.SubmitedInfo != null)
+                    {
+                        var updatedEmployee = await _service.RejectUpdateInfo(id);
                         return Ok(updatedEmployee);
                     }
                     return Content("Don't have updated request.");
