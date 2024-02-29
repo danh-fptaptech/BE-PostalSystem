@@ -85,7 +85,7 @@ namespace TARS_Delivery.Controllers
             }
         }
         //change status
-        [HttpPut("/ChangeStatus/{id}")]
+        [HttpGet("/api/ChangeStatusService/{id}")]
         public async Task<IActionResult> ChangeStatus(int id)
         {
             try

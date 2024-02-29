@@ -40,6 +40,7 @@ namespace TARS_Delivery.Repositories.imp
             var feeCustoms = await _context.FeeCustoms
             .Include(fee => fee.LocationFrom)
             .Include(fee => fee.LocationTo)
+            .Include(fee => fee.Service)
             .Select(fee => new
             {
                 fee.Id,
@@ -52,6 +53,16 @@ namespace TARS_Delivery.Repositories.imp
                 fee.CreatedAt,
                 fee.UpdatedAt,
                 fee.Status,
+                Service = new
+                {
+                    fee.Service.Id,
+                    fee.Service.ServiceName,
+                    fee.Service.WeighFrom,
+                    fee.Service.WeighTo,
+                    fee.Service.CreatedAt,
+                    fee.Service.UpdatedAt,
+                    fee.Service.Status
+                },
                 LocationFrom = new
                 {
                     fee.LocationFrom.Id,
@@ -90,6 +101,16 @@ namespace TARS_Delivery.Repositories.imp
                     CreatedAt = fee.CreatedAt,
                     UpdatedAt = fee.UpdatedAt,
                     Status = fee.Status,
+                    Service = new Service
+                    {
+                        Id = fee.Service.Id,
+                        ServiceName = fee.Service.ServiceName,
+                        WeighFrom = fee.Service.WeighFrom,
+                        WeighTo = fee.Service.WeighTo,
+                        CreatedAt = fee.Service.CreatedAt,
+                        UpdatedAt = fee.Service.UpdatedAt,
+                        Status = fee.Service.Status
+                    },
                     LocationFrom = new Location
                     {
                         Id = fee.LocationFrom.Id,
