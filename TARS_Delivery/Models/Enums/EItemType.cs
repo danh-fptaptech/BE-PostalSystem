@@ -1,4 +1,4 @@
-﻿namespace TARS_Delivery.Models.Enum
+﻿namespace TARS_Delivery.Models.Enums
 {
     public enum EItemType
     {

@@ -1,58 +1,54 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TARS_Delivery.Models;
-using TARS_Delivery.Models.DTOs.req;
-using TARS_Delivery.Models.Entities;
-using TARS_Delivery.Services.imp;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using TARS_Delivery.Models.Enums;
+using TARS_Delivery.Services.Users.GetUserByIdAsync;
 
-namespace TARS_Delivery.Controllers
+namespace TARS_Delivery.Controllers;
+[Route("api/[controller]")]
+[ApiController]
+public class AuthController(ISender sender)
+    : ApiController(sender)
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    [Authorize]
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfileAsync(
+    CancellationToken cancellationToken)
     {
-        private readonly IConfiguration _configuration;
-        private readonly DatabaseContext _context;
-        public AuthController(IConfiguration configuration, DatabaseContext context)
+        var role = User.FindFirstValue("Role");
+        var id = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        if (role != null)
         {
-            _configuration = configuration;
-            _context = context;
+            // return employee profile
+            return Ok();
         }
 
+        GetUserByIdAsyncQuery query = new(int.Parse(id!));
 
-        [HttpPost]
-        public async Task<IActionResult> Login([FromForm] EmployeeCredentials credentials)
+        var result = await Sender.Send(
+            query, cancellationToken);
+
+        if (result.IsFailure)
         {
-            var employee = await Authenticate(credentials);
-            if (employee != null)
+            if (result.Error.Code == "Unauthorized")
             {
-                var tokenString = EmployeeTokenService.GenerateToken(_configuration, employee);
-                if(!string.IsNullOrEmpty( tokenString) )
-                {
-                    return Ok(new { Token = tokenString });
-                }
-                else
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to generate token.");
-                }
-                
+                return Unauthorized(result.Error.Message);
             }
-            else
+
+            if (result.Error.Code == "NotFound")
             {
-                return NotFound("The employee does not exist !");
+                return NotFound(result.Error.Message);
             }
         }
 
-        private async Task<Employee> Authenticate(EmployeeCredentials employeeCredentials)
+        if (result.Value.Status == EStatusData.Inactive)
         {
-            var currentEmployee = await _context.Employees
-                .FirstOrDefaultAsync( e => e.Email.ToLower() == employeeCredentials.Email && e.Password == employeeCredentials.Password);
-            if (currentEmployee != null)
-            {
-                return currentEmployee;
-            }
-            return new Employee(); 
+            return Ok();
         }
+
+        return Ok(result.Value);
     }
 }

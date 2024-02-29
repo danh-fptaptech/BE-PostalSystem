@@ -135,13 +135,13 @@ public class DatabaseContext : DbContext
             .IsUnique();
 
         #endregion
-        
+
         #region modelBuilder for Seeders
 
-        /*new ApplicationSeeders().OnModelSeeders(modelBuilder);*/
+        new ApplicationSeeders().OnModelSeeders(modelBuilder);
 
         #endregion
-        
+
     }
 
     #region DbSet
@@ -161,7 +161,9 @@ public class DatabaseContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Customer> Customers { get; set; }
 
+    public DbSet<UserRegistrationInfo> UserRegistrations { get; set; }
+
     #endregion
 
-    
+
 }

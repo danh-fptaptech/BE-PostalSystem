@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Models.Entities
 {
@@ -16,15 +16,14 @@ namespace TARS_Delivery.Models.Entities
         public string NameTo { get; set; }
         public string AddressTo { get; set; }
         public string PostalCodeTo { get; set; }
+        public int? PackageSize { get; set; }
         public string? PackageNote { get; set; }
         public decimal TotalFee { get; set; }
-        public string? Photos { get; set; }
         public int ServiceId { get; set; }
         public int UserId { get; set; }
         public EPackageStatus Step { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        
         public EStatusData Status { get; set; }
 
 
@@ -34,5 +33,6 @@ namespace TARS_Delivery.Models.Entities
         public virtual Service Service { get; set; }
         public virtual ICollection<Item> Items { get; set; }
         public virtual ICollection<HistoryLog> HistoryLogs { get; set; }
+        
     }
 }

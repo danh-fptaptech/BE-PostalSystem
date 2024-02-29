@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Models.Entities
 {
@@ -22,10 +22,10 @@ namespace TARS_Delivery.Models.Entities
         public EStatusData Status { get; set; }
 
         [ForeignKey("ServiceId")]
-        public Service Service { get; set; }
+        public Service? Service { get; set; }
         [ForeignKey("LocationIdFrom")]
-        public Location LocationFrom { get; set; }
+        public Location? LocationFrom { get; set; }
         [ForeignKey("LocationIdTo")]
-        public Location LocationTo { get; set; }
+        public Location? LocationTo { get; set; }
     }
 }

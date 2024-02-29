@@ -1,29 +1,145 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TARS_Delivery.Models.Enum;
+using System.Security.Cryptography;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Models.Entities;
 
 public class User
 {
+    private readonly List<Customer> _customers = [];
+    private readonly List<Package> _packages = [];
+
+    private User(
+        string fullname, 
+        string email, 
+        string phone,
+        string password,
+        string avatar) 
+        {
+            Fullname = fullname;
+            Email = email;
+            Phone = phone;
+            Password = password;
+            Avatar = avatar;
+            CreatedAt = DateTime.Now;
+            Status = EStatusData.Active;
+        }
+
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+    public int Id { get; private set; }
+
     [Required]
-    public required string Fullname { get; set; }
+    public string Fullname { get; private set; }
+
     [Required]
-    public required string Email { get; set; }
+    public string Email { get; private set; }
+
     [Required]
-    public required string Password { get; set; }
-    public string? Phone { get; set; }
-    public string? Avatar { get; set; }
-    public DateTime? CreatedAt { get; set; } = DateTime.Now;
-    public DateTime? UpdatedAt { get; set; } = DateTime.Now;
-    public EStatusData Status { get; set; }
+    public string Password { get; private set; }
+
+    public string Phone { get; private set; }
+
+    public string Avatar { get; private set; } = string.Empty;
+
+    public DateTime CreatedAt { get; private set; }
+
+    public DateTime? UpdatedAt { get; private set; }
+
+    public EStatusData Status { get; private set; }
+
+    public string? RefreshToken { get; private set; }
+
+    public DateTime? RefreshTokenExpires { get; private set; }
+
     // Relation with Customer
-    public virtual ICollection<Customer>? Customers { get; set; }
+    public IReadOnlyCollection<Customer> Customers => _customers;
 
     // Relation with Package
-    public virtual ICollection<Package>? Packages { get; set; }
+    public IReadOnlyCollection<Package> Packages => _packages;
 
+    public static User Register(
+        string fullname,
+        string email,
+        string phone,
+        string password,
+        string avatar) => 
+            new(
+                fullname,
+                email,
+                phone,
+                password,
+                avatar);
+
+    public void ChangePassword(string password)
+    {
+        Password = password;
+        UpdatedAt = DateTime.Now;
+    }
+
+    public void AddCustomer(
+            string name,
+            string phoneNumber,
+            string address,
+            string city,
+            string district,
+            string ward,
+            int postalCode,
+            ETypeInfo typeInfo)
+    {
+        Customer customer = Customer.CreateCustomer(
+            Id,
+            name,
+            phoneNumber,
+            address,
+            city,
+            district,
+            ward,
+            postalCode,
+            typeInfo);
+        
+        _customers.Add(customer);
+
+        UpdatedAt = DateTime.Now;
+    }
+
+    public void GenerateRefreshToken(HttpContext httpContext)
+    {
+        RefreshToken = Convert.ToBase64String(
+            RandomNumberGenerator.GetBytes(64));
+
+        RefreshTokenExpires = DateTime.Now.AddDays(7);
+
+        CookieOptions options = new()
+        {
+            HttpOnly = true,
+            Expires = RefreshTokenExpires
+        };
+
+        httpContext
+            .Response
+            .Cookies
+            .Append("refresh-token", RefreshToken, options);
+    }
+
+    public void RevokeToken()
+    {
+        RefreshToken = null;
+        RefreshTokenExpires = null;
+    }
+
+    internal static User Seed(
+        int id,
+        string fullname,
+        string email,
+        string phone,
+        string password,
+        string avatar)
+    {
+        User user = Register(fullname, email, phone, password, avatar);
+        user.Id = id;
+
+        return user;
+    }
 }
