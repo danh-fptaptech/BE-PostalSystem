@@ -12,7 +12,7 @@ namespace TARS_Delivery.Controllers
     public class PermissionController : ControllerBase
     {
         private readonly IPermissionService _service;
-        public PermissionController(PermissionService service)
+        public PermissionController(IPermissionService service)
         {
             _service = service;
         }
