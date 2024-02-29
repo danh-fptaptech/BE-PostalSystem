@@ -3,7 +3,7 @@ using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Providers;
 using TARS_Delivery.Repositories;
 
@@ -45,6 +45,7 @@ namespace TARS_Delivery.Services.imp
                 SubmitedInfo = null,
                 Avatar = employee.Avatar,
                 BranchId = employee.BranchId,
+                PostalCode = employee.PostalCode,
                 RoleId = employee.RoleId,
                 Status = EStatusData.Active,
                 CreatedAt = DateTime.Now,

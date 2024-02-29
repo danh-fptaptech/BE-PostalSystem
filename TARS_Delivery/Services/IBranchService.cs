@@ -4,7 +4,7 @@ using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Services;
 
-internal interface IBranchService
+public interface IBranchService
 {
     Task<ICollection<Branch>> GetAllBranches();
     Task<Branch> GetBranchById(int id);

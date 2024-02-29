@@ -6,7 +6,7 @@ using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Providers;
 
 namespace TARS_Delivery.Repositories.imp

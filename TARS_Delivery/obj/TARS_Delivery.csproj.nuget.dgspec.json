@@ -48,13 +48,17 @@
               "target": "Package",
               "version": "[12.0.1, )"
             },
-            "BCrypt.Net-Next": {
+            "FluentValidation.DependencyInjectionExtensions": {
               "target": "Package",
-              "version": "[4.0.3, )"
+              "version": "[11.9.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.2.0, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[8.0.2, )"
+              "version": "[8.0.1, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -73,6 +77,14 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
+            },
+            "Quartz": {
+              "target": "Package",
+              "version": "[3.8.0, )"
+            },
+            "Quartz.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[3.8.0, )"
             },
             "Scrutor": {
               "target": "Package",

@@ -5,7 +5,6 @@ using TARS_Delivery.Services.Users.AddUserAddressAsync;
 using TARS_Delivery.Services.Users.ChangeUserPasswordAsync;
 using TARS_Delivery.Services.Users.GetUserByIdAsync;
 using TARS_Delivery.Services.Users.GetUserByIdWithAddressListAsync;
-using TARS_Delivery.Services.Users.LoginUserAsync;
 using TARS_Delivery.Services.Users.RefreshTokenAsync;
 using TARS_Delivery.Services.Users.RegisterUserAsync;
 using TARS_Delivery.Services.Users.VerifyUserMailAsync;
@@ -67,39 +66,6 @@ public class UsersController(ISender sender)
             if (result.Error.Code == "IncorectOtp")
             {
                 return Unauthorized(result.Error);
-            }
-        }
-
-        return Ok(result.Value);
-    }
-
-    [HttpPost("Login")]
-    public async Task<IActionResult> LoginUserAsync(
-        [FromBody] LoginUserAsyncRequest request,
-        CancellationToken cancellationToken)
-    {
-        LoginUserAsyncCommand command = new(
-            request.UserId,
-            request.Password);
-
-        var result = await Sender.Send(
-            command, cancellationToken);
-
-        if (result.IsFailure)
-        {
-            if (result.Error.Code is "ValidationError")
-            {
-                return HandleFailure(result);
-            }
-
-            if (result.Error.Code is "Unauthorized" or "IncorrectPassword")
-            {
-                return Unauthorized(result.Error);
-            }
-            
-            if (result.Error.Code == "NotFound")
-            {
-                return NotFound(result.Error);
             }
         }
 

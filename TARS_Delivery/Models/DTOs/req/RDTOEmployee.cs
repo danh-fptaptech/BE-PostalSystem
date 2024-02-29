@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TARS_Delivery.Models.Entities;
-using TARS_Delivery.Models.Enum;
+using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Models.DTOs.req
 {
@@ -26,6 +26,9 @@ namespace TARS_Delivery.Models.DTOs.req
 
         [Required(ErrorMessage = "Address is required.")]
         public string Address { get; set; }
+
+        [Required(ErrorMessage = "Postal Code is required.")]
+        public string PostalCode { get; set; }
 
         [Required(ErrorMessage = "Province is required.")]
         public string Province { get; set; }
