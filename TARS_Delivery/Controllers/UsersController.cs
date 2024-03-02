@@ -82,39 +82,6 @@ public class UsersController(ISender sender)
         return Ok(result.Value);
     }
 
-    [HttpPost("Login")]
-    public async Task<IActionResult> LoginUserAsync(
-        [FromBody] LoginUserAsyncRequest request,
-        CancellationToken cancellationToken)
-    {
-        LoginUserAsyncCommand command = new(
-            request.UserId,
-            request.Password);
-
-        var result = await Sender.Send(
-            command, cancellationToken);
-
-        if (result.IsFailure)
-        {
-            if (result.Error.Code is "ValidationError")
-            {
-                return HandleFailure(result);
-            }
-
-            if (result.Error.Code is "Unauthorized" or "IncorrectPassword")
-            {
-                return Unauthorized(result.Error);
-            }
-            
-            if (result.Error.Code == "NotFound")
-            {
-                return NotFound(result.Error);
-            }
-        }
-
-        return Ok(result.Value);
-    }
-
     [Authorize]
     [HttpPut("{id:int}/Change-password")]
     public async Task<IActionResult> ChangeUserPasswordAsync(
