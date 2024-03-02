@@ -47,11 +47,13 @@ internal class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             new(JwtRegisteredClaimNames.Email, employee.Email),
         ];
 
+        claims.Add(new("role", employee.Role.RoleName));
+
         foreach (var rhp in employee.Role.RoleHasPermissions)
         {
             var permission = rhp.Permission.PermissionName;
 
-            claims.Add(new("role", permission));
+            claims.Add(new("permission", permission));
         }
 
         SigningCredentials signingCredentials = new(

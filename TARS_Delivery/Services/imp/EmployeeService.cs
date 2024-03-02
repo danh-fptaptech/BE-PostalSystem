@@ -37,7 +37,7 @@ namespace TARS_Delivery.Services.imp
                 EmployeeCode = employee.EmployeeCode,
                 Email = employee.Email,
                 Password = _hashProvider.Hash(employee.Password),
-                Fullname = employee.Fullname,
+                Fullname = employee.Fullname,       
                 Address = employee.Address,
                 Province = employee.Province,
                 District = employee.District,

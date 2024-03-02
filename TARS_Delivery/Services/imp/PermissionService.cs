@@ -32,7 +32,7 @@ namespace TARS_Delivery.Services.imp
         {
             Permission newPermission = new()
             {
-                PermissionName = permission.PermissionName,
+                PermissionName = permission.name,
             };
             return await _repository.Create(newPermission);
         }

@@ -53,7 +53,7 @@ namespace TARS_Delivery.Controllers
 
         // POST: api/Permissions/permission => done
         [HttpPost]
-        public async Task<ActionResult> CreatePermission([FromForm] RDTOPermission permission)
+        public async Task<ActionResult> CreatePermission([FromBody] RDTOPermission permission)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace TARS_Delivery.Controllers
 
         // PUT: api/Permissions/{permissionId} => done
         [HttpPut("{permissionName}")]
-        public async Task<ActionResult> UpdatePermission(string permissionName, [FromForm] RDTOPermission permission)
+        public async Task<ActionResult> UpdatePermission(string permissionName, [FromBody] RDTOPermission permission)
         {
             try
             {

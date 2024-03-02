@@ -57,7 +57,7 @@ namespace TARS_Delivery.Repositories.imp
                 if (updatedPermission != null)
                 {
                     var existingPermission = await _context.Permissions
-                        .FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName && p.Id != updatedPermission.Id);
+                        .FirstOrDefaultAsync(p => p.PermissionName == permission.name && p.Id != updatedPermission.Id);
 
                     if (existingPermission != null)
                     {

@@ -11,6 +11,7 @@ namespace TARS_Delivery.Models.DTOs.res
         public string Email { get; set; }
         public string Password { get; set; }
         public string Fullname { get; set; }
+        public string PostalCode { get; set; }
         public string Address { get; set; }
         public string Province { get; set; }
         public string District { get; set; }

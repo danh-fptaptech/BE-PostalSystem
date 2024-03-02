@@ -33,6 +33,7 @@ namespace TARS_Delivery.Repositories.imp
                 Email = e.Email,
                 Password = e.Password,
                 Fullname = e.Fullname,
+                PostalCode = e.PostalCode,
                 Address = e.Address,
                 Province = e.Province,
                 District = e.District,
@@ -81,6 +82,7 @@ namespace TARS_Delivery.Repositories.imp
                     Email = employee.Email,
                     Password = employee.Password,
                     PhoneNumber = employee.PhoneNumber,
+                    PostalCode = employee.PostalCode,
                     Address = employee.Address,
                     Province = employee.Province,
                     District = employee.District,
@@ -223,13 +225,14 @@ namespace TARS_Delivery.Repositories.imp
                 {   
                     // get oldValue 
                     string oldEmail = updatedEmployee.Email;
+                    string oldPostalCode = updatedEmployee.PostalCode;
                     string oldAddress = updatedEmployee.Address;
                     string oldProvince = updatedEmployee.Province;
                     string oldDistrict = updatedEmployee.District;
                     string oldPhoneNumber = updatedEmployee.PhoneNumber;
                     string oldAvatar = updatedEmployee.Avatar;
 
-                    updatedEmployee.SubmitedInfo = GenerateSubmitedInfo(employee, oldEmail, oldAddress, oldProvince, oldDistrict, oldPhoneNumber, oldAvatar);
+                    updatedEmployee.SubmitedInfo = GenerateSubmitedInfo(employee, oldEmail, oldPostalCode, oldAddress, oldProvince, oldDistrict, oldPhoneNumber, oldAvatar);
 
                     await _context.SaveChangesAsync();
                     return updatedEmployee;
@@ -258,6 +261,7 @@ namespace TARS_Delivery.Repositories.imp
                 Email = e.Email,
                 Password = e.Password,
                 Fullname = e.Fullname,
+                PostalCode = e.PostalCode,
                 Address = e.Address,
                 Province = e.Province,
                 District = e.District,
@@ -302,6 +306,7 @@ namespace TARS_Delivery.Repositories.imp
                         if (parsedInfo != null)
                         {
                             updatedEmployee.Email = parsedInfo.Email;
+                            updatedEmployee.PostalCode = parsedInfo.PostalCode;
                             updatedEmployee.Address = parsedInfo.Address;
                             updatedEmployee.Province = parsedInfo.Province;
                             updatedEmployee.District = parsedInfo.District;
@@ -325,7 +330,7 @@ namespace TARS_Delivery.Repositories.imp
         }
 
         private static string GenerateSubmitedInfo(UpdateInfoAsync updatedInfo, 
-            string oldEmail, string oldAddress, string oldProvince, string oldDistrict, 
+            string oldEmail, string oldPostalCode, string oldAddress, string oldProvince, string oldDistrict, 
             string oldPhoneNumber, string oldAvatar)
         {
             StringBuilder submittedInfoBuilder = new();
@@ -334,6 +339,11 @@ namespace TARS_Delivery.Repositories.imp
                 submittedInfoBuilder.Append($"Email: {updatedInfo.Email}, ");
             else
                 submittedInfoBuilder.Append($"Email: {oldEmail}, ");
+
+            if (updatedInfo.PostalCode != null && updatedInfo.PostalCode != oldPostalCode)
+                submittedInfoBuilder.Append($"PostalCode: {updatedInfo.PostalCode}, ");
+            else
+                submittedInfoBuilder.Append($"PostalCode: {oldPostalCode}, ");
 
             if (updatedInfo.Address != null && updatedInfo.Address != oldAddress)
                 submittedInfoBuilder.Append($"Address: {updatedInfo.Address}, ");
@@ -378,6 +388,9 @@ namespace TARS_Delivery.Repositories.imp
                 {
                     case "Email":
                         submitedInfo.Email = value;
+                        break;
+                    case "PostalCode":
+                        submitedInfo.PostalCode = value;
                         break;
                     case "Address":
                         submitedInfo.Address = value;
@@ -482,6 +495,7 @@ namespace TARS_Delivery.Repositories.imp
         public class SubmitedInfo
         {
             public string? Email { get; set; }
+            public string? PostalCode { get; set; }
             public string? Address { get; set; }
             public string? Province { get; set; }
             public string? District { get; set; }

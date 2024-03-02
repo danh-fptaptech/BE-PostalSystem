@@ -6,7 +6,9 @@ namespace TARS_Delivery.Models.DTOs.req
     {
         [EmailAddress(ErrorMessage = "It must correct email format: xxx@xxx.xxx")]
         public string? Email { get; set; }
-      
+
+        public string? PostalCode { get; set; }
+
         public string? Address { get; set; }
     
         public string? Province { get; set; }

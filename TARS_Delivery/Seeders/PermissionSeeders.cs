@@ -17,6 +17,11 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 2,
                     PermissionName = "User",
+                },
+                new Permission
+                {
+                    Id = 3,
+                    PermissionName = "Employee",
                 }
             );
         }

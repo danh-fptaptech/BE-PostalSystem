@@ -50,7 +50,7 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-        // GET: api/Employees/{employeeId}
+        // GET: api/Employees/{employeeCode}
         [HttpGet("code/{code}")] // done
         public async Task<ActionResult> GetEmployeeByCode(string code)
         {
@@ -91,7 +91,7 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-        // PUT: api/Employees/{employeeId} => done
+        // PUT: api/Employees/{employeeCode} => done
         [HttpPut("{code}")]
         public async Task<ActionResult> UpdateEmployee(string code, RDTOUpdateEmployee employee)
         {
@@ -115,7 +115,7 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-        // PUT: api/Employees/{employeeId}/ChangePassword => done
+        // PUT: api/Employees/{employeeCode}/ChangePassword => done
         [HttpPut("{code}/ChangePassword")]
         public async Task<ActionResult> UpdatePassword(string code, RDTOChangePassword employee)
         {
@@ -164,7 +164,7 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-        // PUT: api/Employees/{employeeId}/UpdateInfoAsync => done
+        // PUT: api/Employees/{employeeCode}/UpdateInfoAsync => done
         [HttpPut("{code}/UpdateInfoAsync")]
         public async Task<ActionResult> UpdateInfoAsync(string code, [FromBody] UpdateInfoAsync employee)
         {
