@@ -359,6 +359,7 @@ public class UsersController(ISender sender)
         return Ok(result);
     }
 
+    //[Authorize]
     [HttpGet]
     public async Task<IActionResult> GetUsersAsync(CancellationToken cancellationToken)
     {
@@ -369,6 +370,7 @@ public class UsersController(ISender sender)
         return Ok(result.Value);
     }
 
+    //[Authorize]
     [HttpGet("Addresses")]
     public async Task<IActionResult> GetUsersWithAddressListAsync(CancellationToken cancellationToken)
     {
@@ -379,6 +381,7 @@ public class UsersController(ISender sender)
         return Ok(result.Value);
     }
 
+    //[Authorize]
     [HttpGet("Packages")]
     public async Task<IActionResult> GetUsersWithPackagesAsync(CancellationToken cancellationToken)
     {
@@ -389,6 +392,7 @@ public class UsersController(ISender sender)
         return Ok(result.Value);
     }
 
+    //[Authorize]
     [HttpGet("All")]
     public async Task<IActionResult> GetUsersWithAllAsync(CancellationToken cancellationToken)
     {
@@ -399,6 +403,7 @@ public class UsersController(ISender sender)
         return Ok(result.Value);
     }
 
+    [Authorize]
     [HttpGet("{id}/Packages")]
     public async Task<IActionResult> GetUserByIdWithPackagesAsync(int id, CancellationToken cancellationToken)
     {
@@ -408,7 +413,8 @@ public class UsersController(ISender sender)
 
         return Ok(result.Value);
     }
-                                                                                
+
+    [Authorize]
     [HttpPut("{id}")]                                                                 
     public async Task<IActionResult> UpdateUserByIdAsync(
         int id, 
@@ -435,6 +441,7 @@ public class UsersController(ISender sender)
         return Ok();
     }
 
+    //[Authorize]
     [HttpPut("{id}/Change-status")]
     public async Task<IActionResult> ChangeStatusAsync(
         int id,

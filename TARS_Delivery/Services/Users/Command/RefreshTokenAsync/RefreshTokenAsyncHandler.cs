@@ -13,13 +13,13 @@ internal sealed class RefreshTokenAsyncHandler(
     IHttpContextAccessor httpContextAccessor,
     IUserRepository userRepository,
     IJwtProvider jwtProvider)
-    : IRequestHandler<RefreshTokenAsyncCommand, Result<string>>
+    : IRequestHandler<RefreshTokenAsyncCommand, Result<RefreshTokenAsyncResponse>>
 {
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
 
-    public async Task<Result<string>> Handle(
+    public async Task<Result<RefreshTokenAsyncResponse>> Handle(
         RefreshTokenAsyncCommand command,
         CancellationToken cancellationToken)
     {
@@ -29,7 +29,7 @@ internal sealed class RefreshTokenAsyncHandler(
 
         if (oldToken is null)
         {
-            return Result.Failure<string>(RefreshTokenAsyncErrors.Unauthorized);
+            return Result.Failure<RefreshTokenAsyncResponse>(RefreshTokenAsyncErrors.Unauthorized);
         }
 
         ClaimsPrincipal claimPrincipal = _jwtProvider.GetClaimsPrincipalFromExpiredToken(oldToken);
@@ -38,7 +38,7 @@ internal sealed class RefreshTokenAsyncHandler(
 
         if (userId is null)
         {
-            return Result.Failure<string>(RefreshTokenAsyncErrors.Unauthorized);
+            return Result.Failure<RefreshTokenAsyncResponse>(RefreshTokenAsyncErrors.Unauthorized);
         }
 
         User? user = await _userRepository
@@ -50,13 +50,15 @@ internal sealed class RefreshTokenAsyncHandler(
             user.RefreshToken != httpContext.Request.Cookies["refresh-token"] ||
             user.RefreshTokenExpires < DateTime.Now)
         {
-            return Result.Failure<string>(RefreshTokenAsyncErrors.Unauthorized);
+            return Result.Failure<RefreshTokenAsyncResponse>(RefreshTokenAsyncErrors.Unauthorized);
         }
 
         string newToken = _jwtProvider.Generate(user);
 
         user.GenerateRefreshToken(httpContext);
 
-        return Result.Success(newToken);
+        RefreshTokenAsyncResponse res = new(newToken);
+
+        return Result.Success(res);
     }
 }
