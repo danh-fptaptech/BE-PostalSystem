@@ -10,10 +10,6 @@ using TARS_Delivery.BackgroundJobs;
 using TARS_Delivery.Behaviors;
 using TARS_Delivery.Extensions;
 using TARS_Delivery.Models;
-using TARS_Delivery.Repositories;
-using TARS_Delivery.Repositories.imp;
-using TARS_Delivery.Services;
-using TARS_Delivery.Services.imp;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -29,15 +25,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.WriteIndented = true;
 });
-
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<EmployeeService>();
-
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<RoleService>();
-
-builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
-builder.Services.AddScoped<PermissionService>();
 
 // scurtor register all services
 builder.Services.Scan(selector =>

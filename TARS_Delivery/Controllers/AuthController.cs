@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TARS_Delivery.Models.Enums;
-using TARS_Delivery.Services.Users.GetUserByIdAsync;
+using TARS_Delivery.Services.Users.Query.GetUserByIdAsync;
 
 namespace TARS_Delivery.Controllers;
 [Route("api/[controller]")]
