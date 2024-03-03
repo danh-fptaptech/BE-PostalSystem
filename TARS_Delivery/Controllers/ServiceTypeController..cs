@@ -91,5 +91,33 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //get child ServiceType by Id
+        [HttpGet("GetChildServiceTypeById/{id}")]
+        public async Task<IActionResult> GetChildServiceTypeById(int id)
+        {
+            try
+            {
+                var serviceType = await _iServiceTypeRepository.GetChildServiceTypeById(id);
+                return Ok(serviceType);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        //ChangeStatus
+        [HttpGet("ChangeServiceTypeStatus/{id}")]
+        public async Task<IActionResult> ChangeServiceTypeStatus(int id)
+        {
+            try
+            {
+                var serviceType = await _iServiceTypeRepository.ChangeStatus(id);
+                return Ok(serviceType);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 }

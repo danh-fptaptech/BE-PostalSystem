@@ -216,7 +216,7 @@ namespace TARS_Delivery.Repositories.imp
 
             if (postalCodeFromItem == null || postalCodeToItem == null)
             {
-                return new List<RDTOFeecustom>(); // Trả về danh sách rỗng nếu một trong các điểm không tìm thấy
+                return new List<RDTOFeecustom>(); 
             }
 
             var feeCustom = await _context.FeeCustoms
@@ -239,7 +239,33 @@ namespace TARS_Delivery.Repositories.imp
                 TimeProcess = fee.TimeProcess
             }).ToList();
 
-            return mappedFeeCustoms; // Trả về danh sách rỗng nếu không có kết quả
+            return mappedFeeCustoms; 
+        }
+        public async Task<ICollection<RDTOFeecustomGetAll>> GetAllFeesCustom()
+        {
+            var feeCustoms = await _context.FeeCustoms
+                .Include(fee => fee.LocationFrom)
+                .Include(fee => fee.LocationTo)
+                .Include(fee => fee.Service)
+                .ThenInclude(st => st.ServiceType)
+                .ToListAsync();
+            //mapping to RDTOFeecustomGetAll
+            var mappedFeeCustoms = feeCustoms.Select(fee => new RDTOFeecustomGetAll
+            {
+                Id = fee.Id,
+                ServiceId = fee.ServiceId,
+                LocationFromName = fee.LocationFrom?.LocationName ?? "Unknown",
+                LocationToName = fee.LocationTo?.LocationName ?? "Unknown",
+                ServiceName = fee.Service?.ServiceType?.ServiceName ?? "Unknown",
+                ServiceDescription = fee.Service?.ServiceType?.ServiceDescription ?? "Description not available",
+                WeighFrom = fee.Service?.WeighFrom ?? 0,
+                WeighTo = fee.Service?.WeighTo ?? 0,
+                OverWeightCharge = fee.OverWeightCharge,
+                FeeCharge = fee.FeeCharge,
+                TimeProcess = fee.TimeProcess,
+                Status = fee.Status,
+            }).ToList();
+            return mappedFeeCustoms;
         }
     }
 }

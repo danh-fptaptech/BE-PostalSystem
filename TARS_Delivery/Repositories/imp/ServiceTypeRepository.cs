@@ -37,8 +37,12 @@ namespace TARS_Delivery.Repositories.imp
             var serviceTypes = await _context.ServiceTypes.ToListAsync();
             return serviceTypes;
         }
-
-        public async Task<ServiceType> GetServiceTypeById(int id)
+        public async Task<ServiceType> GetServiceTypeById (int id)
+        {
+            var serviceType = await _context.ServiceTypes.FindAsync(id);
+            return serviceType;
+        }
+        public async Task<ServiceType> GetChildServiceTypeById(int id)
         {
             var serviceType = await _context.ServiceTypes
                 .Include(s => s.Services)
