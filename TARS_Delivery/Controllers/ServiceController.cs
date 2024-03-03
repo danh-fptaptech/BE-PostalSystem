@@ -116,5 +116,26 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Validate Weight
+        [HttpGet("/api/ValidateServiceWeight/{serviceTypeId}/{weightFrom}/{weightTo}/{serviceId}")]
+        public async Task<IActionResult> ValidateWeight(int serviceTypeId,int weightFrom, int weightTo,int serviceId)
+        {
+            try
+            {
+                var result = await _iServiceRepository.ValidateWeight(serviceTypeId, weightFrom, weightTo, serviceId);
+                if (result)
+                {
+                    return Ok("Weight is valid");
+                }
+                else
+                {
+                    return BadRequest("Weight is invalid");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 }

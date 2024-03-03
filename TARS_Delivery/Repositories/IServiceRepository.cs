@@ -11,5 +11,6 @@ namespace TARS_Delivery.Repositories
         Task DeleteService(int id);
         Task<Service> ChangeStatus(int id);
         Task<List<Service>> GetServicesByWeight(int weight);
+        Task<Boolean> ValidateWeight(int serviceTypeId,int weightFrom, int weightTo,int serviceId);
     }
 }

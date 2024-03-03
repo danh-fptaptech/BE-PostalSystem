@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TARS_Delivery.Migrations
 {
     /// <inheritdoc />
-    public partial class Step1 : Migration
+    public partial class update : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -102,22 +102,20 @@ namespace TARS_Delivery.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Services",
+                name: "ServiceTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ServiceName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ServiceDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WeighFrom = table.Column<int>(type: "int", nullable: false),
-                    WeighTo = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Services", x => x.Id);
+                    table.PrimaryKey("PK_ServiceTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -213,6 +211,58 @@ namespace TARS_Delivery.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Services",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ServiceTypeId = table.Column<int>(type: "int", nullable: false),
+                    WeighFrom = table.Column<int>(type: "int", nullable: false),
+                    WeighTo = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Services", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Services_ServiceTypes_ServiceTypeId",
+                        column: x => x.ServiceTypeId,
+                        principalTable: "ServiceTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TypeInfo = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Customers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FeeCustoms",
                 columns: table => new
                 {
@@ -249,34 +299,6 @@ namespace TARS_Delivery.Migrations
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Customers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Province = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    District = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TypeInfo = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Customers_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -390,15 +412,15 @@ namespace TARS_Delivery.Migrations
                 columns: new[] { "Id", "Address", "BranchName", "CreatedAt", "District", "PhoneNumber", "PostalCode", "Province", "Status", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "1234 TARS Street", "TARS Delivery", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8306), "TARS", "123456789", "1234", "TARS", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8321) },
-                    { 2, "1234 TARS Street", "TARS Delivery 2", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8326), "TARS", "123456789", "1234", "TARS", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8326) },
-                    { 3, "1234 TARS Street", "TARS Delivery 3", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8328), "TARS", "123456789", "1234", "TARS", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8328) }
+                    { 1, "1234 TARS Street", "TARS Delivery", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5056), "TARS", "123456789", "1234", "TARS", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5075) },
+                    { 2, "1234 TARS Street", "TARS Delivery 2", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5080), "TARS", "123456789", "1234", "TARS", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5080) },
+                    { 3, "1234 TARS Street", "TARS Delivery 3", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5082), "TARS", "123456789", "1234", "TARS", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5082) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Locations",
                 columns: new[] { "Id", "CreatedAt", "LocationLevel", "LocationName", "LocationOf", "PostalCode", "Status", "UpdatedAt" },
-                values: new object[] { 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8613), 0, "TP HCM", null, "700000", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8614) });
+                values: new object[] { 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5371), 0, "TP HCM", null, "700000", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5372) });
 
             migrationBuilder.InsertData(
                 table: "Permissions",
@@ -421,15 +443,13 @@ namespace TARS_Delivery.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Services",
-                columns: new[] { "Id", "CreatedAt", "ServiceDescription", "ServiceName", "Status", "UpdatedAt", "WeighFrom", "WeighTo" },
+                table: "ServiceTypes",
+                columns: new[] { "Id", "CreatedAt", "ServiceDescription", "ServiceName", "Status", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8839), "Fast and secure international delivery service", "EMS Delivery Service", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8839), 0, 500 },
-                    { 2, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8841), "Fast and secure international delivery service", "EMS Delivery Service", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8842), 501, 1000 },
-                    { 3, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8844), "Fast and secure international delivery service", "EMS Delivery Service", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8844), 1001, 2000 },
-                    { 4, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8846), "Fast and convenient express delivery service", "Express Delivery", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8847), 2001, 3000 },
-                    { 5, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8849), "Reliable freight and cargo delivery solutions", "Freight Delivery Services", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8849), 3001, 10000 }
+                    { 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5661), "Fast and secure international delivery service", "EMS Delivery Service", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5661) },
+                    { 2, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5663), "Fast and convenient express delivery service", "Express Delivery", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5664) },
+                    { 3, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5666), "Reliable freight and cargo delivery solutions", "Freight Delivery Services", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5666) }
                 });
 
             migrationBuilder.InsertData(
@@ -437,9 +457,9 @@ namespace TARS_Delivery.Migrations
                 columns: new[] { "Id", "Avatar", "CreatedAt", "Email", "Fullname", "Password", "Phone", "Status", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "avatar.jpg", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8811), "usera@usera", "Nguyễn Văn User", "123", "0123456789", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8812) },
-                    { 2, "avatar.jpg", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8814), "userb@userb", "Trần Thị User", "123", "0987654321", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8815) },
-                    { 3, "avatar.jpg", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8817), "userc@userc", "Lê Văn User", "123", "023023920392", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8818) }
+                    { 1, "avatar.jpg", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5527), "usera@usera", "Nguyễn Văn User", "123", "0123456789", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5528) },
+                    { 2, "avatar.jpg", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5530), "userb@userb", "Trần Thị User", "123", "0987654321", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5531) },
+                    { 3, "avatar.jpg", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5533), "userc@userc", "Lê Văn User", "123", "023023920392", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5533) }
                 });
 
             migrationBuilder.InsertData(
@@ -447,9 +467,9 @@ namespace TARS_Delivery.Migrations
                 columns: new[] { "Id", "Address", "CreatedAt", "District", "Name", "PhoneNumber", "Province", "Status", "TypeInfo", "UpdatedAt", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "Số 1, Đường 1, Phường 1, Quận 1, TP HCM", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8448), "Quận 1", "Nguyễn Văn Customer", "0123456789", "TP HCM", 1, 0, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8449), 1 },
-                    { 2, "Số 2, Đường 2, Phường 2, Quận 2, TP HCM", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8452), "Quận 2", "Trần Thị Customer", "0987654321", "TP HCM", 1, 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8453), 2 },
-                    { 3, "Số 3, Đường 3, Phường 3, Quận 3, TP HCM", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8455), "Quận 3", "Lê Văn Customer", "044333333", "TP HCM", 1, 0, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8455), 3 }
+                    { 1, "Số 1, Đường 1, Phường 1, Quận 1, TP HCM", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5183), "Quận 1", "Nguyễn Văn Customer", "0123456789", "TP HCM", 1, 0, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5183), 1 },
+                    { 2, "Số 2, Đường 2, Phường 2, Quận 2, TP HCM", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5186), "Quận 2", "Trần Thị Customer", "0987654321", "TP HCM", 1, 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5186), 2 },
+                    { 3, "Số 3, Đường 3, Phường 3, Quận 3, TP HCM", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5189), "Quận 3", "Lê Văn Customer", "044333333", "TP HCM", 1, 0, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5189), 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -457,9 +477,9 @@ namespace TARS_Delivery.Migrations
                 columns: new[] { "Id", "Address", "Avatar", "BranchId", "CreatedAt", "District", "Email", "EmployeeCode", "Fullname", "Password", "PhoneNumber", "PostalCode", "Province", "RoleId", "Status", "SubmitedInfo", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, "Số 1, Đường 1, Phường 1, Quận 1, TP HCM", "avatar.jpg", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8484), "Quận 1", "emp1@emp1", "EMP001", "Nguyễn Văn Employee", "123", "0123456789", "700000", "TP HCM", 1, 1, "SubmitedInfo", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8485) },
-                    { 2, "Số 2, Đường 2, Phường 2, Quận 2, TP HCM", "avatar.jpg", 2, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8489), "Quận 2", "emp2@emp2", "EMP002", "Trần Thị Employee", "123", "0987654321", "700000", "TP HCM", 2, 1, "SubmitedInfo", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8490) },
-                    { 3, "Số 3, Đường 3, Phường 3, Quận 3, TP HCM", "avatar.jpg", 3, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8493), "Quận 3", "emp3@emp3", "EMP003", "Lê Văn Employee", "123", "12548897451", "700000", "TP HCM", 3, 1, "SubmitedInfo", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8493) }
+                    { 1, "Số 1, Đường 1, Phường 1, Quận 1, TP HCM", "avatar.jpg", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5214), "Quận 1", "emp1@emp1", "EMP001", "Nguyễn Văn Employee", "123", "0123456789", "700000", "TP HCM", 1, 1, "SubmitedInfo", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5215) },
+                    { 2, "Số 2, Đường 2, Phường 2, Quận 2, TP HCM", "avatar.jpg", 2, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5218), "Quận 2", "emp2@emp2", "EMP002", "Trần Thị Employee", "123", "0987654321", "700000", "TP HCM", 2, 1, "SubmitedInfo", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5218) },
+                    { 3, "Số 3, Đường 3, Phường 3, Quận 3, TP HCM", "avatar.jpg", 3, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5245), "Quận 3", "emp3@emp3", "EMP003", "Lê Văn Employee", "123", "12548897451", "700000", "TP HCM", 3, 1, "SubmitedInfo", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5245) }
                 });
 
             migrationBuilder.InsertData(
@@ -467,33 +487,36 @@ namespace TARS_Delivery.Migrations
                 columns: new[] { "Id", "CreatedAt", "LocationLevel", "LocationName", "LocationOf", "PostalCode", "Status", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 2, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8618), 1, "Quận 1", 1, "710100", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8619) },
-                    { 3, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8621), 1, "Quận 2", 1, "713000", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8621) },
-                    { 4, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8623), 1, "Quận 3", 1, "722000", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8624) },
-                    { 5, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8626), 1, "Quận 4", 1, "754000", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8627) },
-                    { 6, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8659), 1, "Quận 5", 1, "748000", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8659) },
-                    { 7, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8662), 1, "Quận 6", 1, "746000", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8662) },
-                    { 8, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8664), 1, "Quận 7", 1, "756000", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8666) },
-                    { 9, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8668), 1, "Quận 8", 1, "751500", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8669) },
-                    { 10, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8671), 1, "Quận 9", 1, "715000", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8672) },
-                    { 11, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8674), 1, "Quận 10", 1, "740010", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8674) },
-                    { 12, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8676), 1, "Quận 11", 1, "743800", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8677) },
-                    { 13, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8679), 1, "Quận 12", 1, "729400", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8679) },
-                    { 14, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8681), 1, "Quận Gò Vấp", 1, "727010", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8682) },
-                    { 15, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8684), 1, "Quận Tân Bình", 1, "736090", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8685) },
-                    { 16, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8687), 1, "Quận Tân Phú", 1, "760000", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8688) },
-                    { 17, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8690), 1, "Quận Phú Nhuận", 1, "725060", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8691) },
-                    { 18, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8693), 1, "Quận Bình Thạnh", 1, "718440", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8694) },
-                    { 19, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8696), 1, "Quận Thủ Đức", 1, "720150", 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8696) }
+                    { 2, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5375), 1, "Quận 1", 1, "710100", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5375) },
+                    { 3, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5378), 1, "Quận 2", 1, "713000", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5378) },
+                    { 4, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5380), 1, "Quận 3", 1, "722000", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5381) },
+                    { 5, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5382), 1, "Quận 4", 1, "754000", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5383) },
+                    { 6, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5385), 1, "Quận 5", 1, "748000", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5385) },
+                    { 7, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5387), 1, "Quận 6", 1, "746000", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5387) },
+                    { 8, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5389), 1, "Quận 7", 1, "756000", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5390) },
+                    { 9, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5392), 1, "Quận 8", 1, "751500", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5392) },
+                    { 10, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5394), 1, "Quận 9", 1, "715000", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5395) },
+                    { 11, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5396), 1, "Quận 10", 1, "740010", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5397) },
+                    { 12, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5399), 1, "Quận 11", 1, "743800", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5399) },
+                    { 13, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5401), 1, "Quận 12", 1, "729400", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5402) },
+                    { 14, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5403), 1, "Quận Gò Vấp", 1, "727010", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5404) },
+                    { 15, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5406), 1, "Quận Tân Bình", 1, "736090", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5406) },
+                    { 16, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5408), 1, "Quận Tân Phú", 1, "760000", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5409) },
+                    { 17, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5411), 1, "Quận Phú Nhuận", 1, "725060", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5411) },
+                    { 18, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5413), 1, "Quận Bình Thạnh", 1, "718440", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5413) },
+                    { 19, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5415), 1, "Quận Thủ Đức", 1, "720150", 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5416) }
                 });
 
             migrationBuilder.InsertData(
-                table: "Packages",
-                columns: new[] { "Id", "AddressFrom", "AddressTo", "CreatedAt", "NameFrom", "NameTo", "PackageNote", "PackageSize", "PostalCodeFrom", "PostalCodeTo", "ServiceId", "Status", "Step", "TotalFee", "TrackingCode", "UpdatedAt", "UserId" },
+                table: "Services",
+                columns: new[] { "Id", "CreatedAt", "ServiceTypeId", "Status", "UpdatedAt", "WeighFrom", "WeighTo" },
                 values: new object[,]
                 {
-                    { 1, "Số 1, Đường 1, Phường 1, Quận 1, TP HCM", "Số 2, Đường 2, Phường 2, Quận 2, TP HCM", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8738), "Nguyễn Văn A", "Trần Thị B", "Giao hàng cẩn thận", null, "700000", "700000", 1, 1, 0, 100000m, "123456789", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8739), 1 },
-                    { 2, "Số 2, Đường 2, Phường 2, Quận 2, TP HCM", "Số 3, Đường 3, Phường 3, Quận 3, TP HCM", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8743), "Trần Thị B", "Lê Văn C", "Giao hàng cẩn thận", null, "700000", "700000", 1, 1, 0, 100000m, "987654321", new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8744), 2 }
+                    { 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5557), 1, 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5558), 0, 500 },
+                    { 2, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5560), 1, 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5560), 501, 1000 },
+                    { 3, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5629), 1, 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5629), 1001, 2000 },
+                    { 4, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5631), 1, 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5632), 2001, 3000 },
+                    { 5, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5634), 1, 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5634), 3001, 10000 }
                 });
 
             migrationBuilder.InsertData(
@@ -501,10 +524,19 @@ namespace TARS_Delivery.Migrations
                 columns: new[] { "Id", "CreatedAt", "Distance", "FeeCharge", "LocationIdFrom", "LocationIdTo", "ServiceId", "Status", "TimeProcess", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8519), 15.5m, 35000.00m, 2, 3, 1, 1, 2, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8520) },
-                    { 2, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8523), 25.0m, 45000.00m, 2, 3, 2, 1, 4, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8523) },
-                    { 3, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8526), 30.0m, 50000.00m, 2, 3, 3, 1, 5, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8526) },
-                    { 4, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8528), 15.0m, 60000.00m, 2, 3, 1, 1, 24, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8529) }
+                    { 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5270), 15.5m, 35000.00m, 2, 3, 1, 1, 2, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5271) },
+                    { 2, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5273), 25.0m, 45000.00m, 2, 3, 2, 1, 4, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5274) },
+                    { 3, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5276), 30.0m, 50000.00m, 2, 3, 3, 1, 5, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5277) },
+                    { 4, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5279), 15.0m, 60000.00m, 2, 3, 1, 1, 24, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5279) }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Packages",
+                columns: new[] { "Id", "AddressFrom", "AddressTo", "CreatedAt", "NameFrom", "NameTo", "PackageNote", "PackageSize", "PostalCodeFrom", "PostalCodeTo", "ServiceId", "Status", "Step", "TotalFee", "TrackingCode", "UpdatedAt", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "Số 1, Đường 1, Phường 1, Quận 1, TP HCM", "Số 2, Đường 2, Phường 2, Quận 2, TP HCM", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5451), "Nguyễn Văn A", "Trần Thị B", "Giao hàng cẩn thận", null, "700000", "700000", 1, 1, 0, 100000m, "123456789", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5452), 1 },
+                    { 2, "Số 2, Đường 2, Phường 2, Quận 2, TP HCM", "Số 3, Đường 3, Phường 3, Quận 3, TP HCM", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5455), "Trần Thị B", "Lê Văn C", "Giao hàng cẩn thận", null, "700000", "700000", 1, 1, 0, 100000m, "987654321", new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5455), 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -512,8 +544,8 @@ namespace TARS_Delivery.Migrations
                 columns: new[] { "Id", "CreatedAt", "EmployeeId", "EmployeeIdNextStep", "HistoryNote", "PackageId", "Photos", "ProcessStep", "Status", "Step", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8555), 1, 2, "Đang chờ lấy hàng", 1, "https://tars.com/photos/1", 0, 1, 0, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8557) },
-                    { 2, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8559), 2, 3, "Đang chờ lấy hàng", 2, "https://tars.com/photos/2", 0, 1, 0, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8560) }
+                    { 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5311), 1, 2, "Đang chờ lấy hàng", 1, "https://tars.com/photos/1", 0, 1, 0, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5311) },
+                    { 2, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5314), 2, 3, "Đang chờ lấy hàng", 2, "https://tars.com/photos/2", 0, 1, 0, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5315) }
                 });
 
             migrationBuilder.InsertData(
@@ -521,8 +553,8 @@ namespace TARS_Delivery.Migrations
                 columns: new[] { "Id", "CreatedAt", "ItemName", "ItemQuantity", "ItemType", "ItemValue", "ItemWeight", "PackageId", "Status", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8587), "Quần áo", 5, 0, 1000000m, 2, 1, 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8587) },
-                    { 2, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8590), "Giày dép", 3, 1, 500000m, 1, 2, 1, new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8591) }
+                    { 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5342), "Quần áo", 5, 0, 1000000m, 2, 1, 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5342) },
+                    { 2, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5345), "Giày dép", 3, 1, 500000m, 1, 2, 1, new DateTime(2024, 3, 2, 19, 52, 12, 540, DateTimeKind.Local).AddTicks(5345) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -613,6 +645,11 @@ namespace TARS_Delivery.Migrations
                 column: "RoleId1");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Services_ServiceTypeId",
+                table: "Services",
+                column: "ServiceTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
@@ -670,6 +707,9 @@ namespace TARS_Delivery.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "ServiceTypes");
         }
     }
 }

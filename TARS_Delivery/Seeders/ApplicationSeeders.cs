@@ -19,5 +19,6 @@ public class ApplicationSeeders
         new RoleSeeders(modelBuilder);
         new UserSeeders(modelBuilder);
         new ServiceSeeders(modelBuilder);
+        new ServiceTypeSeeders(modelBuilder);
     }
 }

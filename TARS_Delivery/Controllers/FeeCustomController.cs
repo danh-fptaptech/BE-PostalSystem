@@ -141,7 +141,7 @@ namespace TARS_Delivery.Controllers
                 ServiceId = fee.ServiceId,
                 LocationIdFrom = fee.LocationIdFrom,
                 LocationIdTo = fee.LocationIdTo,
-                Distance = fee.Distance,
+                OverWeightCharge = fee.OverWeightCharge,
                 FeeCharge = fee.FeeCharge,
                 TimeProcess = fee.TimeProcess,
                 Status = EStatusData.Active
@@ -154,7 +154,7 @@ namespace TARS_Delivery.Controllers
                 {
                     if (item.ServiceId == fee.ServiceId)
                     {
-                        item.FeeCharge = fee.FeeCharge;
+                        item.OverWeightCharge = fee.OverWeightCharge;
                         item.TimeProcess = fee.TimeProcess;
                         await _feeCustomRepository.UpdateFee(item.Id, item);
                         return Ok("Fee updated successfully");

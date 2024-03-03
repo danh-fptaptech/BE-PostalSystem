@@ -12,8 +12,8 @@ using TARS_Delivery.Models;
 namespace TARS_Delivery.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240223131756_Step1")]
-    partial class Step1
+    [Migration("20240303064851_updatenull")]
+    partial class updatenull
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,39 +76,39 @@ namespace TARS_Delivery.Migrations
                             Id = 1,
                             Address = "1234 TARS Street",
                             BranchName = "TARS Delivery",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8306),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2656),
                             District = "TARS",
                             PhoneNumber = "123456789",
                             PostalCode = "1234",
                             Province = "TARS",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8321)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2669)
                         },
                         new
                         {
                             Id = 2,
                             Address = "1234 TARS Street",
                             BranchName = "TARS Delivery 2",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8326),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2678),
                             District = "TARS",
                             PhoneNumber = "123456789",
                             PostalCode = "1234",
                             Province = "TARS",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8326)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2679)
                         },
                         new
                         {
                             Id = 3,
                             Address = "1234 TARS Street",
                             BranchName = "TARS Delivery 3",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8328),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2680),
                             District = "TARS",
                             PhoneNumber = "123456789",
                             PostalCode = "1234",
                             Province = "TARS",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8328)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2681)
                         });
                 });
 
@@ -166,42 +166,42 @@ namespace TARS_Delivery.Migrations
                         {
                             Id = 1,
                             Address = "Số 1, Đường 1, Phường 1, Quận 1, TP HCM",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8448),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2775),
                             District = "Quận 1",
                             Name = "Nguyễn Văn Customer",
                             PhoneNumber = "0123456789",
                             Province = "TP HCM",
                             Status = 1,
                             TypeInfo = 0,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8449),
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2776),
                             UserId = 1
                         },
                         new
                         {
                             Id = 2,
                             Address = "Số 2, Đường 2, Phường 2, Quận 2, TP HCM",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8452),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2779),
                             District = "Quận 2",
                             Name = "Trần Thị Customer",
                             PhoneNumber = "0987654321",
                             Province = "TP HCM",
                             Status = 1,
                             TypeInfo = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8453),
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2779),
                             UserId = 2
                         },
                         new
                         {
                             Id = 3,
                             Address = "Số 3, Đường 3, Phường 3, Quận 3, TP HCM",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8455),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2781),
                             District = "Quận 3",
                             Name = "Lê Văn Customer",
                             PhoneNumber = "044333333",
                             Province = "TP HCM",
                             Status = 1,
                             TypeInfo = 0,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8455),
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2782),
                             UserId = 3
                         });
                 });
@@ -290,7 +290,7 @@ namespace TARS_Delivery.Migrations
                             Address = "Số 1, Đường 1, Phường 1, Quận 1, TP HCM",
                             Avatar = "avatar.jpg",
                             BranchId = 1,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8484),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2812),
                             District = "Quận 1",
                             Email = "emp1@emp1",
                             EmployeeCode = "EMP001",
@@ -302,7 +302,7 @@ namespace TARS_Delivery.Migrations
                             RoleId = 1,
                             Status = 1,
                             SubmitedInfo = "SubmitedInfo",
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8485)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2812)
                         },
                         new
                         {
@@ -310,7 +310,7 @@ namespace TARS_Delivery.Migrations
                             Address = "Số 2, Đường 2, Phường 2, Quận 2, TP HCM",
                             Avatar = "avatar.jpg",
                             BranchId = 2,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8489),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2816),
                             District = "Quận 2",
                             Email = "emp2@emp2",
                             EmployeeCode = "EMP002",
@@ -322,7 +322,7 @@ namespace TARS_Delivery.Migrations
                             RoleId = 2,
                             Status = 1,
                             SubmitedInfo = "SubmitedInfo",
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8490)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2816)
                         },
                         new
                         {
@@ -330,7 +330,7 @@ namespace TARS_Delivery.Migrations
                             Address = "Số 3, Đường 3, Phường 3, Quận 3, TP HCM",
                             Avatar = "avatar.jpg",
                             BranchId = 3,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8493),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2819),
                             District = "Quận 3",
                             Email = "emp3@emp3",
                             EmployeeCode = "EMP003",
@@ -342,7 +342,7 @@ namespace TARS_Delivery.Migrations
                             RoleId = 3,
                             Status = 1,
                             SubmitedInfo = "SubmitedInfo",
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8493)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2820)
                         });
                 });
 
@@ -357,9 +357,6 @@ namespace TARS_Delivery.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Distance")
-                        .HasColumnType("decimal(12,2)");
-
                     b.Property<decimal>("FeeCharge")
                         .HasColumnType("decimal(12,2)");
 
@@ -368,6 +365,9 @@ namespace TARS_Delivery.Migrations
 
                     b.Property<int>("LocationIdTo")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("OverWeightCharge")
+                        .HasColumnType("decimal(12,2)");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
@@ -395,54 +395,54 @@ namespace TARS_Delivery.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8519),
-                            Distance = 15.5m,
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2847),
                             FeeCharge = 35000.00m,
                             LocationIdFrom = 2,
                             LocationIdTo = 3,
+                            OverWeightCharge = 2m,
                             ServiceId = 1,
                             Status = 1,
                             TimeProcess = 2,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8520)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2848)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8523),
-                            Distance = 25.0m,
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2851),
                             FeeCharge = 45000.00m,
                             LocationIdFrom = 2,
                             LocationIdTo = 3,
+                            OverWeightCharge = 3m,
                             ServiceId = 2,
                             Status = 1,
                             TimeProcess = 4,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8523)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2851)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8526),
-                            Distance = 30.0m,
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2853),
                             FeeCharge = 50000.00m,
                             LocationIdFrom = 2,
                             LocationIdTo = 3,
+                            OverWeightCharge = 4m,
                             ServiceId = 3,
                             Status = 1,
                             TimeProcess = 5,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8526)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2854)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8528),
-                            Distance = 15.0m,
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2856),
                             FeeCharge = 60000.00m,
                             LocationIdFrom = 2,
                             LocationIdTo = 3,
+                            OverWeightCharge = 5m,
                             ServiceId = 1,
                             Status = 1,
                             TimeProcess = 24,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8529)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2856)
                         });
                 });
 
@@ -521,7 +521,7 @@ namespace TARS_Delivery.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8555),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2887),
                             EmployeeId = 1,
                             EmployeeIdNextStep = 2,
                             HistoryNote = "Đang chờ lấy hàng",
@@ -530,12 +530,12 @@ namespace TARS_Delivery.Migrations
                             ProcessStep = 0,
                             Status = 1,
                             Step = 0,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8557)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2887)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8559),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2890),
                             EmployeeId = 2,
                             EmployeeIdNextStep = 3,
                             HistoryNote = "Đang chờ lấy hàng",
@@ -544,7 +544,7 @@ namespace TARS_Delivery.Migrations
                             ProcessStep = 0,
                             Status = 1,
                             Step = 0,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8560)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2891)
                         });
                 });
 
@@ -594,7 +594,7 @@ namespace TARS_Delivery.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8587),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2918),
                             ItemName = "Quần áo",
                             ItemQuantity = 5,
                             ItemType = 0,
@@ -602,12 +602,12 @@ namespace TARS_Delivery.Migrations
                             ItemWeight = 2,
                             PackageId = 1,
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8587)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2919)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8590),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2922),
                             ItemName = "Giày dép",
                             ItemQuantity = 3,
                             ItemType = 1,
@@ -615,7 +615,7 @@ namespace TARS_Delivery.Migrations
                             ItemWeight = 1,
                             PackageId = 2,
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8591)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2922)
                         });
                 });
 
@@ -659,210 +659,210 @@ namespace TARS_Delivery.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8613),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2946),
                             LocationLevel = 0,
                             LocationName = "TP HCM",
                             PostalCode = "700000",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8614)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2947)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8618),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2949),
                             LocationLevel = 1,
                             LocationName = "Quận 1",
                             LocationOf = 1,
                             PostalCode = "710100",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8619)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2950)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8621),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2952),
                             LocationLevel = 1,
                             LocationName = "Quận 2",
                             LocationOf = 1,
                             PostalCode = "713000",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8621)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2952)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8623),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2954),
                             LocationLevel = 1,
                             LocationName = "Quận 3",
                             LocationOf = 1,
                             PostalCode = "722000",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8624)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2955)
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8626),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2957),
                             LocationLevel = 1,
                             LocationName = "Quận 4",
                             LocationOf = 1,
                             PostalCode = "754000",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8627)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2957)
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8659),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2959),
                             LocationLevel = 1,
                             LocationName = "Quận 5",
                             LocationOf = 1,
                             PostalCode = "748000",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8659)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2959)
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8662),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2961),
                             LocationLevel = 1,
                             LocationName = "Quận 6",
                             LocationOf = 1,
                             PostalCode = "746000",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8662)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2962)
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8664),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2964),
                             LocationLevel = 1,
                             LocationName = "Quận 7",
                             LocationOf = 1,
                             PostalCode = "756000",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8666)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2964)
                         },
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8668),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2966),
                             LocationLevel = 1,
                             LocationName = "Quận 8",
                             LocationOf = 1,
                             PostalCode = "751500",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8669)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2966)
                         },
                         new
                         {
                             Id = 10,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8671),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2968),
                             LocationLevel = 1,
                             LocationName = "Quận 9",
                             LocationOf = 1,
                             PostalCode = "715000",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8672)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2969)
                         },
                         new
                         {
                             Id = 11,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8674),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2971),
                             LocationLevel = 1,
                             LocationName = "Quận 10",
                             LocationOf = 1,
                             PostalCode = "740010",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8674)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2971)
                         },
                         new
                         {
                             Id = 12,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8676),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2973),
                             LocationLevel = 1,
                             LocationName = "Quận 11",
                             LocationOf = 1,
                             PostalCode = "743800",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8677)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2973)
                         },
                         new
                         {
                             Id = 13,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8679),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2975),
                             LocationLevel = 1,
                             LocationName = "Quận 12",
                             LocationOf = 1,
                             PostalCode = "729400",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8679)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2976)
                         },
                         new
                         {
                             Id = 14,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8681),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2978),
                             LocationLevel = 1,
                             LocationName = "Quận Gò Vấp",
                             LocationOf = 1,
                             PostalCode = "727010",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8682)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2978)
                         },
                         new
                         {
                             Id = 15,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8684),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2980),
                             LocationLevel = 1,
                             LocationName = "Quận Tân Bình",
                             LocationOf = 1,
                             PostalCode = "736090",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8685)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2980)
                         },
                         new
                         {
                             Id = 16,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8687),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2982),
                             LocationLevel = 1,
                             LocationName = "Quận Tân Phú",
                             LocationOf = 1,
                             PostalCode = "760000",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8688)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2983)
                         },
                         new
                         {
                             Id = 17,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8690),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2984),
                             LocationLevel = 1,
                             LocationName = "Quận Phú Nhuận",
                             LocationOf = 1,
                             PostalCode = "725060",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8691)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2985)
                         },
                         new
                         {
                             Id = 18,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8693),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2987),
                             LocationLevel = 1,
                             LocationName = "Quận Bình Thạnh",
                             LocationOf = 1,
                             PostalCode = "718440",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8694)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2987)
                         },
                         new
                         {
                             Id = 19,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8696),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2989),
                             LocationLevel = 1,
                             LocationName = "Quận Thủ Đức",
                             LocationOf = 1,
                             PostalCode = "720150",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8696)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(2989)
                         });
                 });
 
@@ -946,7 +946,7 @@ namespace TARS_Delivery.Migrations
                             Id = 1,
                             AddressFrom = "Số 1, Đường 1, Phường 1, Quận 1, TP HCM",
                             AddressTo = "Số 2, Đường 2, Phường 2, Quận 2, TP HCM",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8738),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3049),
                             NameFrom = "Nguyễn Văn A",
                             NameTo = "Trần Thị B",
                             PackageNote = "Giao hàng cẩn thận",
@@ -957,7 +957,7 @@ namespace TARS_Delivery.Migrations
                             Step = 0,
                             TotalFee = 100000m,
                             TrackingCode = "123456789",
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8739),
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3049),
                             UserId = 1
                         },
                         new
@@ -965,7 +965,7 @@ namespace TARS_Delivery.Migrations
                             Id = 2,
                             AddressFrom = "Số 2, Đường 2, Phường 2, Quận 2, TP HCM",
                             AddressTo = "Số 3, Đường 3, Phường 3, Quận 3, TP HCM",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8743),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3053),
                             NameFrom = "Trần Thị B",
                             NameTo = "Lê Văn C",
                             PackageNote = "Giao hàng cẩn thận",
@@ -976,7 +976,7 @@ namespace TARS_Delivery.Migrations
                             Step = 0,
                             TotalFee = 100000m,
                             TrackingCode = "987654321",
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8744),
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3053),
                             UserId = 2
                         });
                 });
@@ -1090,12 +1090,8 @@ namespace TARS_Delivery.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ServiceDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ServiceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ServiceTypeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -1111,63 +1107,118 @@ namespace TARS_Delivery.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ServiceTypeId");
+
                     b.ToTable("Services");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8839),
-                            ServiceDescription = "Fast and secure international delivery service",
-                            ServiceName = "EMS Delivery Service",
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3161),
+                            ServiceTypeId = 1,
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8839),
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3162),
                             WeighFrom = 0,
                             WeighTo = 500
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8841),
-                            ServiceDescription = "Fast and secure international delivery service",
-                            ServiceName = "EMS Delivery Service",
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3164),
+                            ServiceTypeId = 1,
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8842),
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3164),
                             WeighFrom = 501,
                             WeighTo = 1000
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8844),
-                            ServiceDescription = "Fast and secure international delivery service",
-                            ServiceName = "EMS Delivery Service",
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3166),
+                            ServiceTypeId = 1,
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8844),
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3167),
                             WeighFrom = 1001,
                             WeighTo = 2000
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8846),
-                            ServiceDescription = "Fast and convenient express delivery service",
-                            ServiceName = "Express Delivery",
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3169),
+                            ServiceTypeId = 1,
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8847),
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3169),
                             WeighFrom = 2001,
                             WeighTo = 3000
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8849),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3171),
+                            ServiceTypeId = 1,
+                            Status = 1,
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3171),
+                            WeighFrom = 3001,
+                            WeighTo = 10000
+                        });
+                });
+
+            modelBuilder.Entity("TARS_Delivery.Models.Entities.ServiceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ServiceDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServiceName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServiceTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3195),
+                            ServiceDescription = "Fast and secure international delivery service",
+                            ServiceName = "EMS Delivery Service",
+                            Status = 1,
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3196)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3199),
+                            ServiceDescription = "Fast and convenient express delivery service",
+                            ServiceName = "Express Delivery",
+                            Status = 1,
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3200)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3201),
                             ServiceDescription = "Reliable freight and cargo delivery solutions",
                             ServiceName = "Freight Delivery Services",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8849),
-                            WeighFrom = 3001,
-                            WeighTo = 10000
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3202)
                         });
                 });
 
@@ -1222,37 +1273,37 @@ namespace TARS_Delivery.Migrations
                         {
                             Id = 1,
                             Avatar = "avatar.jpg",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8811),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3131),
                             Email = "usera@usera",
                             Fullname = "Nguyễn Văn User",
                             Password = "123",
                             Phone = "0123456789",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8812)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3132)
                         },
                         new
                         {
                             Id = 2,
                             Avatar = "avatar.jpg",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8814),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3135),
                             Email = "userb@userb",
                             Fullname = "Trần Thị User",
                             Password = "123",
                             Phone = "0987654321",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8815)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3136)
                         },
                         new
                         {
                             Id = 3,
                             Avatar = "avatar.jpg",
-                            CreatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8817),
+                            CreatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3138),
                             Email = "userc@userc",
                             Fullname = "Lê Văn User",
                             Password = "123",
                             Phone = "023023920392",
                             Status = 1,
-                            UpdatedAt = new DateTime(2024, 2, 23, 20, 17, 55, 843, DateTimeKind.Local).AddTicks(8818)
+                            UpdatedAt = new DateTime(2024, 3, 3, 13, 48, 50, 922, DateTimeKind.Local).AddTicks(3138)
                         });
                 });
 
@@ -1403,6 +1454,17 @@ namespace TARS_Delivery.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("TARS_Delivery.Models.Entities.Service", b =>
+                {
+                    b.HasOne("TARS_Delivery.Models.Entities.ServiceType", "ServiceType")
+                        .WithMany("Services")
+                        .HasForeignKey("ServiceTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ServiceType");
+                });
+
             modelBuilder.Entity("TARS_Delivery.Models.Entities.Branch", b =>
                 {
                     b.Navigation("Employees");
@@ -1428,6 +1490,11 @@ namespace TARS_Delivery.Migrations
             modelBuilder.Entity("TARS_Delivery.Models.Entities.Role", b =>
                 {
                     b.Navigation("RoleHasPermissions");
+                });
+
+            modelBuilder.Entity("TARS_Delivery.Models.Entities.ServiceType", b =>
+                {
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("TARS_Delivery.Models.Entities.User", b =>

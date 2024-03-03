@@ -13,7 +13,7 @@ namespace TARS_Delivery.Models.Entities
         public int LocationIdFrom { get; set; }
         public int LocationIdTo { get; set; }
         [Column(TypeName = "decimal(12,2)")]
-        public decimal Distance { get; set; }
+        public decimal? OverWeightCharge { get; set; }
         [Column(TypeName = "decimal(12,2)")]
         public decimal FeeCharge { get; set; }
         public int TimeProcess { get; set; }
