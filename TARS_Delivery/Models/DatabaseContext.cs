@@ -142,6 +142,12 @@ public class DatabaseContext : DbContext
 
         #endregion
 
+        #region ModelBuilder for Blog
+        modelBuilder.Entity<Blog>()
+            .HasOne<Employee>(b => b.Employee)
+            .WithMany(e=>e.Blogs)
+            .HasForeignKey(b=>b.EmployeeID)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
     #region DbSet
@@ -160,9 +166,8 @@ public class DatabaseContext : DbContext
     public DbSet<Package> Packages { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Customer> Customers { get; set; }
-
     public DbSet<UserRegistrationInfo> UserRegistrations { get; set; }
-
+    public DbSet<Blog> Blogs { get; set; }
     #endregion
 
 
