@@ -25,6 +25,7 @@ namespace TARS_Delivery.Repositories.imp
                 Content = b.Content,
                 Author = b.Author,
                 EmployeeId = b.EmployeeId,
+                Category = b.Category,
                 CreatedAt = b.CreatedAt,
                 UpdatedAt = b.UpdatedAt,
                 Status = b.Status

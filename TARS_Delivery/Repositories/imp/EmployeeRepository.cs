@@ -23,9 +23,9 @@ namespace TARS_Delivery.Repositories.imp
         public async Task<IEnumerable<EmployeeDTO>> GetEmployees()
         {
             IEnumerable<Employee> employees = await databaseContext.Employees.ToListAsync();
-            var employeeDTO  = mapper.Map<EmployeeDTO>(employees);
-            return (IEnumerable<EmployeeDTO>)employeeDTO;
-        }    
+            var employeeDTOs = mapper.Map<IEnumerable<EmployeeDTO>>(employees);
+            return employeeDTOs;
+        }
 
 
         public async Task<EmployeeDTO> GetEmployee(int id)
