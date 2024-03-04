@@ -99,9 +99,10 @@ namespace TARS_Delivery.Repositories.imp
                         Id = h.Id,
                         PackageId = h.PackageId,
                         EmployeeId = h.EmployeeId,
-                        Step = h.Step,
                         HistoryNote = h.HistoryNote,
                         Photos = h.Photos,
+                        Step = h.Step,
+                        ProcessStep = h.ProcessStep,
                         CreatedAt = h.CreatedAt,
                         UpdatedAt = h.UpdatedAt,
                         Status = h.Status,
@@ -198,14 +199,18 @@ namespace TARS_Delivery.Repositories.imp
         {
             try
             {
-                var UpdatedEmployee = await _context.Employees.FindAsync(id);
-                if (UpdatedEmployee != null)
+                var updatedEmployee = await _context.Employees.FindAsync(id);
+                if (updatedEmployee != null)
                 {
-                    UpdatedEmployee.Status = UpdatedEmployee.Status == EStatusData.Active ? EStatusData.Inactive : EStatusData.Active;
+                   if(updatedEmployee.Role.RoleName != "Admin")
+                    {
+                        updatedEmployee.Status = updatedEmployee.Status == EStatusData.Active ? EStatusData.Inactive : EStatusData.Active;
 
-                    UpdatedEmployee.UpdatedAt = DateTime.Now;
-                    await _context.SaveChangesAsync();
-                    return UpdatedEmployee;
+                        updatedEmployee.UpdatedAt = DateTime.Now;
+                        await _context.SaveChangesAsync();
+                        return updatedEmployee;
+                    }
+                    throw new Exception("Failed to change! The role is one of system roles. !");
                 }
                 throw new Exception("The employee does not exist !");
             }
@@ -215,7 +220,7 @@ namespace TARS_Delivery.Repositories.imp
                 throw new Exception(ex.Message);
             }
         }
-
+            
         public async Task<Employee> UpdateInfoAsync(string code, UpdateInfoAsync employee)
         {
             try
@@ -490,6 +495,59 @@ namespace TARS_Delivery.Repositories.imp
                 Console.WriteLine(ex);
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<IEnumerable<SDTOEmployee>> GetEmployeesByBranch(string branchName)
+        {
+            IEnumerable<Employee> employees = await _context.Employees
+                .Where(e => e.Branch.BranchName == branchName)
+                .Include(e => e.Role)
+                .Include(e => e.Branch)
+                .Include(e => e.HistoryLogs)
+                .ToListAsync();
+
+            foreach (Employee employee in employees)
+            {
+                if(employee.Role.RoleName == "Branch Manager")
+                {
+                    IEnumerable<SDTOEmployee> dtoEmployees = employees.Select(e => new SDTOEmployee
+                    {
+                        Id = e.Id,
+                        EmployeeCode = e.EmployeeCode,
+                        Email = e.Email,
+                        Password = e.Password,
+                        Fullname = e.Fullname,
+                        PostalCode = e.PostalCode,
+                        Address = e.Address,
+                        Province = e.Province,
+                        District = e.District,
+                        PhoneNumber = e.PhoneNumber,
+                        Avatar = e.Avatar,
+                        SubmitedInfo = e.SubmitedInfo,
+                        CreatedAt = e.CreatedAt,
+                        UpdatedAt = e.UpdatedAt,
+                        Status = e.Status,
+                        BranchId = e.BranchId,
+                        BranchName = e.Branch.BranchName,
+                        RoleId = e.RoleId,
+                        RoleName = e.Role.RoleName,
+                        HistoryLogs = e.HistoryLogs.Select(h => new HistoryLog
+                        {
+                            Id = h.Id,
+                            PackageId = h.PackageId,
+                            EmployeeId = h.EmployeeId,
+                            Step = h.Step,
+                            HistoryNote = h.HistoryNote,
+                            Photos = h.Photos,
+                            CreatedAt = h.CreatedAt,
+                            UpdatedAt = h.UpdatedAt,
+                            Status = h.Status,
+                        }).ToList()
+                    });
+                    return dtoEmployees;
+                }
+            }
+            return null;
         }
 
         public class SubmitedInfo

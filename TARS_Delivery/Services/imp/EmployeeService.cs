@@ -37,7 +37,8 @@ namespace TARS_Delivery.Services.imp
                 EmployeeCode = employee.EmployeeCode,
                 Email = employee.Email,
                 Password = _hashProvider.Hash(employee.Password),
-                Fullname = employee.Fullname,       
+                Fullname = employee.Fullname,
+                PostalCode = employee.PostalCode,
                 Address = employee.Address,
                 Province = employee.Province,
                 District = employee.District,
@@ -45,7 +46,6 @@ namespace TARS_Delivery.Services.imp
                 SubmitedInfo = null,
                 Avatar = employee.Avatar,
                 BranchId = employee.BranchId,
-                PostalCode = employee.PostalCode,
                 RoleId = employee.RoleId,
                 Status = EStatusData.Active,
                 CreatedAt = DateTime.Now,
@@ -111,6 +111,11 @@ namespace TARS_Delivery.Services.imp
         public Task<Employee> RejectUpdateInfo(int id)
         {
             return _repository.RejectUpdateInfo(id);
+        }
+
+        public async Task<IEnumerable<SDTOEmployee>> GetEmployeesByBranch(string branchName)
+        {
+            return await _repository.GetEmployeesByBranch(branchName);
         }
     }
 }

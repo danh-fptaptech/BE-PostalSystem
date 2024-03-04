@@ -17,5 +17,6 @@ namespace TARS_Delivery.Services
         Task<Employee> RejectUpdateInfo(int id);
         Task<Employee> ChangeStatus (int id);
         Task<IEnumerable<SDTOEmployee>> GetSubmitedInfoEmployees();
+        Task<IEnumerable<SDTOEmployee>> GetEmployeesByBranch(string branchName);
     }
 }

@@ -200,13 +200,16 @@ namespace TARS_Delivery.Repositories.imp
 
             if (rhp != null)
             {
-                _context.RoleHasPermissions.Remove(rhp);
+                if(rhp.Permission.PermissionName != "Admin")
+                {
+                    _context.RoleHasPermissions.Remove(rhp);
 
-                await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
-                return;
+                    return;
+                }
+                throw new Exception("Failed to delete ! The permission is one of system permission !");
             }
-
             throw new Exception("The role or permission does not exist !");
         }
     }

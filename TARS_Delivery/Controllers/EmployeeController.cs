@@ -248,5 +248,19 @@ namespace TARS_Delivery.Controllers
             }
         }
 
+        [HttpGet("Branch")]
+        public async Task<ActionResult> GetEmployeesByBranch(string branchName)
+        {
+            try
+            {
+                var employees = await _service.GetEmployeesByBranch(branchName);
+                return Ok(employees);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }
