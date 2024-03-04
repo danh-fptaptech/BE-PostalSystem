@@ -95,7 +95,7 @@ namespace TARS_Delivery.Repositories.imp
                 var removedRole = await _context.Roles.Include(r => r.RoleHasPermissions).FirstOrDefaultAsync(r => r.Id == id);
                 if (removedRole != null)
                 {
-                    if (removedRole.Id > 3)
+                    if (removedRole.Id > 4)
                     {
                         if (removedRole.RoleHasPermissions != null)
                         {
