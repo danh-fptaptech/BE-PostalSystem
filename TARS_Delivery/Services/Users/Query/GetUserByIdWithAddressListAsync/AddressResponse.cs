@@ -9,4 +9,5 @@ public sealed record AddressResponse(
     string City,
     string District,
     string Ward,
+    string PostalCode,
     ETypeInfo TypeInfo);

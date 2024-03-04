@@ -1,6 +1,6 @@
 ﻿using TARS_Delivery.Shared;
 
-namespace TARS_Delivery.Services.Users.Query.UpdateUserByIdAsync;
+namespace TARS_Delivery.Services.Users.Command.UpdateUserProfileByIdAsync;
 
 internal static class UpdateUserByIdAsyncErrors
 {

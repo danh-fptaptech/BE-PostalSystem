@@ -9,4 +9,5 @@ public sealed record AddUserAddressAsyncRequest(
     string City,
     string District,
     string Ward,
+    string PostalCode,
     ETypeInfo TypeInfo);

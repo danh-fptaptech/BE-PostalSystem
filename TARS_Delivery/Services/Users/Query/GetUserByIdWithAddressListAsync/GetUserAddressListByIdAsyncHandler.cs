@@ -46,6 +46,7 @@ internal sealed class GetUserAddressListByIdAsyncHandler(
                 c.City,
                 c.District,
                 c.Ward,
+                c.PostalCode,
                 c.TypeInfo))
             .ToList();
 

@@ -12,4 +12,5 @@ internal sealed record AddUserAddressAsyncCommand(
     string City,
     string District,
     string Ward,
+    string PostalCode,
     ETypeInfo TypeInfo) : IRequest<Result>;

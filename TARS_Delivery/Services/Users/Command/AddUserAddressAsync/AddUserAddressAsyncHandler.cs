@@ -43,9 +43,6 @@ internal sealed class AddUserAddressAsyncHandler(
             return Result.Failure(ChangeUserPasswordAsyncErrors.NotFound);
         }
 
-        // tim postal code
-        int postalcode = 0;
-
         user.AddCustomer(
             command.Name,
             command.PhoneNumber,
@@ -53,7 +50,7 @@ internal sealed class AddUserAddressAsyncHandler(
             command.City,
             command.District,
             command.Ward,
-            postalcode,
+            command.PostalCode,
             command.TypeInfo);
 
         await _unitOfWork.SaveChangeAsync(cancellationToken);

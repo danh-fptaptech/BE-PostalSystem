@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace TARS_Delivery.Services.Users.Command.UpdateUserByIdAsync;
+namespace TARS_Delivery.Services.Users.Command.UpdateUserProfileByIdAsync;
 
 internal class UpdateUserByIdAsyncCommandValidator : AbstractValidator<UpdateUserByIdAsyncCommand>
 {

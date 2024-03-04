@@ -28,6 +28,6 @@ internal class AddUserAddressAsyncValidator : AbstractValidator<AddUserAddressAs
             .NotEmpty();
 
         RuleFor(x => x.TypeInfo)
-            .NotEmpty();
+            .NotNull();
     }
 }

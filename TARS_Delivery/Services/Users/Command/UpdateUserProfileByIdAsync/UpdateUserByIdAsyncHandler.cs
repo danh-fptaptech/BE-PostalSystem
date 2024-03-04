@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
-using TARS_Delivery.Services.Users.Query.UpdateUserByIdAsync;
+using TARS_Delivery.Services.Users.Command.UpdateUserProfileByIdAsync;
 using TARS_Delivery.Shared;
 using TARS_Delivery.UnitOfWork;
 
@@ -21,7 +21,7 @@ internal class UpdateUserByIdAsyncHandler(IUserRepository userRepository, IUnitO
             return Result.Failure(UpdateUserByIdAsyncErrors.NotFound);
         }
 
-        user.UpdateProfile(command.Fullname, command.Email, command.Phone, command.Avatar);
+        user.UpdateProfile(command.Fullname, command.Email, command.Phone);
 
         _userRepository.UpdateUserByIdAsync(user);
 

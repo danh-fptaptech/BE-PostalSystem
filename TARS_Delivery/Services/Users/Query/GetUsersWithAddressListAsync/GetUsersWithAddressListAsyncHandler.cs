@@ -19,7 +19,8 @@ internal class GetUsersWithAddressListAsyncHandler(IUserRepository userRepositor
         IReadOnlyCollection<UserWithAddressListResponse> result = users
                 .Select(u => new UserWithAddressListResponse(
                     u.Id, u.Fullname, u.Email, u.Phone, u.Avatar, u.Status,
-                    u.Customers.Select(c => new AddressResponse(c.Name, c.PhoneNumber, c.Address, c.City, c.District, c.Ward, c.TypeInfo))
+                    u.Customers.Select(c => new AddressResponse(
+                        c.Name, c.PhoneNumber, c.Address, c.City, c.District, c.Ward, c.PostalCode, c.TypeInfo))
                     .ToList()))
                 .ToList();
 

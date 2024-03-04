@@ -8,7 +8,7 @@ using TARS_Delivery.Services.Users.Command.ForgotPasswordAsync;
 using TARS_Delivery.Services.Users.Command.RefreshTokenAsync;
 using TARS_Delivery.Services.Users.Command.RegisterUserAsync;
 using TARS_Delivery.Services.Users.Command.ResetPasswordAsync;
-using TARS_Delivery.Services.Users.Command.UpdateUserByIdAsync;
+using TARS_Delivery.Services.Users.Command.UpdateUserProfileByIdAsync;
 using TARS_Delivery.Services.Users.Command.VerifyUserMailAsync;
 using TARS_Delivery.Services.Users.Query.GetUserByIdAsync;
 using TARS_Delivery.Services.Users.Query.GetUserByIdWithAddressListAsync;
@@ -227,6 +227,7 @@ public class UsersController(ISender sender)
             request.City,
             request.District,
             request.Ward,
+            request.PostalCode,
             request.TypeInfo);
 
         var result = await Sender.Send(
@@ -380,6 +381,17 @@ public class UsersController(ISender sender)
         return Ok(result.Value);
     }
 
+    /*[Authorize]
+    [HttpGet("{id}/All")]
+    public async Task<IActionResult> GetUserByIdWithAllAsync(int id, CancellationToken cancellationToken)
+    {
+        GetUserByIdWithAllAsyncQuery query = new(id);
+
+        var result = await Sender.Send(query, cancellationToken);
+
+        return Ok(result.Value);
+    }*/
+
     [Authorize]
     [HttpPut("{id}")]                                                                 
     public async Task<IActionResult> UpdateUserByIdAsync(
@@ -387,7 +399,7 @@ public class UsersController(ISender sender)
         [FromBody] UpdateUserByIdAsyncRequest request, 
         CancellationToken cancellationToken)
     {
-        UpdateUserByIdAsyncCommand command = new(id, request.Fullname, request.Email, request.Phone, request.Avatar);
+        UpdateUserByIdAsyncCommand command = new(id, request.Fullname, request.Email, request.Phone);
 
         var result = await Sender.Send(command, cancellationToken);
 

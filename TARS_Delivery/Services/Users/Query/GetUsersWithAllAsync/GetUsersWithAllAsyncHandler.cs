@@ -42,6 +42,7 @@ internal class GetUsersWithAllAsyncHandler(IUserRepository userRepository)
                         c.City,
                         c.District,
                         c.Ward,
+                        c.PostalCode,
                         c.TypeInfo))
                     .ToList()))
                 .ToList();

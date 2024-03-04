@@ -92,7 +92,7 @@ public class User
             string city,
             string district,
             string ward,
-            int postalCode,
+            string postalCode,
             ETypeInfo typeInfo)
     {
         Customer customer = Customer.CreateCustomer(
@@ -159,11 +159,16 @@ public class User
         return PasswordResetToken;
     }
 
-    public void UpdateProfile(string fullname, string email, string phone, string? avatar)
+    public void UpdateProfile(string fullname, string email, string phone)
     {
         Fullname = fullname;
         Email = email;
         Phone = phone;
+        UpdatedAt = DateTime.Now;
+    }
+
+    public void UpdateAvatar(string avatar)
+    {
         Avatar = avatar;
         UpdatedAt = DateTime.Now;
     }
