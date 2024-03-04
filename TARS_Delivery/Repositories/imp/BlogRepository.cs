@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
+using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories.imp
@@ -14,37 +15,71 @@ namespace TARS_Delivery.Repositories.imp
             _db = db;
         }
         
-        public async Task<List<Blog>> GetAllBlogs()
+        public async Task<List<RDTOBlog>> GetAllBlogs()
         {
-            return await _db.Blogs.ToListAsync();
+            return await _db.Blogs.Select(b=>new RDTOBlog
+            {
+                Id = b.Id,
+                Title = b.Title,
+                Slug = b.Slug,
+                Content = b.Content,
+                Author = b.Author,
+                EmployeeId = b.EmployeeId,
+                CreatedAt = b.CreatedAt,
+                UpdatedAt = b.UpdatedAt,
+                Status = b.Status
+            }).ToListAsync();
         }
         
         public async Task<Blog> GetBlogById(int id)
         {
-            return await _db.Blogs.FirstOrDefaultAsync(b=>b.Id == id);
+            return await _db.Blogs.Include(b=>b.Employee).FirstOrDefaultAsync(b=>b.Id == id);
         }
         
-        public async Task<Blog> GetBlogByEmployeeId(int id)
+        public async Task<List<RDTOBlog>> GetBlogByEmployeeId(int id)
         {
-            return await _db.Blogs.FirstOrDefaultAsync(b=>b.EmployeeID == id);
+            return await _db.Blogs.Where(b=>b.EmployeeId == id).Select(b=>new RDTOBlog
+            {
+                Id = b.Id,
+                Title = b.Title,
+                Slug = b.Slug,
+                Content = b.Content,
+                Author = b.Author,
+                EmployeeId = b.EmployeeId,
+                CreatedAt = b.CreatedAt,
+                UpdatedAt = b.UpdatedAt,
+                Status = b.Status
+            }).ToListAsync();
         }
         
-        public async Task<Blog> CreateBlog(Blog blog)
+        public async Task<Blog> CreateBlog(RDTOBlog blog)
         {
             try
             {
-                await _db.Blogs.AddAsync(blog);
+                Blog newBlog = new Blog
+                {
+                    Title = blog.Title,
+                    Slug = blog.Slug,
+                    Content = blog.Content,
+                    Author = blog.Author,
+                    EmployeeId = blog.EmployeeId,
+                    Category = blog.Category,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    Status = blog.Status
+                };
+                _db.Blogs.Add(newBlog);
                 await _db.SaveChangesAsync();
-                return blog;
+                return newBlog;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw new Exception("Error while adding blog");
+                throw new Exception("Error while creating blog");
             }
         }
         
-        public async Task<Blog> UpdateBlog(int id, Blog blog)
+        public async Task<Blog> UpdateBlog(int id, RDTOBlog blog)
         {
             try
             {
@@ -57,8 +92,9 @@ namespace TARS_Delivery.Repositories.imp
                 blogToUpdate.Slug = blog.Slug;
                 blogToUpdate.Content = blog.Content;
                 blogToUpdate.Author = blog.Author;
-                blogToUpdate.EmployeeID = blog.EmployeeID;
+                blogToUpdate.EmployeeId = blog.EmployeeId;
                 blogToUpdate.UpdatedAt = DateTime.Now;
+                blogToUpdate.Status = blog.Status;
                 await _db.SaveChangesAsync();
                 return blogToUpdate;
             }

@@ -16,12 +16,14 @@ namespace TARS_Delivery.Models.Entities
         [Required]
         public string Author { get; set; }
         [Required]
-        public int EmployeeID { get; set; }
+        public required ECategory Category { get; set; }
+        [Required]
+        public int EmployeeId { get; set; }
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         public EStatusData Status { get; set; }
 
-        [ForeignKey("BranchId")]
+        [ForeignKey("EmployeeId")]
         public virtual Employee Employee { get; set; }
     }
 }

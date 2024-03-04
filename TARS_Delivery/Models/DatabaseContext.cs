@@ -146,8 +146,10 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Blog>()
             .HasOne<Employee>(b => b.Employee)
             .WithMany(e=>e.Blogs)
-            .HasForeignKey(b=>b.EmployeeID)
+            .HasForeignKey(b=>b.EmployeeId)
             .OnDelete(DeleteBehavior.Restrict);
+        #endregion
+
     }
 
     #region DbSet

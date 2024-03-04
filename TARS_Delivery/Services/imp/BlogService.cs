@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
-using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Services.imp
 {
-    public class BlogService
+    public class BlogService : IBlogService
     {
         private readonly IBlogRepository _rp;
         private readonly IMapper _mapper;
@@ -16,10 +16,9 @@ namespace TARS_Delivery.Services.imp
             _mapper = mapper;
         }
         
-        public async Task<ICollection<Blog>> GetAllBlogs()
+        public async Task<List<RDTOBlog>> GetAllBlogs()
         {
-            ICollection<Blog> blogs = await _rp.GetAllBlogs();
-            return blogs;
+            return await _rp.GetAllBlogs();
         }
 
         public async Task<Blog> GetBlogById(int id)
@@ -27,23 +26,17 @@ namespace TARS_Delivery.Services.imp
             return await _rp.GetBlogById(id);
         }
 
-        public async Task<Blog> AddBlog(Blog blog)
+        public async Task<List<RDTOBlog>> GetBlogByEmployeeId(int id)
         {
-            Blog newBlog = new()
-            {
-                Title = blog.Title,
-                Slug = blog.Slug,
-                Content = blog.Content,
-                Author = blog.Author,
-                EmployeeID = blog.EmployeeID,
-                Status = EStatusData.Active,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-            return await _rp.CreateBlog(newBlog);
+            return await _rp.GetBlogByEmployeeId(id);
         }
 
-        public async Task<Blog> UpdateBlog(int id, Blog blog)
+        public async Task<Blog> CreateBlog(RDTOBlog blog)
+        {
+            return await _rp.CreateBlog(blog);
+        }
+
+        public async Task<Blog> UpdateBlog(int id, RDTOBlog blog)
         {
             return await _rp.UpdateBlog(id, blog);
         }
@@ -52,6 +45,5 @@ namespace TARS_Delivery.Services.imp
         {
             return await _rp.DeleteBlog(id);
         }
-        
     }
 }

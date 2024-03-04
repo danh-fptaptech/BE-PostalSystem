@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Services;
 
 namespace TARS_Delivery.Controllers
 {
@@ -7,94 +10,95 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class BlogController : ControllerBase
     {
-        private readonly IBlogRepository _blogRepository;
-        
-        public BlogController(IBlogRepository blogRepository)
+        private readonly IBlogService _blogService;
+
+        public BlogController(IBlogService blogService)
         {
-            _blogRepository = blogRepository;
+            _blogService = blogService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllBlogs()
+        [Route("all")]
+        public async Task<ActionResult<List<Blog>>> GetAllBlogs()
         {
             try
             {
-                var blogs = await _blogRepository.GetAllBlogs();
-                return Ok(blogs);
+                return Ok(await _blogService.GetAllBlogs());
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetBlogById(int id)
+        [HttpGet]
+        [Route("getbyid/{id}")]
+        public async Task<ActionResult<Blog>> GetBlogById(int id)
         {
-            try
+            Blog blog = await _blogService.GetBlogById(id);
+            if (blog == null)
             {
-                var blog = await _blogRepository.GetBlogById(id);
-                return Ok(blog);
+                return NotFound();
             }
-            catch (Exception e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
-            }
+            return Ok(blog);
         }
 
-        [HttpGet("employee/{id}")]
-        public async Task<IActionResult> GetBlogByEmployeeId(int id)
+        [HttpGet]
+        [Route("getBlogByEmployeeId/{id}")]
+        public async Task<ActionResult<List<RDTOBlog>>> GetBlogByEmployeeId(int id)
         {
             try
             {
-                var blog = await _blogRepository.GetBlogByEmployeeId(id);
-                return Ok(blog);
+                return Ok(await _blogService.GetBlogByEmployeeId(id));
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBlog([FromBody] Blog blog)
+        [Route("add")]
+        public async Task<ActionResult<Blog>> AddBlog(RDTOBlog blog)
         {
             try
             {
-                var newBlog = await _blogRepository.CreateBlog(blog);
-                return Ok(newBlog);
+                Blog newBlog = await _blogService.CreateBlog(blog);
+                return Created($"/api/blog/{newBlog.Id}", newBlog);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBlog(int id, [FromBody] Blog blog)
+        [HttpPut]
+        [Route("update/{id}")]
+        public async Task<ActionResult<Blog>> UpdateBlog(int id, RDTOBlog blog)
         {
             try
             {
-                var updatedBlog = await _blogRepository.UpdateBlog(id, blog);
+                Blog updatedBlog = await _blogService.UpdateBlog(id, blog);
                 return Ok(updatedBlog);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBlog(int id)
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<ActionResult<Blog>> DeleteBlog(int id)
         {
             try
             {
-                var deletedBlog = await _blogRepository.DeleteBlog(id);
+                Blog deletedBlog = await _blogService.DeleteBlog(id);
                 return Ok(deletedBlog);
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return BadRequest(e.Message);
             }
         }
     }

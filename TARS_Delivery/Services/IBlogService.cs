@@ -1,9 +1,9 @@
 ﻿using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
 
-namespace TARS_Delivery.Repositories
+namespace TARS_Delivery.Services
 {
-    public interface IBlogRepository
+    public interface IBlogService
     {
         public Task<List<RDTOBlog>> GetAllBlogs();
         public Task<Blog> GetBlogById(int id);
