@@ -150,6 +150,18 @@ public class DatabaseContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
 
+        #region ModelBuilder for SupportTicket
+        modelBuilder.Entity<SupportTicket>()
+            .HasOne<Employee>(st => st.Employee)
+            .WithMany(e=>e.SupportTickets)
+            .HasForeignKey(st=>st.EmployeeId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<SupportTicket>()
+            .HasOne<User>(st => st.User)
+            .WithMany(u=>u.SupportTickets)
+            .HasForeignKey(st=>st.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        #endregion
     }
 
     #region DbSet
@@ -170,6 +182,7 @@ public class DatabaseContext : DbContext
     public DbSet<Customer> Customers { get; set; }
     public DbSet<UserRegistrationInfo> UserRegistrations { get; set; }
     public DbSet<Blog> Blogs { get; set; }
+    public DbSet<SupportTicket> SupportTickets { get; set; }
     #endregion
 
 

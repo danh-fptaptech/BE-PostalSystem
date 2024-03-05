@@ -58,6 +58,8 @@ public class User
 
     // Relation with Package
     public IReadOnlyCollection<Package> Packages => _packages;
+    public virtual ICollection<SupportTicket>? SupportTickets { get; set; }
+
 
     public static User Register(
         string fullname,
