@@ -34,7 +34,7 @@ public class AuthController(
         var id = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
         if (role != null)
         {
-            var employee = await _context.Employees.Include(e => e.Branch).FirstOrDefaultAsync(e => e.Id == int.Parse(id!));
+            var employee = await _context.Employees.Include(e => e.Branch).Where(e => e.Status == EStatusData.Active).FirstOrDefaultAsync(e => e.Id == int.Parse(id!));
             return Ok(
                 new
                 {
@@ -81,7 +81,14 @@ public class AuthController(
             return Ok();
         }
 
-        return Ok(result.Value);
+        return Ok(new
+        {
+            result.Value.Id,
+            result.Value.Fullname,
+            result.Value.Email,
+            PhoneNumer = result.Value.Phone,
+            result.Value.Avatar,
+        });
     }
 
     [HttpPost("Login")]
