@@ -23,20 +23,6 @@ namespace TARS_Delivery.Controllers
             _permissionService = permissionService;
         }
 
-        // GET: api/Roles => done
-        /*        [HttpGet] 
-                public async Task<ActionResult> GetRoles()
-                {
-                    try
-                    {
-                        var roles = await _roleService.GetRoles();
-                        return Ok(roles);
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-                }*/
 
         // GET: api/Roles/{roleId} => done
         [HttpGet("{id}")] 
@@ -114,7 +100,10 @@ namespace TARS_Delivery.Controllers
                 var removedRole = await _roleService.GetRole(id);
                 if(removedRole != null)
                 {
-                    if(removedRole.Id > 3)
+                    if(removedRole.RoleName == "Admin" || 
+                       removedRole.RoleName == "Branch Manager" ||
+                       removedRole.RoleName == "Warehouse" ||
+                       removedRole.RoleName == "Delivery")
                     {
                         await _roleService.Delete(id);
                         return Ok("Delete role successfully.");
