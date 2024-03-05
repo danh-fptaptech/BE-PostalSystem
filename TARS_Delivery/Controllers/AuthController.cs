@@ -7,8 +7,8 @@ using System.Security.Claims;
 using TARS_Delivery.Models;
 using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Providers;
-using TARS_Delivery.Services.Users.GetUserByIdAsync;
-using TARS_Delivery.Services.Users.LoginUserAsync;
+using TARS_Delivery.Services.Users.Command.LoginUserAsync;
+using TARS_Delivery.Services.Users.Query.GetUserByIdAsync;
 
 namespace TARS_Delivery.Controllers;
 [Route("api/[controller]")]
