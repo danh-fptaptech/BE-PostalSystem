@@ -11,9 +11,10 @@ using TARS_Delivery.Providers;
 
 namespace TARS_Delivery.Repositories.imp
 {
-    public class EmployeeRepository(DatabaseContext context, IMapper mapper) : IEmployeeRepository
+    public class EmployeeRepository(DatabaseContext context, IMapper mapper, IMailProvider mailProvider) : IEmployeeRepository
     {
         private readonly DatabaseContext _context = context;
+        private readonly IMailProvider _mailProvider = mailProvider;
 
         //private readonly IMapper _mapper = mapper;
 
@@ -321,6 +322,7 @@ namespace TARS_Delivery.Repositories.imp
                             updatedEmployee.SubmitedInfo = null;
                             updatedEmployee.UpdatedAt = DateTime.Now;
                             await _context.SaveChangesAsync();
+                            await _mailProvider.Send(parsedInfo.Email, "Change Employee Information", "Success!", default);
                         }
                     }
                     return updatedEmployee;
@@ -484,6 +486,7 @@ namespace TARS_Delivery.Repositories.imp
                             updatedEmployee.SubmitedInfo = null;
                             updatedEmployee.UpdatedAt = DateTime.Now;
                             await _context.SaveChangesAsync();
+                            await _mailProvider.Send(parsedInfo.Email, "Change Employee Information", "Reject!", default);
                         }
                     }
                     return updatedEmployee;

@@ -34,7 +34,7 @@ public class AuthController(
         var id = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
         if (role != null)
         {
-            var employee = await _context.Employees.FindAsync(int.Parse(id!));
+            var employee = await _context.Employees.Include(e => e.Branch).FirstOrDefaultAsync(e => e.Id == int.Parse(id!));
             return Ok(
                 new
                 {
@@ -48,6 +48,8 @@ public class AuthController(
                     employee.PostalCode,
                     employee.PhoneNumber,
                     employee.Avatar,
+                    employee.BranchId,
+                    BranchName = employee.Branch.BranchName,
                     Role = new
                     {
                         Name = role,
