@@ -1,6 +1,6 @@
 ﻿namespace TARS_Delivery.Providers;
 
-internal interface IHashProvider
+public interface IHashProvider
 {
     string Hash(string input);
 

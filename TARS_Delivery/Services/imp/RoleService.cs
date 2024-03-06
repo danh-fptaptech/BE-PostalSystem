@@ -1,5 +1,6 @@
-﻿using TARS_Delivery.Models;
-using TARS_Delivery.Models.DTOs;
+﻿
+using TARS_Delivery.Models.DTOs.req;
+using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Repositories;
 
@@ -7,30 +8,59 @@ namespace TARS_Delivery.Services.imp
 {
     public class RoleService : IRoleService
     {
-        private readonly IRoleRepository repository;
-        public RoleService(IRoleRepository repository)
+        private readonly IRoleRepository _repository;
+        public RoleService(IRoleRepository repository) 
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task<IEnumerable<Role>> GetRoles()
         {
-            return await repository.GetRoles();
+            return await _repository.GetRoles();
         }
 
         public async Task<Role> GetRole(int id)
         {
-            return await repository.GetRole(id);
+            return await _repository.GetRole(id);
         }
 
-        public async Task<Role> Create(Role RolePost)
+        public async Task<Role> Create(RDTORole role)
         {
-            return await repository.Create(RolePost);
+            Role newRole = new()
+            {
+                RoleName = role.Name,
+            };
+            return await _repository.Create(newRole);
         }
 
-        //public async Task<Role> Update(Role role)
-        //{
-        //    return await repository.Update(role);
-        //}
+        public async Task<Role> Update(int id, RDTORole role)
+        {
+            return await _repository.Update(id, role);
+        }
+
+        public Task<Role> Delete(int id)
+        {
+            return _repository.Delete(id);
+        }
+
+        public Task<SDTORole> GetRoleWithPermissions(int id)
+        {
+            return _repository.GetRoleWithPermissions(id);
+        }
+
+        public Task<IEnumerable<SDTORole>> GetRolesWithPermissions()
+        {
+            return _repository.GetRolesWithPermissions();
+        }
+
+        public Task<SDTORole> AddPermission(int roleId, IEnumerable<string> permissionNames)
+        {
+            return _repository.AddPermission(roleId, permissionNames);
+        }
+
+        public Task DeletePermission(int roleId, string permissionName)
+        {
+            return _repository.DeletePermission(roleId, permissionName);
+        }
     }
 }

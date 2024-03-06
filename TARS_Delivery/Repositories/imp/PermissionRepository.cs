@@ -1,59 +1,85 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Linq;
 using TARS_Delivery.Models;
+using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories.imp
 {
     public class PermissionRepository : IPermissionRepository
     {
-        private readonly DatabaseContext databaseContext;
-        public PermissionRepository(DatabaseContext databaseContext)
+        private readonly DatabaseContext _context;
+        public PermissionRepository(DatabaseContext context)
         {
-            this.databaseContext = databaseContext;
+            _context = context;
         }
 
 
         public async Task<IEnumerable<Permission>> GetPermissions()
         {
-            return await databaseContext.Permissions.ToListAsync();
+            return await _context.Permissions.ToListAsync();
         }
 
-        public async Task<Permission> GetPermission(int id)
+        public async Task<Permission> GetPermission(string permissionName)
         {
-            var permission = await databaseContext.Permissions.FindAsync(id);
-            if (permission != null)
-            {
-                return permission;
-            }
-            return null;
-        }
+            return await _context.Permissions.FirstOrDefaultAsync(p => p.PermissionName == permissionName);
 
+        }
 
         public async Task<Permission> Create(Permission permission)
         {
-            var duplicatedName = await databaseContext.Permissions.FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName);
-            if (duplicatedName != null)
+            try
             {
-                throw new InvalidOperationException("Permission name already exists.");
+                var duplicatedName = await _context.Permissions.
+                    FirstOrDefaultAsync(p => p.PermissionName == permission.PermissionName);
+                if (duplicatedName != null)
+                {
+                    throw new Exception("The permission name has already existed.");
+                }
+
+                await _context.Permissions.AddAsync(permission);
+                await _context.SaveChangesAsync();
+
+                return permission;
             }
-
-            await databaseContext.Permissions.AddAsync(permission);
-            await databaseContext.SaveChangesAsync();
-
-            return permission;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-
-        public async Task<Permission> Remove(int id)
+        public async Task<Permission> Update(string permissionName, RDTOPermission permission)
         {
-            var existedPermission = await databaseContext.Permissions.FindAsync(id);
-            if (existedPermission != null)
+            try
             {
-                databaseContext.Permissions.Remove(existedPermission);
-                await databaseContext.SaveChangesAsync();
+                var updatedPermission = await _context.Permissions.FirstOrDefaultAsync(p => p.PermissionName == permissionName);
+                if (updatedPermission != null)
+                {
+                    var existingPermission = await _context.Permissions
+                        .FirstOrDefaultAsync(p => p.PermissionName == permission.name && p.Id != updatedPermission.Id);
+
+                    if (existingPermission != null)
+                    {
+                        throw new Exception("The permission name already exists.");
+                    }
+
+                    _context.Entry(updatedPermission).CurrentValues.SetValues(permission);
+                    await _context.SaveChangesAsync();
+
+                    return updatedPermission;
+                }
+                throw new Exception("This permission does not exist!");
             }
-            return null;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<Permission>> GetPermissionsByName(IEnumerable<string> permissionNames)
+        {
+            return await _context.Permissions.Where(p => permissionNames.Contains(p.PermissionName)).ToListAsync();
         }
     }
 }

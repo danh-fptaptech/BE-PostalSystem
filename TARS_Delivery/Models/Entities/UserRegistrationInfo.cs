@@ -10,7 +10,6 @@ public class UserRegistrationInfo
         string email, 
         string password, 
         string phone, 
-        string avatar,
         string otp) 
     { 
         Fullname = fullname;
@@ -18,7 +17,6 @@ public class UserRegistrationInfo
         Password = password;
         Phone = phone;
         Otp = otp;
-        Avatar = avatar;
         CreatedAt = DateTime.Now;
     }
 
@@ -37,7 +35,7 @@ public class UserRegistrationInfo
 
     public string Phone { get; private set; }
 
-    public string Avatar { get; private set; }
+    public string? Avatar { get; private set; }
 
     public string Otp { get; private set; }
 
@@ -48,14 +46,13 @@ public class UserRegistrationInfo
         string email,
         string password,
         string phone,
-        string avatar,
         string otp)
     {
-        return new(fullname, email, password, phone, otp, avatar);
+        return new(fullname, email, password, phone, otp);
     }
 
     public User Register()
     {
-        return User.Register(Fullname, Email, Phone, Password, Avatar);
+        return User.Register(Fullname, Email, Phone, Password);
     }
 }
