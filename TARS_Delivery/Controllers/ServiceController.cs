@@ -123,14 +123,28 @@ namespace TARS_Delivery.Controllers
             try
             {
                 var result = await _iServiceRepository.ValidateWeight(serviceTypeId, weightFrom, weightTo, serviceId);
-                if (result)
+                if (result.Count==0)
                 {
-                    return Ok("Weight is valid");
+                    return Ok(result);
                 }
                 else
                 {
-                    return BadRequest("Weight is invalid");
+                    return BadRequest(result);
                 }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        //Allow Range
+        [HttpGet("/api/AllowRange/{serviceTypeId}")]
+        public async Task<IActionResult> AlowRange(int serviceTypeId)
+        {
+            try
+            {
+                var result = await _iServiceRepository.AlowRange(serviceTypeId);
+                return Ok(result);
             }
             catch (Exception ex)
             {

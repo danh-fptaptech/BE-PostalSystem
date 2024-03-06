@@ -1,4 +1,6 @@
-﻿using TARS_Delivery.Models.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using TARS_Delivery.Models.DTOs.req.Service;
+using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories
 {
@@ -11,6 +13,7 @@ namespace TARS_Delivery.Repositories
         Task DeleteService(int id);
         Task<Service> ChangeStatus(int id);
         Task<List<Service>> GetServicesByWeight(int weight);
-        Task<Boolean> ValidateWeight(int serviceTypeId,int weightFrom, int weightTo,int serviceId);
+        Task<List<Service>> ValidateWeight(int serviceTypeId,int weightFrom, int weightTo,int serviceId);
+        Task<List<RDTORange>> AlowRange(int serviceTypeId);
     }
 }
