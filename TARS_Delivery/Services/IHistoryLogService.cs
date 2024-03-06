@@ -5,9 +5,9 @@ namespace TARS_Delivery.Services
 {
     public interface IHistoryLogService
     {
-        Task<IEnumerable<ListHistoryLogDTO>> GetAllHistoryLogs();
+        Task<IEnumerable<HistoryLog>> GetAllHistoryLogs();
         Task<HistoryLog> GetHistoryLogById(int id);
-        Task<HistoryLog> AddHistoryLog(ListHistoryLogDTO historyLog);
+        Task<bool> AddHistoryLog(HistoryLog historyLog);
         Task<HistoryLog> UpdateHistoryLog(int id, ListHistoryLogDTO historyLog);
         void ChangeStatusHistoryLog(int id, int status);
     }

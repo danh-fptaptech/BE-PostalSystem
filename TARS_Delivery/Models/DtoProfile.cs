@@ -30,7 +30,6 @@ public class DtoProfile : Profile
         CreateMap<Package, SDTOPackage>().ReverseMap();
         
         CreateMap<Package, SDTOPackageList>()
-            .AfterMap((src, dest) => dest.CounterItem = src.Items.Count)
             .ReverseMap();
 
         #endregion

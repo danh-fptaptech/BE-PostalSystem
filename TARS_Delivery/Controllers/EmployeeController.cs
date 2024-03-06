@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security;
 using TARS_Delivery.Models.DTOs;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Services;
 using TARS_Delivery.Services.imp;
 
 namespace TARS_Delivery.Controllers
@@ -12,9 +12,9 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly EmployeeService service;
+        private readonly IEmployeeService service;
 
-        public EmployeeController(EmployeeService service, IMapper mapper)
+        public EmployeeController(IEmployeeService service, IMapper mapper)
         {
             this.service = service;
         }

@@ -84,13 +84,13 @@ public class DatabaseContext : DbContext
             .HasKey(rhp => new { rhp.RoleId, rhp.PermissionId });
         modelBuilder.Entity<RoleHasPermission>()
             .HasOne<Role>()
-            .WithMany(r=>r.RoleHasPermissions)
-            .HasForeignKey(rhp=>rhp.RoleId)
+            .WithMany(r => r.RoleHasPermissions)
+            .HasForeignKey(rhp => rhp.RoleId)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<RoleHasPermission>()
             .HasOne<Permission>(rhp => rhp.Permission)
             .WithMany()
-            .HasForeignKey(rhp=>rhp.PermissionId)
+            .HasForeignKey(rhp => rhp.PermissionId)
             .OnDelete(DeleteBehavior.Restrict);
 
         #endregion

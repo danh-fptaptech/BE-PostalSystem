@@ -19,9 +19,14 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // Add services to the container.
-
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("DBC")));
+
+// Auto Dependency Injection
+builder.Services.Scan(scan =>
+    scan.FromAssemblyOf<IBranchRepository>().AddClasses(action => action.NotInNamespaces("TARS_Delivery.Shared")).AsMatchingInterface().WithScopedLifetime());
+builder.Services.Scan(scan => 
+    scan.FromAssemblyOf<IBranchService>().AddClasses(action => action.NotInNamespaces("TARS_Delivery.Shared")).AsMatchingInterface().WithScopedLifetime());
 
 // JSON Serializer
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -29,15 +34,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.WriteIndented = true;
 });
-
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<EmployeeService>();
-
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<RoleService>();
-
-builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
-builder.Services.AddScoped<PermissionService>();
 
 // scurtor register all services
 builder.Services.Scan(selector =>
@@ -64,12 +60,6 @@ builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavi
 
 builder.Services.AddValidatorsFromAssembly(AssemblyReference.Assembly, includeInternalTypes: true);
 
-// JSON Serializer
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    options.JsonSerializerOptions.WriteIndented = true;
-});
 
 
 // Cors

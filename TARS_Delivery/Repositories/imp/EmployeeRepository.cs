@@ -23,6 +23,7 @@ namespace TARS_Delivery.Repositories.imp
         public async Task<IEnumerable<EmployeeDTO>> GetEmployees()
         {
             IEnumerable<Employee> employees = await databaseContext.Employees.ToListAsync();
+            // Không thể AutoMapper một list sang một list khác -> Cần fix lại
             var employeeDTO  = mapper.Map<EmployeeDTO>(employees);
             return (IEnumerable<EmployeeDTO>)employeeDTO;
         }    

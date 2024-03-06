@@ -13,12 +13,12 @@ namespace TARS_Delivery.Models.Entities
         [Required]
         public int PackageId { get; set; }
         [Required]
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
         [Required]
         public EPackageStatus Step { get; set; }
         public string? HistoryNote { get; set; }
         public string? Photos { get; set; }
-        public EStep ProcessStep { get; set; } = EStep.Processing;
+        public EStep ProcessStep { get; set; } = EStep.Hold;
         public int? EmployeeIdNextStep { get; set; }
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = DateTime.Now;
@@ -28,9 +28,9 @@ namespace TARS_Delivery.Models.Entities
         [ForeignKey("PackageId")]
         public virtual Package? Package { get; set; }
         [ForeignKey("EmployeeId")]
-        public virtual Employee Employee { get; set; }
+        public virtual Employee? Employee { get; set; }
         
         [ForeignKey("EmployeeIdNextStep")]
-        public virtual Employee EmployeeNextStep { get; set; }
+        public virtual Employee? EmployeeNextStep { get; set; }
     }
 }
