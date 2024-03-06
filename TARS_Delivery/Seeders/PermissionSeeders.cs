@@ -26,17 +26,12 @@ namespace TARS_Delivery.Seeders
                 new Permission
                 {
                     Id = 4,
-                    PermissionName = "Branch Manager",
+                    PermissionName = "app.view",
                 },
                 new Permission
                 {
                     Id = 5,
-                    PermissionName = "Warehouse",
-                },
-                new Permission
-                {
-                    Id = 6,
-                    PermissionName = "Delivery",
+                    PermissionName = "employees.view",
                 }
             );
         }

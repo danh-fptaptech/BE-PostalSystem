@@ -2,6 +2,7 @@
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Services.imp
@@ -29,6 +30,7 @@ namespace TARS_Delivery.Services.imp
             Role newRole = new()
             {
                 RoleName = role.Name,
+                Status = EStatusData.Active,
             };
             return await _repository.Create(newRole);
         }
