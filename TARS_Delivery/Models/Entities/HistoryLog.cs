@@ -22,7 +22,7 @@ namespace TARS_Delivery.Models.Entities
         public int? EmployeeIdNextStep { get; set; }
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = DateTime.Now;
-        public EStatusData Status { get; set; }
+        public EStatusData Status { get; set; } = EStatusData.Active;
 
         // Navigation properties
         [ForeignKey("PackageId")]

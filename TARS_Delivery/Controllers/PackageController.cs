@@ -3,11 +3,13 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TARS_Delivery.Models;
 using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.DTOs.res;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Services;
+using JsonException = Newtonsoft.Json.JsonException;
 
 namespace TARS_Delivery.Controllers;
 
@@ -18,13 +20,15 @@ public class PackageController : ControllerBase
     private readonly IPackageService _packageService;
     private readonly IItemService _itemService;
     private readonly IHistoryLogService _historyLogService;
+    private readonly DatabaseContext _db;
 
     public PackageController(IPackageService packageService, IItemService itemService,
-        IHistoryLogService historyLogService)
+        IHistoryLogService historyLogService, DatabaseContext db)
     {
         _packageService = packageService;
         _itemService = itemService;
         _historyLogService = historyLogService;
+        _db = db;
     }
 
     #region Get all packages
@@ -83,7 +87,8 @@ public class PackageController : ControllerBase
     [HttpPost]
     [Route("add")]
     public async Task<ActionResult> AddPackage()
-    {
+    {   
+        using var trans = await _db.Database.BeginTransactionAsync();
         try
         {
             using var reader = new StreamReader(Request.Body);
@@ -103,43 +108,51 @@ public class PackageController : ControllerBase
                                 data.receiver.district + " Province: " + data.receiver.province;
             package.PostalCodeTo = data.receiver.postalCode;
             //Info package
+            bool employCheck = !string.IsNullOrEmpty(data.submitBy.employeeCode.ToString());
+
             package.ServiceId = data.service.serviceId;
             package.PackageNote = data.packageNote;
-            package.PackageSize = data.packageSize ? data.packageSize.ToString() : null;
-            package.EmployeeCode = data.submitBy.employeeCode || null;
-            package.UserId = data.submitBy.employeeCode ? null : data.submitBy.userId;
-            package.EmployeeId = data.submitBy.employeeCode ? data.submitBy.employeeId : null;
-            package.TotalFee = decimal.Parse(data.fee);
-            package.COD = int.Parse(data.cod);
-            package.Step = data.submitBy.employeeCode ? EPackageStatus.Created : EPackageStatus.WaitingForPickup;
+            package.PackageSize = data.packageSize.ToString();
+            package.EmployeeCode = employCheck ? data.submitBy.employeeCode.ToString() : null;
+            package.UserId = employCheck ? null : int.Parse(data.submitBy.id.ToString());
+            package.EmployeeId = employCheck ? int.Parse(data.submitBy.id.ToString()) : null;
+            package.TotalFee = decimal.Parse(data.fee.ToString());
+            package.COD = int.Parse(data.cod.ToString());
+            package.Step = employCheck ? EPackageStatus.Created : EPackageStatus.WaitingForPickup;
             //Add package by service
             var newPackage = await _packageService.AddPackage(package);
             foreach (var item in data.items)
             {
                 Item newItem = new Item();
                 newItem.ItemName = item.itemName;
-                newItem.ItemQuantity = int.Parse(item.itemQuantity);
-                newItem.ItemWeight = int.Parse(item.itemWeight);
-                newItem.ItemValue = decimal.Parse(item.itemValue);
+                newItem.ItemQuantity = int.Parse(item.itemQuantity.ToString());
+                newItem.ItemWeight = int.Parse(item.itemWeight.ToString());
+                newItem.ItemValue = !string.IsNullOrEmpty(item.ItemValue) ? decimal.Parse(item.ItemValue) : 0;
                 newItem.PackageId = newPackage.Id;
                 newItem.ItemType = data.type == "document" ? EItemType.Document : EItemType.Pack;
-                var result = await _itemService.AddItem(newItem);
-                newPackage.Items.Add(result);
+                await _itemService.AddItem(newItem);
             }
 
             HistoryLog log = new HistoryLog();
             log.PackageId = newPackage.Id;
-            log.EmployeeId = data.submitBy.employeeCode ? data.submitBy.id : null;
-            log.Step = data.submitBy.employeeCode ? EPackageStatus.Created : EPackageStatus.WaitingForPickup;
-            log.HistoryNote = data.employeeProcess?.historyNote||null;
-            log.Photos = data.employeeProcess?.photo||null;
-            log.EmployeeNextStep = data.employeeProcess?.employeeNext ? int.Parse(data.employeeProcess?.employeeNext) : null;
-            var resulthl =  _historyLogService.AddHistoryLog(log);
+            log.EmployeeId = employCheck ? int.Parse(data.submitBy.id.ToString()) : null;
+            log.Step = data.submitBy.employeeCode != null ? EPackageStatus.Created : EPackageStatus.WaitingForPickup;
+            log.HistoryNote = data.employeeProcess?.historyNote??null;
+            log.Photos = data.employeeProcess?.photo??null;
+            log.EmployeeIdNextStep = data.employeeProcess?.employeeNext != null ? int.Parse(data.employeeProcess.employeeNext.ToString()) : (int?)null;
+            await _historyLogService.AddHistoryLog(log);
+            await trans.CommitAsync();
             return Ok(newPackage);
+        }
+        catch (JsonException je)
+        {
+            trans.Rollback();
+            return BadRequest("Invalid JSON format: " + je.Message);
         }
         catch (Exception e)
         {
-            return BadRequest(e.Message);
+            trans.Rollback();
+            return BadRequest("An error occurred: " + e.Message);
         }
     }
 

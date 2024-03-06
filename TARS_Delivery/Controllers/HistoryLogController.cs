@@ -36,20 +36,6 @@ namespace TARS_Delivery.Controllers
             return Ok(historyLog);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<HistoryLog>> AddHistoryLog(ListHistoryLogDTO historyLog)
-        {
-            try
-            {
-                var newHistoryLog = await _historyLogService.AddHistoryLog(historyLog);
-                return CreatedAtAction("GetHistoryLogById", new { id = newHistoryLog.Id }, newHistoryLog);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateHistoryLog(int id, ListHistoryLogDTO historyLog)
         {

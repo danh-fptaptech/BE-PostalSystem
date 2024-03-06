@@ -66,7 +66,7 @@ public class PackageRepository : IPackageRepository
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var random = new Random().Next(1000, 9999);
             code =  $"CT{id}-{timestamp}{random}";
-        } while (!IsTrackingNumberUnique(code));
+        } while (IsTrackingNumberUnique(code));
         return code;
     }
 
