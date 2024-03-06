@@ -152,6 +152,26 @@ public class DatabaseContext : DbContext
 
         #endregion
 
+        #region ModelBuilder for Blog
+        modelBuilder.Entity<Blog>()
+            .HasOne<Employee>(b => b.Employee)
+            .WithMany(e=>e.Blogs)
+            .HasForeignKey(b=>b.EmployeeId)
+            .OnDelete(DeleteBehavior.Restrict);
+        #endregion
+
+        #region ModelBuilder for SupportTicket
+        modelBuilder.Entity<SupportTicket>()
+            .HasOne<Employee>(st => st.Employee)
+            .WithMany(e=>e.SupportTickets)
+            .HasForeignKey(st=>st.EmployeeId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<SupportTicket>()
+            .HasOne<User>(st => st.User)
+            .WithMany(u=>u.SupportTickets)
+            .HasForeignKey(st=>st.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        #endregion
     }
 
     #region DbSet
@@ -171,9 +191,9 @@ public class DatabaseContext : DbContext
     public DbSet<Package> Packages { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Customer> Customers { get; set; }
-
     public DbSet<UserRegistrationInfo> UserRegistrations { get; set; }
-
+    public DbSet<Blog> Blogs { get; set; }
+    public DbSet<SupportTicket> SupportTickets { get; set; }
     #endregion
 
 

@@ -19,6 +19,7 @@ public class ApplicationSeeders
         new PermissionSeeders(modelBuilder);
         new RoleSeeders(modelBuilder);
         new ServiceSeeders(modelBuilder);
+        new BlogSeeders(modelBuilder);
         new ServiceTypeSeeders(modelBuilder);
     }
 }
