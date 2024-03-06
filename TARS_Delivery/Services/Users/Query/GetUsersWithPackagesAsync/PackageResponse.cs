@@ -11,7 +11,7 @@ internal record PackageResponse(
     string NameTo, 
     string AddressTo, 
     string PostalCodeTo, 
-    int? PackageSize, 
+    string? PackageSize, 
     string? PackageNote, 
     decimal TotalFee, 
     int ServiceId,

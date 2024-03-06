@@ -10,6 +10,8 @@ using TARS_Delivery.BackgroundJobs;
 using TARS_Delivery.Behaviors;
 using TARS_Delivery.Extensions;
 using TARS_Delivery.Models;
+using TARS_Delivery.Repositories;
+using TARS_Delivery.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
