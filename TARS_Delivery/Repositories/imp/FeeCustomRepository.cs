@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
+using TARS_Delivery.Models.DTOs.req.FeeCustom;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Models.Enums;
 
@@ -40,18 +41,28 @@ namespace TARS_Delivery.Repositories.imp
             var feeCustoms = await _context.FeeCustoms
             .Include(fee => fee.LocationFrom)
             .Include(fee => fee.LocationTo)
+            .Include(fee => fee.Service)
             .Select(fee => new
             {
                 fee.Id,
                 fee.ServiceId,
                 fee.LocationIdFrom,
                 fee.LocationIdTo,
-                fee.Distance,
+                fee.OverWeightCharge,
                 fee.FeeCharge,
                 fee.TimeProcess,
                 fee.CreatedAt,
                 fee.UpdatedAt,
                 fee.Status,
+                Service = new
+                {
+                    fee.Service.Id,
+                    fee.Service.WeighFrom,
+                    fee.Service.WeighTo,
+                    fee.Service.CreatedAt,
+                    fee.Service.UpdatedAt,
+                    fee.Service.Status
+                },
                 LocationFrom = new
                 {
                     fee.LocationFrom.Id,
@@ -84,12 +95,21 @@ namespace TARS_Delivery.Repositories.imp
                     ServiceId = fee.ServiceId,
                     LocationIdFrom = fee.LocationIdFrom,
                     LocationIdTo = fee.LocationIdTo,
-                    Distance = fee.Distance,
+                    OverWeightCharge = fee.OverWeightCharge,
                     FeeCharge = fee.FeeCharge,
                     TimeProcess = fee.TimeProcess,
                     CreatedAt = fee.CreatedAt,
                     UpdatedAt = fee.UpdatedAt,
                     Status = fee.Status,
+                    Service = new Service
+                    {
+                        Id = fee.Service.Id,
+                        WeighFrom = fee.Service.WeighFrom,
+                        WeighTo = fee.Service.WeighTo,
+                        CreatedAt = fee.Service.CreatedAt,
+                        UpdatedAt = fee.Service.UpdatedAt,
+                        Status = fee.Service.Status
+                    },
                     LocationFrom = new Location
                     {
                         Id = fee.LocationFrom.Id,
@@ -128,7 +148,7 @@ namespace TARS_Delivery.Repositories.imp
                     ServiceId = feeCustom.ServiceId,
                     LocationIdFrom = feeCustom.LocationIdFrom,
                     LocationIdTo = feeCustom.LocationIdTo,
-                    Distance = feeCustom.Distance,
+                    OverWeightCharge = feeCustom.OverWeightCharge,
                     FeeCharge = feeCustom.FeeCharge,
                     TimeProcess = feeCustom.TimeProcess,
                     CreatedAt = feeCustom.CreatedAt,
@@ -189,27 +209,63 @@ namespace TARS_Delivery.Repositories.imp
             }
             return null;
         }
-       
-        public async Task<List<FeeCustom>> GetFeeByPostalCodeWeight(string postalCodeFrom, string postalCodeTo, int weight)
+        public async Task<List<RDTOFeecustom>> GetFeeByPostalCodeWeight(string postalCodeFrom, string postalCodeTo, int weight)
         {
-            var postalCodeFromItem = await _context.Locations
-                .FirstOrDefaultAsync(l => l.PostalCode.Equals(postalCodeFrom));
-            var postalCodeToItem = await _context.Locations
-                .FirstOrDefaultAsync(l => l.PostalCode.Equals(postalCodeTo));
+            var postalCodeFromItem = await _context.Locations.FirstOrDefaultAsync(l => l.PostalCode.Equals(postalCodeFrom));
+            var postalCodeToItem = await _context.Locations.FirstOrDefaultAsync(l => l.PostalCode.Equals(postalCodeTo));
 
-            if (postalCodeFromItem != null && postalCodeToItem != null)
+            if (postalCodeFromItem == null || postalCodeToItem == null)
             {
-                var feeCustom = await _context.FeeCustoms
-                    .Where(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdTo == postalCodeToItem.Id)
-                    .Include(s => s.Service)
-                    .Where(s=> s.Service.WeighFrom <= weight && s.Service.WeighTo >= weight)
-                    .ToListAsync();
-                if (feeCustom != null)
-                {
-                   return feeCustom;
-                }
+                return new List<RDTOFeecustom>(); 
             }
-            return null;
+
+            var feeCustom = await _context.FeeCustoms
+                .Where(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdTo == postalCodeToItem.Id)
+                .Where(s => s.Service.WeighFrom <= weight && s.Service.WeighTo >= weight)
+                .Include(s => s.Service)
+                .ThenInclude(st => st.ServiceType)
+                .ToListAsync();
+
+            var mappedFeeCustoms = feeCustom.Select(fee => new RDTOFeecustom
+            {
+                Status = fee.Status,
+                ServiceId = fee.ServiceId,
+                ServiceName = fee.Service?.ServiceType?.ServiceName ?? "Unknown",
+                ServiceDescription = fee.Service?.ServiceType?.ServiceDescription ?? "Description not available",
+                WeighFrom = fee.Service?.WeighFrom ?? 0,
+                WeighTo = fee.Service?.WeighTo ?? 0,
+                OverWeightCharge = fee.OverWeightCharge,
+                FeeCharge = fee.FeeCharge,
+                TimeProcess = fee.TimeProcess
+            }).ToList();
+
+            return mappedFeeCustoms; 
+        }
+        public async Task<ICollection<RDTOFeecustomGetAll>> GetAllFeesCustom()
+        {
+            var feeCustoms = await _context.FeeCustoms
+                .Include(fee => fee.LocationFrom)
+                .Include(fee => fee.LocationTo)
+                .Include(fee => fee.Service)
+                .ThenInclude(st => st.ServiceType)
+                .ToListAsync();
+            //mapping to RDTOFeecustomGetAll
+            var mappedFeeCustoms = feeCustoms.Select(fee => new RDTOFeecustomGetAll
+            {
+                Id = fee.Id,
+                ServiceId = fee.ServiceId,
+                LocationFromName = fee.LocationFrom?.LocationName ?? "Unknown",
+                LocationToName = fee.LocationTo?.LocationName ?? "Unknown",
+                ServiceName = fee.Service?.ServiceType?.ServiceName ?? "Unknown",
+                ServiceDescription = fee.Service?.ServiceType?.ServiceDescription ?? "Description not available",
+                WeighFrom = fee.Service?.WeighFrom ?? 0,
+                WeighTo = fee.Service?.WeighTo ?? 0,
+                OverWeightCharge = fee.OverWeightCharge,
+                FeeCharge = fee.FeeCharge,
+                TimeProcess = fee.TimeProcess,
+                Status = fee.Status,
+            }).ToList();
+            return mappedFeeCustoms;
         }
     }
 }

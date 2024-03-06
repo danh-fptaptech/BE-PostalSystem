@@ -136,6 +136,16 @@ public class DatabaseContext : DbContext
 
         #endregion
 
+        #region ModelBuilder Service
+        modelBuilder.Entity<Service>(entity =>
+        {
+            entity.HasOne(d => d.ServiceType) 
+                .WithMany(p => p.Services) 
+                .HasForeignKey(d => d.ServiceTypeId) 
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        #endregion
+
         #region modelBuilder for Seeders
 
         new ApplicationSeeders().OnModelSeeders(modelBuilder);
@@ -155,6 +165,7 @@ public class DatabaseContext : DbContext
     public DbSet<Role> Roles { get; set; }
     public DbSet<RoleHasPermission> RoleHasPermissions { get; set; }
     public DbSet<Service> Services { get; set; }
+    public DbSet<ServiceType> ServiceTypes { get; set; }
     public DbSet<HistoryLog> HistoryLogs { get; set; }
     public DbSet<Item> Items { get; set; }
     public DbSet<Package> Packages { get; set; }

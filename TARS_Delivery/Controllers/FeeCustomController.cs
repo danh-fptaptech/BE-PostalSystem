@@ -81,7 +81,7 @@ namespace TARS_Delivery.Controllers
             return BadRequest("Invalid model");
         }
         //Change Status
-        [HttpPut("ChangeStatus/{id}")]
+        [HttpGet("ChangeStatus/{id}")]
         public async Task<IActionResult> ChangeStatus(int id)
         {
             try
@@ -141,7 +141,7 @@ namespace TARS_Delivery.Controllers
                 ServiceId = fee.ServiceId,
                 LocationIdFrom = fee.LocationIdFrom,
                 LocationIdTo = fee.LocationIdTo,
-                Distance = fee.Distance,
+                OverWeightCharge = fee.OverWeightCharge,
                 FeeCharge = fee.FeeCharge,
                 TimeProcess = fee.TimeProcess,
                 Status = EStatusData.Active
@@ -154,7 +154,7 @@ namespace TARS_Delivery.Controllers
                 {
                     if (item.ServiceId == fee.ServiceId)
                     {
-                        item.FeeCharge = fee.FeeCharge;
+                        item.OverWeightCharge = fee.OverWeightCharge;
                         item.TimeProcess = fee.TimeProcess;
                         await _feeCustomRepository.UpdateFee(item.Id, item);
                         return Ok("Fee updated successfully");
@@ -168,6 +168,20 @@ namespace TARS_Delivery.Controllers
             {
                 await _feeCustomRepository.CreateFee(newItem);
                 return Ok("Fee added successfully");
+            }
+        }
+        //Get all Fees Custom
+        [HttpGet("GetAllFeesCustom")]
+        public async Task<IActionResult> GetAllFeesCustom()
+        {
+            try
+            {
+                var fees = await _feeCustomRepository.GetAllFeesCustom();
+                return Ok(fees);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

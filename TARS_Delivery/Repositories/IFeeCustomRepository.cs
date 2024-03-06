@@ -1,4 +1,5 @@
-﻿using TARS_Delivery.Models.Entities;
+﻿using TARS_Delivery.Models.DTOs.req.FeeCustom;
+using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Models.Enums;
 
 namespace TARS_Delivery.Repositories
@@ -11,7 +12,7 @@ namespace TARS_Delivery.Repositories
         Task<FeeCustom> UpdateFee(int id, FeeCustom fee);
         Task ChangeStatus(int id);
         Task<List<FeeCustom>> GetFeeByPostalCode(string postalCodeFrom, string postalCodeTo);
-/*        Task<FeeCustom> CreateUpdateFee(string postalCodeFrom, string postalCodeTo,FeeCustom fee);*/
-        Task<List<FeeCustom>> GetFeeByPostalCodeWeight(string postalCodeFrom, string postalCodeTo,int weight);
+        Task<List<RDTOFeecustom>> GetFeeByPostalCodeWeight(string postalCodeFrom, string postalCodeTo,int weight);
+        Task<ICollection<RDTOFeecustomGetAll>> GetAllFeesCustom();
     }
 }

@@ -85,7 +85,7 @@ namespace TARS_Delivery.Controllers
             }
         }
         //change status
-        [HttpPut("/ChangeStatus/{id}")]
+        [HttpGet("/api/ChangeStatusService/{id}")]
         public async Task<IActionResult> ChangeStatus(int id)
         {
             try
@@ -110,6 +110,41 @@ namespace TARS_Delivery.Controllers
                     return NotFound("No services found");
                 }
                 return Ok(services);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        //Validate Weight
+        [HttpGet("/api/ValidateServiceWeight/{serviceTypeId}/{weightFrom}/{weightTo}/{serviceId}")]
+        public async Task<IActionResult> ValidateWeight(int serviceTypeId,int weightFrom, int weightTo,int serviceId)
+        {
+            try
+            {
+                var result = await _iServiceRepository.ValidateWeight(serviceTypeId, weightFrom, weightTo, serviceId);
+                if (result.Count==0)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+        //Allow Range
+        [HttpGet("/api/AllowRange/{serviceTypeId}")]
+        public async Task<IActionResult> AlowRange(int serviceTypeId)
+        {
+            try
+            {
+                var result = await _iServiceRepository.AlowRange(serviceTypeId);
+                return Ok(result);
             }
             catch (Exception ex)
             {

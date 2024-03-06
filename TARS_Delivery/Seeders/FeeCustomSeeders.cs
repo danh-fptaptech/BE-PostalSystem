@@ -15,7 +15,7 @@ namespace TARS_Delivery.Seeders
                     ServiceId = 1, // EMS Delivery Service
                     LocationIdFrom = 2, // Quận 1
                     LocationIdTo = 3, // Quận 2
-                    Distance = 15.5m,
+                    OverWeightCharge = 2,
                     FeeCharge = 35000.00m,
                     TimeProcess = 2,
                     CreatedAt = DateTime.Now,
@@ -28,7 +28,7 @@ namespace TARS_Delivery.Seeders
                     ServiceId = 2, // Freight Delivery Services
                     LocationIdFrom = 2, // Quận 1
                     LocationIdTo = 3, // Quận 7
-                    Distance = 25.0m,
+                    OverWeightCharge =3,
                     FeeCharge = 45000.00m,
                     TimeProcess = 4,
                     CreatedAt = DateTime.Now,
@@ -41,7 +41,7 @@ namespace TARS_Delivery.Seeders
                     ServiceId = 3, // Express Delivery
                     LocationIdFrom = 2, // Quận 1
                     LocationIdTo = 3, // Quận 2
-                    Distance = 30.0m,
+                    OverWeightCharge = 4,
                     FeeCharge = 50000.00m,
                     TimeProcess = 5,
                     CreatedAt = DateTime.Now,
@@ -54,7 +54,7 @@ namespace TARS_Delivery.Seeders
                     ServiceId = 1, // EMS Delivery Service
                     LocationIdFrom = 2, // TP HCM
                     LocationIdTo = 3, // TP HCM (nội thành)
-                    Distance = 15.0m, // Giá trị ước tính cho cự ly nội thành
+                    OverWeightCharge = 5, // Giá trị ước tính cho cự ly nội thành
                     FeeCharge = 60000.00m,
                     TimeProcess = 24,
                     CreatedAt = DateTime.Now,
