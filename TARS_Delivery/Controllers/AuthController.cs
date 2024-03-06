@@ -105,6 +105,7 @@ public class AuthController(
 
             if (employee != null)
             {
+                //string a = _hashProvider.Hash(request.Password);
                 bool verify = _hashProvider.Verify(request.Password, employee.Password);
 
                 if (verify)
