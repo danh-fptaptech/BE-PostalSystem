@@ -1,7 +1,8 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
+using TARS_Delivery.Models.DTOs.req;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Services;
 using TARS_Delivery.Services.imp;
 
 namespace TARS_Delivery.Controllers
@@ -10,58 +11,55 @@ namespace TARS_Delivery.Controllers
     [ApiController]
     public class PermissionController : ControllerBase
     {
-        private readonly PermissionService service;
-        private readonly IMapper mapper;
-
-        public PermissionController(PermissionService service, IMapper mapper)
+        private readonly IPermissionService _service;
+        public PermissionController(IPermissionService service)
         {
-            this.service = service;
-            this.mapper = mapper;
+            _service = service;
         }
 
-
+        // GET: api/Permissions => done
         [HttpGet]
         public async Task<ActionResult> GetPermissions()
         {
             try
             {
-                var permissions = await service.GetPermissions();
+                var permissions = await _service.GetPermissions();
                 return Ok(permissions);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return Problem(ex.Message);
             }
         }
 
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetPermission(int id)
+        // GET: api/Permissions/{permissionId} => done
+        [HttpGet("{permissionName}")]
+        public async Task<ActionResult> GetPermission(string permissionName)
         {
             try
             {
-                Permission permission = await service.GetPermission(id);
+                Permission permission = await _service.GetPermission(permissionName);
                 if (permission != null)
                 {
                     return Ok(permission);
                 }
                 return NotFound("This permissions does not exist !");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return Problem(ex.Message);
             }
         }
 
-
+        // POST: api/Permissions/permission => done
         [HttpPost]
-        public async Task<ActionResult> CreatePermission(Permission permission)
+        public async Task<ActionResult> CreatePermission([FromBody] RDTOPermission permission)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await service.Create(permission);
+                    await _service.Create(permission);
                     return Ok(permission);
                 }
                 return BadRequest();
@@ -73,23 +71,27 @@ namespace TARS_Delivery.Controllers
             }
         }
 
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> RemovePermission(int id)
+        // PUT: api/Permissions/{permissionId} => done
+        [HttpPut("{permissionName}")]
+        public async Task<ActionResult> UpdatePermission(string permissionName, [FromBody] RDTOPermission permission)
         {
             try
             {
-                Permission permission = await service.GetPermission(id);
-                if (permission != null)
+                if (ModelState.IsValid)
                 {
-                    await service.Remove(id);
-                    return Ok("Delete Successfully.");
+                    Permission updatedPermission = await _service.GetPermission(permissionName);
+                    if(updatedPermission != null)
+                    {
+                        await _service.Update(permissionName, permission);
+                        return Ok(permission);
+                    }
+                    return NotFound("This permission does not exist !");
                 }
-                return NotFound("This permission does not exist !");
+                return BadRequest();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return Problem(ex.Message);
             }
         }
     }

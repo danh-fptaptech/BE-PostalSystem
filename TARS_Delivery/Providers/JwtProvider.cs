@@ -30,6 +30,42 @@ internal class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             _options.Audience,
             claims,
             null,
+            DateTime.Now.AddMinutes(5),
+            signingCredentials);
+
+        string tokenValue = new JwtSecurityTokenHandler()
+            .WriteToken(token);
+
+        return tokenValue;
+    }
+
+    public string Generate(Employee employee)
+    {
+        List<Claim> claims =
+        [
+            new(JwtRegisteredClaimNames.Sub, employee.Id.ToString()),
+            new(JwtRegisteredClaimNames.Email, employee.Email),
+        ];
+
+        claims.Add(new("role", employee.Role.RoleName));
+
+        foreach (var rhp in employee.Role.RoleHasPermissions)
+        {
+            var permission = rhp.Permission.PermissionName;
+
+            claims.Add(new("permission", permission));
+        }
+
+        SigningCredentials signingCredentials = new(
+            new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_options.SecretKey)),
+            SecurityAlgorithms.HmacSha256);
+
+        JwtSecurityToken token = new(
+            _options.Issuer,
+            _options.Audience,
+            claims,
+            null,
             DateTime.Now.AddHours(1),
             signingCredentials);
 

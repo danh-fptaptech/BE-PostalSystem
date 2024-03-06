@@ -14,14 +14,12 @@ public class User
         string fullname, 
         string email, 
         string phone,
-        string password,
-        string avatar) 
+        string password) 
         {
             Fullname = fullname;
             Email = email;
             Phone = phone;
             Password = password;
-            Avatar = avatar;
             CreatedAt = DateTime.Now;
             Status = EStatusData.Active;
         }
@@ -41,7 +39,7 @@ public class User
 
     public string Phone { get; private set; }
 
-    public string Avatar { get; private set; } = string.Empty;
+    public string? Avatar { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
 
@@ -53,6 +51,10 @@ public class User
 
     public DateTime? RefreshTokenExpires { get; private set; }
 
+    public string? PasswordResetToken { get; private set; }
+
+    public DateTime? ResetTokenExpires {  get; private set; }
+
     // Relation with Customer
     public IReadOnlyCollection<Customer> Customers => _customers;
 
@@ -63,19 +65,24 @@ public class User
         string fullname,
         string email,
         string phone,
-        string password,
-        string avatar) => 
+        string password) => 
             new(
                 fullname,
                 email,
                 phone,
-                password,
-                avatar);
+                password);
 
     public void ChangePassword(string password)
     {
         Password = password;
         UpdatedAt = DateTime.Now;
+    }
+
+    public void ResetPassword(string password)
+    {
+        ChangePassword(password);
+        ResetTokenExpires = null;
+        PasswordResetToken = null;
     }
 
     public void AddCustomer(
@@ -85,7 +92,7 @@ public class User
             string city,
             string district,
             string ward,
-            int postalCode,
+            string postalCode,
             ETypeInfo typeInfo)
     {
         Customer customer = Customer.CreateCustomer(
@@ -114,7 +121,7 @@ public class User
         CookieOptions options = new()
         {
             HttpOnly = true,
-            Expires = RefreshTokenExpires
+            Expires = RefreshTokenExpires,
         };
 
         httpContext
@@ -127,6 +134,7 @@ public class User
     {
         RefreshToken = null;
         RefreshTokenExpires = null;
+        UpdatedAt = DateTime.Now;
     }
 
     internal static User Seed(
@@ -134,12 +142,46 @@ public class User
         string fullname,
         string email,
         string phone,
-        string password,
-        string avatar)
+        string password)
     {
-        User user = Register(fullname, email, phone, password, avatar);
+        User user = Register(fullname, email, phone, password);
         user.Id = id;
 
         return user;
+    }
+
+    public string GeneratePasswordResetToken()
+    {
+        PasswordResetToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+        ResetTokenExpires = DateTime.Now.AddDays(1);
+        UpdatedAt = DateTime.Now;
+
+        return PasswordResetToken;
+    }
+
+    public void UpdateProfile(string fullname, string phone)
+    {
+        Fullname = fullname;
+        Phone = phone;
+        UpdatedAt = DateTime.Now;
+    }
+
+    public void UpdateAvatar(string avatar)
+    {
+        Avatar = avatar;
+        UpdatedAt = DateTime.Now;
+    }
+
+    public void ChangeStatus()
+    {
+        if (Status == EStatusData.Active)
+        {
+            Status = EStatusData.Inactive;
+        }
+        else
+        {
+            Status = EStatusData.Active;
+        }
+        UpdatedAt = DateTime.Now;
     }
 }

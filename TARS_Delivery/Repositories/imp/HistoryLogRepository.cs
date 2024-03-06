@@ -101,5 +101,25 @@ namespace TARS_Delivery.Repositories.imp
                 throw new Exception(e.Message);
             }
         }
+
+        /*public async Task UpdateStep(int id, EPackageStatus newStep)
+        {
+            var historyLog = await GetHistoryLogById(id);
+            if (historyLog != null)
+            {
+                historyLog.Step = newStep;
+                await _context.SaveChangesAsync();
+            }
+        }*/
+
+        /*public async Task UpdateProcessStep(int id, EStep newProcessStep)
+        {
+            var historyLog = await GetHistoryLogById(id);
+            if (historyLog != null)
+            {
+                historyLog.ProcessStep = newProcessStep;
+                await _context.SaveChangesAsync();
+            }
+        }*/
     }
 }

@@ -15,13 +15,22 @@ public class DtoProfile : Profile
         
         
         CreateMap<Branch, RDTOBranch>().ReverseMap();
-        
+
+        //Employee
+        CreateMap<Employee, EmployeeCredentials>().ReverseMap();
+        CreateMap<Employee, RDTOEmployee>().ReverseMap();
+        CreateMap<Employee, RDTOChangePassword>().ReverseMap();
+        CreateMap<Employee, UpdateInfoAsync>().ReverseMap();
+
+        CreateMap<Role, RDTORole>().ReverseMap();
+        CreateMap<Permission, RDTOPermission>().ReverseMap();
+
 
         #endregion
 
         #region Response DTOs
 
-        
+
         CreateMap<Branch, SDTOBranch>().ReverseMap();
         CreateMap<Employee, EmployeeDTO>().ReverseMap();
 
@@ -32,7 +41,10 @@ public class DtoProfile : Profile
         CreateMap<Package, SDTOPackageList>()
             .ReverseMap();
 
+        CreateMap<Employee, SDTOEmployee>().ReverseMap();
+        CreateMap<Role, SDTORole>().ReverseMap();
+
         #endregion
-        
+
     }
 }

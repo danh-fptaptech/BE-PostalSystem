@@ -10,10 +10,6 @@ using TARS_Delivery.BackgroundJobs;
 using TARS_Delivery.Behaviors;
 using TARS_Delivery.Extensions;
 using TARS_Delivery.Models;
-using TARS_Delivery.Repositories;
-using TARS_Delivery.Repositories.imp;
-using TARS_Delivery.Services;
-using TARS_Delivery.Services.imp;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -77,7 +73,10 @@ builder.Services.AddAutoMapper(typeof(DtoProfile));
 //authentication and authorization
 builder.Services.ConfigureJwtSetup(configuration);
 builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer();
 
 builder.Services.AddHttpContextAccessor();
