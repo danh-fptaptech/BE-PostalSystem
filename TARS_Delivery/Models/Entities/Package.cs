@@ -18,7 +18,10 @@ namespace TARS_Delivery.Models.Entities
         public string AddressTo { get; set; }
         public string PostalCodeTo { get; set; }
         public string PhoneTo { get; set; }
-       
+        
+        public int TimeProcess { get; set; }
+        
+        public EItemType PackageType { get; set; }
         public string? PackageSize { get; set; }
         public string? PackageNote { get; set; }
         public decimal TotalFee { get; set; }

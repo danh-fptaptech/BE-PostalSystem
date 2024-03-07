@@ -83,7 +83,7 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<RoleHasPermission>()
             .HasKey(rhp => new { rhp.RoleId, rhp.PermissionId });
         modelBuilder.Entity<RoleHasPermission>()
-            .HasOne<Role>()
+            .HasOne<Role>(rhp=>rhp.Role)
             .WithMany(r => r.RoleHasPermissions)
             .HasForeignKey(rhp => rhp.RoleId)
             .OnDelete(DeleteBehavior.Restrict);

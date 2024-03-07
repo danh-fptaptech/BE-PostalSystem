@@ -15,7 +15,6 @@ namespace TARS_Delivery.Models.Entities
         public int ItemWeight { get; set; }
         public int ItemQuantity { get; set; }
         public decimal ItemValue { get; set; }
-        public EItemType ItemType { get; set; }
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = DateTime.Now;
         public EStatusData Status { get; set; }

@@ -30,6 +30,8 @@ public class RDTOPackage
     [Required(ErrorMessage = "Total Fee is required")]
     public decimal TotalFee { get; set; }
     public int COD { get; set; }
+    public EItemType PackageType { get; set; }
+    public int TimeProcess { get; set; }
     public EPackageStatus Step { get; set; }
     public ICollection<Entities.Item> Items { get; set; }
 }

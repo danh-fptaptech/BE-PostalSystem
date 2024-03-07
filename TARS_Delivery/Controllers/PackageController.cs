@@ -94,25 +94,28 @@ public class PackageController : ControllerBase
             using var reader = new StreamReader(Request.Body);
             string jsonBody = await reader.ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(jsonBody);
+            Console.WriteLine(data);
             RDTOPackage package = new RDTOPackage();
             //Info sender
             package.NameFrom = data.sender.fullName;
             package.PhoneFrom = data.sender.phoneNumber;
-            package.AddressFrom = data.sender.address + " Ward: " + data.sender.ward + " District: " +
-                                  data.sender.district + " Province: " + data.sender.province;
+            package.AddressFrom = data.sender.address + ", Ward: " + data.sender.ward + ", District: " +
+                                  data.sender.district + ", Province: " + data.sender.province;
             package.PostalCodeFrom = data.sender.postalCode;
             //Info receiver
             package.NameTo = data.receiver.fullName;
             package.PhoneTo = data.receiver.phoneNumber;
-            package.AddressTo = data.receiver.address + " Ward: " + data.receiver.ward + " District: " +
-                                data.receiver.district + " Province: " + data.receiver.province;
+            package.AddressTo = data.receiver.address + ", Ward: " + data.receiver.ward + ", District: " +
+                                data.receiver.district + ", Province: " + data.receiver.province;
             package.PostalCodeTo = data.receiver.postalCode;
             //Info package
-            bool employCheck = !string.IsNullOrEmpty(data.submitBy.employeeCode.ToString());
+            bool employCheck = !string.IsNullOrEmpty(data.submitBy.employeeCode?.ToString());
 
             package.ServiceId = data.service.serviceId;
             package.PackageNote = data.packageNote;
             package.PackageSize = data.packageSize.ToString();
+            package.PackageType = data.type == "document" ? EItemType.Document : EItemType.Pack;
+            package.TimeProcess = int.Parse(data.timeProcess.ToString());
             package.EmployeeCode = employCheck ? data.submitBy.employeeCode.ToString() : null;
             package.UserId = employCheck ? null : int.Parse(data.submitBy.id.ToString());
             package.EmployeeId = employCheck ? int.Parse(data.submitBy.id.ToString()) : null;
@@ -129,7 +132,6 @@ public class PackageController : ControllerBase
                 newItem.ItemWeight = int.Parse(item.itemWeight.ToString());
                 newItem.ItemValue = !string.IsNullOrEmpty(item.ItemValue) ? decimal.Parse(item.ItemValue) : 0;
                 newItem.PackageId = newPackage.Id;
-                newItem.ItemType = data.type == "document" ? EItemType.Document : EItemType.Pack;
                 await _itemService.AddItem(newItem);
             }
 
