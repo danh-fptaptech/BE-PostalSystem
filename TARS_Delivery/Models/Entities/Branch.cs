@@ -17,7 +17,7 @@ namespace TARS_Delivery.Models.Entities
         public string PostalCode { get; set; }
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; } = DateTime.Now;
-        public EStatusData Status { get; set; }
+        public EStatusData Status { get; set; } = EStatusData.Active;
         public virtual ICollection<Employee>? Employees { get; set; }
         
     }

@@ -16,22 +16,9 @@ namespace TARS_Delivery.Repositories.imp
             _context = context;
         }
 
-        public async Task<IEnumerable<ListHistoryLogDTO>> GetAllHistoryLogs()
+        public async Task<IEnumerable<HistoryLog>> GetAllHistoryLogs()
         {
-            return await _context.HistoryLogs
-                .Select(hl => new ListHistoryLogDTO
-                {
-                    Id = hl.Id,
-                    PackageId = hl.PackageId,
-                    EmployeeId = hl.EmployeeId,
-                    Step = hl.Step,
-                    HistoryNote = hl.HistoryNote,
-                    Photos = hl.Photos,
-                    CreatedAt = (DateTime)hl.CreatedAt,
-                    UpdatedAt = (DateTime)hl.UpdatedAt,
-                    Status = hl.Status
-                })
-                .ToListAsync();
+            return await _context.HistoryLogs.ToListAsync();
         }
 
         public async Task<HistoryLog> GetHistoryLogById(int id)
@@ -47,30 +34,17 @@ namespace TARS_Delivery.Repositories.imp
             }
         }
 
-        public async Task<HistoryLog> AddHistoryLog(ListHistoryLogDTO historyLog)
+        public async Task<bool> AddHistoryLog(HistoryLog historyLog)
         {
             try
             {
-                var newHistoryLog = new HistoryLog
-                {
-                    PackageId = historyLog.PackageId,
-                    EmployeeId = historyLog.EmployeeId,
-                    Step = historyLog.Step,
-                    HistoryNote = historyLog.HistoryNote,
-                    Photos = historyLog.Photos,
-                    CreatedAt = historyLog.CreatedAt,
-                    UpdatedAt = historyLog.UpdatedAt,
-                    Status = historyLog.Status
-                };
-
-                _context.HistoryLogs.Add(newHistoryLog);
+                _context.HistoryLogs.Add(historyLog);
                 await _context.SaveChangesAsync();
-
-                return newHistoryLog;
+                return true;
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                return false;
             }
         }
 

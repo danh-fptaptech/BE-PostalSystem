@@ -6,9 +6,9 @@ namespace TARS_Delivery.Services;
 
 public interface IPackageService
 {
-    Task<ICollection<SDTOPackageList>> GetAllPackages();
+    Task<ICollection<Package>> GetAllPackages();
     Task<Package> GetPackageById(int id);
-    Task<Package> UserAddPackage(RDTOPackage package);
+    Task<Package> AddPackage(RDTOPackage package);
     Task<Package> EmpAddPackage(RDTOEmpPackage package);
     Task<bool> CancelPackage(int id);
     Task<Package> UpdatePackage(int id, Object package);

@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TARS_Delivery.Models;
+using TARS_Delivery.Models.DTOs.req.Service;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Models.Enums;
 
@@ -42,13 +44,34 @@ namespace TARS_Delivery.Repositories
 
         public async Task<ICollection<Service>> GetAllServices()
         {
-            var services = await _context.Services.ToListAsync();
+            var services = await _context.Services.Select(s=> new Service
+            {
+                Id = s.Id,
+                ServiceTypeId = s.ServiceTypeId,
+                WeighFrom = s.WeighFrom,
+                WeighTo = s.WeighTo,
+                CreatedAt = s.CreatedAt,
+                UpdatedAt = s.UpdatedAt,
+                Status = s.Status,
+                ServiceType = _context.ServiceTypes.Where(st => st.Id == s.ServiceTypeId).FirstOrDefault()
+            }).ToListAsync();
+
             return services;
         }
 
-        public async Task<Service> GetServiceById(int id)
+        public async Task<Service> GetServiceById(int id)   
         {
-            var service = await _context.Services.FindAsync(id);
+            var service = await _context.Services.Select(s => new Service
+            {
+                Id = s.Id,
+                ServiceTypeId = s.ServiceTypeId,
+                WeighFrom = s.WeighFrom,
+                WeighTo = s.WeighTo,
+                CreatedAt = s.CreatedAt,
+                UpdatedAt = s.UpdatedAt,
+                Status = s.Status,
+                ServiceType = _context.ServiceTypes.Where(st => st.Id == s.ServiceTypeId).FirstOrDefault()
+            }).Where(s => s.Id == id).FirstOrDefaultAsync();
             if (service == null)
             {
                 return null;
@@ -72,30 +95,113 @@ namespace TARS_Delivery.Repositories
         }
         public async Task<List<Service>> GetServicesByWeight(int weight)
         {
-            /*ETypeService TypeService = ETypeService.kl_0_500;
-            if (weight > 500 && weight <= 1000)
+            var services = await _context.Services.Select(s => new Service
             {
-                TypeService = ETypeService.kl_501_1000;
-            }
-            else if (weight > 1000 && weight <= 5000)
-            {
-                TypeService = ETypeService.kl_1001_5000;
-            }
-            else if (weight > 5000 && weight <= 10000)
-            {
-                TypeService = ETypeService.kl_5001_10000;
-            }
-            else if (weight > 10000 && weight <= 20000)
-            {
-                TypeService = ETypeService.kl_10001_20000;
-            }
-            else if (weight > 20000)
-            {
-                TypeService = ETypeService.kl_ovver_20000;
-            }
-            var services = await _context.Services.Where(s => s.TypeService == TypeService).ToListAsync();*/
-            var services = await _context.Services.Where(s => s.WeighFrom <= weight && s.WeighTo >= weight).ToListAsync();
+                Id = s.Id,
+                ServiceTypeId = s.ServiceTypeId,
+                WeighFrom = s.WeighFrom,
+                WeighTo = s.WeighTo,
+                CreatedAt = s.CreatedAt,
+                UpdatedAt = s.UpdatedAt,
+                Status = s.Status,
+                ServiceType = _context.ServiceTypes.Where(st => st.Id == s.ServiceTypeId).FirstOrDefault()
+            }).Where(s => s.WeighFrom <= weight && s.WeighTo >= weight).ToListAsync();
             return services;
+        }
+        /*public async Task<Boolean> ValidateWeight(int serviceTypeId,int weightFrom, int weightTo, int serviceId)
+        {
+            if (serviceId == 0) { 
+                var services = await _context.Services
+                .Where(s => s.ServiceTypeId == serviceTypeId &&
+                        ((s.WeighFrom <= weightFrom && s.WeighTo >= weightFrom) ||
+                        (s.WeighFrom <= weightTo && s.WeighTo >= weightTo)))
+                .ToListAsync();
+
+                if (services.Count > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                var services = await _context.Services
+                .Where(s => s.ServiceTypeId == serviceTypeId &&
+                        s.Id != serviceId &&
+                        ((s.WeighFrom <= weightFrom && s.WeighTo >= weightFrom) ||
+                        (s.WeighFrom <= weightTo && s.WeighTo >= weightTo)))
+                .ToListAsync();
+
+                if (services.Count > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }*/
+        public async Task<List<Service>> ValidateWeight(int serviceTypeId, int weightFrom, int weightTo, int serviceId)
+        {
+            if (serviceId == 0)
+            {
+                var services = await _context.Services
+                .Where(s => s.ServiceTypeId == serviceTypeId &&
+                        ((s.WeighFrom <= weightFrom && s.WeighTo >= weightFrom) ||
+                        (s.WeighFrom <= weightTo && s.WeighTo >= weightTo)))
+                .ToListAsync();
+
+                return services;
+            }
+            else
+            {
+                var services = await _context.Services
+                .Where(s => s.ServiceTypeId == serviceTypeId &&
+                        s.Id != serviceId &&
+                        ((s.WeighFrom <= weightFrom && s.WeighTo >= weightFrom) ||
+                        (s.WeighFrom <= weightTo && s.WeighTo >= weightTo)))
+                .ToListAsync();
+
+                return services;
+            }
+        }
+        public async Task<List<RDTORange>> AlowRange(int serviceTypeId)
+        {
+            var services = await _context.Services
+                .Where(s => s.ServiceTypeId == serviceTypeId)
+                .OrderBy(s => s.WeighFrom)
+                .ToListAsync();
+            var listRange = new List<RDTORange>();
+            if (services.Count > 1)
+            {
+                for (int i = 0; i < services.Count - 1; i++)
+                {
+                    if (services[i + 1].WeighFrom - services[i].WeighTo > 1)
+                    {
+                        listRange.Add(new RDTORange { From = services[i].WeighTo, To = services[i + 1].WeighFrom });
+                    }
+                }
+                if (services[services.Count-1].WeighFrom <= 999999999)
+                {
+                    listRange.Add(new RDTORange { From = services[services.Count-1].WeighTo, To = 999999999 });
+                }
+            }
+            else if (services.Count == 1)
+            {
+                if (services[0].WeighTo==0)
+                {
+                    listRange.Add(new RDTORange { From = 0, To = services[0].WeighFrom });
+                    if (services[0].WeighFrom <= 999999999)
+                    {
+                        listRange.Add(new RDTORange { From = services[0].WeighTo, To = 999999999 });
+                    }
+                }
+            }
+            return listRange;
         }
     }
 }

@@ -37,9 +37,8 @@ public class DtoProfile : Profile
         CreateMap<Location, RDTOLocation>().ReverseMap();
         CreateMap<Location, RDTOLocationByZipcode>().ReverseMap();
         CreateMap<Package, SDTOPackage>().ReverseMap();
-        
+        CreateMap<Package, RDTOPackage>().ReverseMap();
         CreateMap<Package, SDTOPackageList>()
-            .AfterMap((src, dest) => dest.CounterItem = src.Items.Count)
             .ReverseMap();
 
         CreateMap<Employee, SDTOEmployee>().ReverseMap();

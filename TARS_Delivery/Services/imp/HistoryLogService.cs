@@ -14,7 +14,7 @@ namespace TARS_Delivery.Services.imp
             _historyLogRepository = historyLogRepository;
         }
 
-        public async Task<IEnumerable<ListHistoryLogDTO>> GetAllHistoryLogs()
+        public async Task<IEnumerable<HistoryLog>> GetAllHistoryLogs()
         {
             return await _historyLogRepository.GetAllHistoryLogs();
         }
@@ -24,7 +24,7 @@ namespace TARS_Delivery.Services.imp
             return await _historyLogRepository.GetHistoryLogById(id);
         }
 
-        public async Task<HistoryLog> AddHistoryLog(ListHistoryLogDTO historyLog)
+        public async Task<bool> AddHistoryLog(HistoryLog historyLog)
         {
             return await _historyLogRepository.AddHistoryLog(historyLog);
         }

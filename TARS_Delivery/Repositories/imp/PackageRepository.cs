@@ -41,7 +41,7 @@ public class PackageRepository : IPackageRepository
     {
         try
         { 
-            package.TrackingCode = GenerateTrackingNumber(package.UserId);
+            package.TrackingCode = GenerateTrackingNumber(1);
             await _db.Packages.AddAsync(package);
             await _db.SaveChangesAsync();
             return package;
@@ -66,7 +66,7 @@ public class PackageRepository : IPackageRepository
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var random = new Random().Next(1000, 9999);
             code =  $"CT{id}-{timestamp}{random}";
-        } while (!IsTrackingNumberUnique(code));
+        } while (IsTrackingNumberUnique(code));
         return code;
     }
 
@@ -127,6 +127,7 @@ public class PackageRepository : IPackageRepository
     {
         Package package = await _db.Packages
             .Include(p=>p.Items)
+            .Include(p=>p.User)
             .Include(p=> p.Service)
             .Include(p=>p.HistoryLogs)
             .ThenInclude(h=>h.Employee)

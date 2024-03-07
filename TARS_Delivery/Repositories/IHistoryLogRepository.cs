@@ -6,9 +6,9 @@ namespace TARS_Delivery.Repositories
 {
     public interface IHistoryLogRepository
     {
-        Task<IEnumerable<ListHistoryLogDTO>> GetAllHistoryLogs();
+        Task<IEnumerable<HistoryLog>> GetAllHistoryLogs();
         Task<HistoryLog> GetHistoryLogById(int id);
-        Task<HistoryLog> AddHistoryLog(ListHistoryLogDTO historyLog);
+        Task<bool> AddHistoryLog(HistoryLog historyLog);
         Task<HistoryLog> UpdateHistoryLog(int id, ListHistoryLogDTO historyLog);
         void ChangeStatusHistoryLog(int id, int status);
         //Task UpdateStep(int id, EPackageStatus newStep);

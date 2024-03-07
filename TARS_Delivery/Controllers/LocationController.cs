@@ -50,6 +50,11 @@ namespace TARS_Delivery.Controllers
         {
             if (ModelState.IsValid)
             {
+                var checkPostalCode = await _iLocationRepository.GetLocationByCode(location.PostalCode);
+                if (checkPostalCode != null)
+                {
+                    return BadRequest("Postal code already exists");
+                }
                 try
                 {
                     await _iLocationRepository.AddLocation(location);
@@ -71,6 +76,14 @@ namespace TARS_Delivery.Controllers
         {
             if (ModelState.IsValid)
             {
+                var checkPostalCode = await _iLocationRepository.GetLocationByCode(location.PostalCode);
+                if (checkPostalCode != null)
+                {
+                    if (checkPostalCode.Id != location.Id)
+                    {
+                        return BadRequest("Postal code already exists");
+                    }
+                }
                 try
                 {
                     await _iLocationRepository.UpdateLocation(location.Id, location);
@@ -87,7 +100,7 @@ namespace TARS_Delivery.Controllers
             }
         }
         //Change Status
-        [HttpPut("ChangeStatus/{id}")]
+        [HttpGet("ChangeStatus/{id}")]
         public async Task<ActionResult> UpdateStatus(int id)
         {
             try

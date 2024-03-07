@@ -26,7 +26,7 @@ public class BranchRepository : IBranchRepository
 
     public async Task<Branch> GetBranchById(int id)
     {
-        return await _db.Branches.Include(b => b.Employees).FirstOrDefaultAsync(b=>b.Id == id);
+        return await _db.Branches.Include(b => b.Employees).ThenInclude(e=>e.Role).FirstOrDefaultAsync(b=>b.Id == id);
     }
 
 

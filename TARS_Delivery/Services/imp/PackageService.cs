@@ -18,10 +18,9 @@ public class PackageService : IPackageService
         _mapper = mapper;
     }
 
-    public async Task<ICollection<SDTOPackageList>> GetAllPackages()
+    public async Task<ICollection<Package>> GetAllPackages()
     {
-        ICollection<Package> packages = await _rp.GetAllPackages();
-        return _mapper.Map<ICollection<SDTOPackageList>>(packages);
+        return await _rp.GetAllPackages();
     }
 
     public async Task<Package> GetPackageById(int id)
@@ -29,12 +28,13 @@ public class PackageService : IPackageService
         return await _rp.GetPackageById(id);
     }
 
-    public async Task<Package> UserAddPackage(RDTOPackage package)
-    {
+    public async Task<Package> AddPackage(RDTOPackage package)
+    {  
         Package newPackage = _mapper.Map<Package>(package);
-        return await _rp.AddPackage(newPackage);
+        return  await _rp.AddPackage(newPackage);
     }
-    
+
+
     public async Task<bool> CancelPackage(int id)
     {
         try
