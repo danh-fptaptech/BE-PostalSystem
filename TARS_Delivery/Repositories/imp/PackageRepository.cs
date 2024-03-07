@@ -123,16 +123,17 @@ public class PackageRepository : IPackageRepository
         }
     }
 
-    public async Task<Package> GetPackageByTrackingNumber(string trackingNumber)
+    public async Task<Package> GetPackageByTrackingNumber(string trackingNumber, string phoneFrom)
     {
-        Package package = await _db.Packages
+        Package? package = await _db.Packages
             .Include(p=>p.Items)
             .Include(p=>p.User)
             .Include(p=> p.Service)
+                .ThenInclude(s => s.ServiceType)
             .Include(p=>p.HistoryLogs)
-            .ThenInclude(h=>h.Employee)
-            .ThenInclude(e=>e.Branch)
-            .FirstOrDefaultAsync(p => p.TrackingCode == trackingNumber);
+                .ThenInclude(h=>h.Employee)
+                .ThenInclude(e=>e.Branch)
+            .FirstOrDefaultAsync(p => p.TrackingCode == trackingNumber && p.User.Phone == phoneFrom);
         return package;
     }
 

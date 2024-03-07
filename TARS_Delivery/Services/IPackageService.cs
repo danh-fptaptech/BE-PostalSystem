@@ -13,5 +13,5 @@ public interface IPackageService
     Task<bool> CancelPackage(int id);
     Task<Package> UpdatePackage(int id, Object package);
     bool TogglePackageStatus(int id);
-    Task<Package> GetPackageByTrackingNumber(string trackingNumber);
+    Task<Package> GetPackageByTrackingNumber(string trackingNumber, string phoneFrom);
 }

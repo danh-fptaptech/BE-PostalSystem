@@ -16,7 +16,6 @@ namespace TARS_Delivery.Seeders
                 ItemWeight = 2,
                 ItemQuantity = 5,
                 ItemValue = 1000000,
-                ItemType = Models.Enums.EItemType.Document,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 Status = Models.Enums.EStatusData.Active
@@ -29,7 +28,6 @@ namespace TARS_Delivery.Seeders
                 ItemWeight = 1,
                 ItemQuantity = 3,
                 ItemValue = 500000,
-                ItemType = Models.Enums.EItemType.Pack,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 Status = Models.Enums.EStatusData.Active

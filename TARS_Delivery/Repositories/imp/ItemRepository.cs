@@ -25,7 +25,6 @@ namespace TARS_Delivery.Repositories.imp
                     ItemWeight = x.ItemWeight,
                     ItemQuantity = x.ItemQuantity,
                     ItemValue = x.ItemValue,
-                    ItemType = x.ItemType,
                     CreatedAt = (DateTime)x.CreatedAt,
                     UpdatedAt = (DateTime)x.UpdatedAt,
                     Status = x.Status
@@ -56,7 +55,6 @@ namespace TARS_Delivery.Repositories.imp
             itemToUpdate.ItemWeight = item.ItemWeight;
             itemToUpdate.ItemQuantity = item.ItemQuantity;
             itemToUpdate.ItemValue = item.ItemValue;
-            itemToUpdate.ItemType = item.ItemType;
             itemToUpdate.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return itemToUpdate;

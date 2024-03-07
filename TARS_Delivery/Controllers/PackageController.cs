@@ -65,18 +65,17 @@ public class PackageController : ControllerBase
 
     #endregion
 
-    #region Get a package by tracking number
+    #region Get a package by tracking number and phoneFrom
 
     [HttpGet]
-    [Route("getbytracking/{trackingNumber}")]
-    public async Task<ActionResult<Package>> GetPackageByTrackingNumber(string trackingNumber)
+    [Route("getbytracking/{trackingNumber}/{phoneFrom}")]
+    public async Task<ActionResult<Package>> GetPackageByTrackingNumber(string trackingNumber, string phoneFrom)
     {
-        Package package = await _packageService.GetPackageByTrackingNumber(trackingNumber);
+        Package package = await _packageService.GetPackageByTrackingNumber(trackingNumber, phoneFrom);
         if (package == null)
         {
             return NotFound();
         }
-
         return Ok(package);
     }
 
