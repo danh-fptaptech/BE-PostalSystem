@@ -100,10 +100,7 @@ namespace TARS_Delivery.Controllers
                 var removedRole = await _roleService.GetRole(id);
                 if(removedRole != null)
                 {
-                    if(removedRole.RoleName == "Admin" || 
-                       removedRole.RoleName == "Branch Manager" ||
-                       removedRole.RoleName == "Warehouse" ||
-                       removedRole.RoleName == "Delivery")
+                    if(removedRole.Id > 4)
                     {
                         await _roleService.Delete(id);
                         return Ok("Delete role successfully.");

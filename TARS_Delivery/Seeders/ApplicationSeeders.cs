@@ -21,5 +21,6 @@ public class ApplicationSeeders
         new ServiceSeeders(modelBuilder);
         new BlogSeeders(modelBuilder);
         new ServiceTypeSeeders(modelBuilder);
+        new RoleHasPermissionSeeders(modelBuilder);
     }
 }

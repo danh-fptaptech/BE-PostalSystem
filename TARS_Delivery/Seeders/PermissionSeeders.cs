@@ -212,10 +212,61 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 41,
                     PermissionName = "profile.view",
-                }, new Permission
+                }, 
+                new Permission
                 {
                     Id = 42,
                     PermissionName = "role.delete",
+                },
+                new Permission
+                {
+                    Id = 43,
+                    PermissionName = "users.view",
+                },
+                new Permission
+                {
+                    Id = 44,
+                    PermissionName = "locations.view",
+                },
+                new Permission
+                {
+                    Id = 45,
+                    PermissionName = "checkFee.view",
+                },
+                new Permission
+                {
+                    Id = 46,
+                    PermissionName = "users.view",
+                },
+                new Permission
+                {
+                    Id = 47,
+                    PermissionName = "request.view",
+                },
+                new Permission
+                {
+                    Id = 48,
+                    PermissionName = "packages.view",
+                },
+                new Permission
+                {
+                    Id = 49,
+                    PermissionName = "password.change",
+                },
+                new Permission
+                {
+                    Id = 50,
+                    PermissionName = "addresses.view",
+                },
+                new Permission
+                {
+                    Id = 51,
+                    PermissionName = "addresses.create",
+                },
+                new Permission
+                {
+                    Id = 52,
+                    PermissionName = "servicetype.view",
                 }
             );
         }
