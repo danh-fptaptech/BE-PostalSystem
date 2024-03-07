@@ -17,6 +17,7 @@
 *.userosscache
 *.sln.docstates
 **/appsettings.json
+**/appsettings.Development.json
 **/bin
 **/obj
 **/Migrations

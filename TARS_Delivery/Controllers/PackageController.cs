@@ -94,7 +94,6 @@ public class PackageController : ControllerBase
             using var reader = new StreamReader(Request.Body);
             string jsonBody = await reader.ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(jsonBody);
-            Console.WriteLine(data);
             RDTOPackage package = new RDTOPackage();
             //Info sender
             package.NameFrom = data.sender.fullName;
@@ -115,7 +114,7 @@ public class PackageController : ControllerBase
             package.PackageNote = data.packageNote;
             package.PackageSize = data.packageSize.ToString();
             package.PackageType = data.type == "document" ? EItemType.Document : EItemType.Pack;
-            package.TimeProcess = int.Parse(data.timeProcess.ToString());
+            package.TimeProcess = int.Parse(data.service.timeProcess.ToString());
             package.EmployeeCode = employCheck ? data.submitBy.employeeCode.ToString() : null;
             package.UserId = employCheck ? null : int.Parse(data.submitBy.id.ToString());
             package.EmployeeId = employCheck ? int.Parse(data.submitBy.id.ToString()) : null;
@@ -144,7 +143,7 @@ public class PackageController : ControllerBase
             log.EmployeeIdNextStep = data.employeeProcess?.employeeNext != null ? int.Parse(data.employeeProcess.employeeNext.ToString()) : (int?)null;
             await _historyLogService.AddHistoryLog(log);
             await trans.CommitAsync();
-            return Ok(newPackage);
+            return Ok(new { trackingCode = newPackage.TrackingCode });
         }
         catch (JsonException je)
         {

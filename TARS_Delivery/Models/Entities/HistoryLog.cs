@@ -12,9 +12,7 @@ namespace TARS_Delivery.Models.Entities
         public int Id { get; set; }
         [Required]
         public int PackageId { get; set; }
-        [Required]
         public int? EmployeeId { get; set; }
-        [Required]
         public EPackageStatus Step { get; set; }
         public string? HistoryNote { get; set; }
         public string? Photos { get; set; }
