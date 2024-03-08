@@ -11,7 +11,7 @@ public interface IPackageService
     Task<Package> AddPackage(RDTOPackage package);
     Task<Package> EmpAddPackage(RDTOEmpPackage package);
     Task<bool> CancelPackage(int id);
-    Task<Package> UpdatePackage(int id, Object package);
     bool TogglePackageStatus(int id);
     Task<Package> GetPackageByTrackingNumber(string trackingNumber);
+    Task<bool> AddPickup(int id, int empId);
 }

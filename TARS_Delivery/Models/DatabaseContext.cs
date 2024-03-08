@@ -72,9 +72,9 @@ public class DatabaseContext : DbContext
             .HasForeignKey(p=>p.UserId)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Package>()
-            .HasOne<Service>(p => p.Service)
+            .HasOne<FeeCustom>(p => p.FeeCustom)
             .WithMany()
-            .HasForeignKey(p=>p.ServiceId)
+            .HasForeignKey(p => p.FeeCustomId)
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
 

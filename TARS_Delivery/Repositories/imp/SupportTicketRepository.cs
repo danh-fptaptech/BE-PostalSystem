@@ -23,7 +23,7 @@ namespace TARS_Delivery.Repositories.imp
                 Title = s.Title,
                 Content = s.Content,
                 UserId = s.UserId,
-                EmployeeId = s.EmployeeId,
+                EmployeeId = (int)s.EmployeeId,
                 CreatedAt = s.CreatedAt,
                 UpdatedAt = s.UpdatedAt,
                 Status = s.Status

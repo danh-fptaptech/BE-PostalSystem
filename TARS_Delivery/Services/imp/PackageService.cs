@@ -59,11 +59,6 @@ public class PackageService : IPackageService
         return await _rp.AddPackage(newPackage);
     }
 
-    public Task<Package> UpdatePackage(int id, Object package)
-    {
-        return null;
-    }
-
     public bool TogglePackageStatus(int id)
     {
         throw new NotImplementedException();
@@ -72,5 +67,21 @@ public class PackageService : IPackageService
     public Task<Package> GetPackageByTrackingNumber(string trackingNumber)
     {
         return _rp.GetPackageByTrackingNumber(trackingNumber);
+    }
+
+    public async Task<bool> AddPickup(int id, int empId)
+    {
+        Package package = await _rp.FindPackageById(id);
+        if (package == null) return false;
+        package?.HistoryLogs?.Where(h => h.Step == EPackageStatus.WaitingForPickup).ToList().ForEach(h => h.ProcessStep = EStep.Done);
+        package?.HistoryLogs?.Add(new HistoryLog
+        {
+            Step = EPackageStatus.Created,
+            ProcessStep = EStep.Processing,
+            EmployeeId = empId,
+            CreatedAt = DateTime.Now
+        });
+        await _rp.UpdatePackage(id, package);
+        return true;
     }
 }

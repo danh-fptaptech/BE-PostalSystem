@@ -23,7 +23,8 @@ namespace TARS_Delivery.Models.Entities
         public string? PackageSize { get; set; }
         public string? PackageNote { get; set; }
         public decimal TotalFee { get; set; }
-        public int ServiceId { get; set; }
+        public int? COD { get; set; }
+        public int FeeCustomId { get; set; }
         public int? UserId { get; set; }
         public EPackageStatus Step { get; set; } = EPackageStatus.WaitingForPickup;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
@@ -33,8 +34,8 @@ namespace TARS_Delivery.Models.Entities
 
         [ForeignKey("UserId")]
         public virtual User? User { get; set; }
-        [ForeignKey("ServiceId")]
-        public virtual Service Service { get; set; }
+        [ForeignKey("FeeCustomId")]
+        public virtual FeeCustom FeeCustom { get; set; }
         public virtual ICollection<Item>? Items { get; set; }
         public virtual ICollection<HistoryLog>? HistoryLogs { get; set; }
         

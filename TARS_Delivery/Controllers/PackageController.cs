@@ -82,7 +82,7 @@ public class PackageController : ControllerBase
 
     #endregion
 
-    #region Create a new package by user
+    #region Create a new package
 
     [HttpPost]
     [Route("add")]
@@ -110,7 +110,7 @@ public class PackageController : ControllerBase
             //Info package
             bool employCheck = !string.IsNullOrEmpty(data.submitBy.employeeCode?.ToString());
 
-            package.ServiceId = data.service.serviceId;
+            package.FeeCustomId = data.service.serviceId;
             package.PackageNote = data.packageNote;
             package.PackageSize = data.packageSize.ToString();
             package.PackageType = data.type == "document" ? EItemType.Document : EItemType.Pack;
@@ -155,6 +155,61 @@ public class PackageController : ControllerBase
             trans.Rollback();
             return BadRequest("An error occurred: " + e.Message);
         }
+    }
+
+    #endregion
+
+    #region Cancel a package
+    [HttpPut]
+    [Route("cancel/{id}")]
+    public async Task<ActionResult> CancelPackage(int id)
+    {
+        try
+        {
+            using var reader = new StreamReader(Request.Body);
+            string jsonBody = await reader.ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(jsonBody);
+            bool result =  await _packageService.CancelPackage(id);
+            Package package = await _packageService.GetPackageById(id);
+            package.HistoryLogs.Add(new HistoryLog
+            {
+                PackageId = id,
+                Step = EPackageStatus.Cancelled,
+                HistoryNote = data.employeeProcess != null ? "Cancelled by employee"+ data.employeeProcess.employeeCode  : "Cancelled by user",
+                EmployeeId = data.employeeProcess != null ? data.userId : null,
+            });
+            await _db.SaveChangesAsync();
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest("Package cancel failed!");
+        }
+        catch (Exception e)
+        {
+            return BadRequest("An error occurred: " + e.Message);
+        }
+    }
+    #endregion
+
+    #region Update package 
+    [HttpPut]
+    [Route("addPickup/{id}")]
+    public async Task<ActionResult> AddPickup(int id)
+    {
+        using var reader = new StreamReader(Request.Body);
+        string jsonBody = await reader.ReadToEndAsync();
+        dynamic data = JsonConvert.DeserializeObject(jsonBody);
+        if(data is null) return BadRequest("Invalid JSON format");
+        if(data.action == "addPickup" && data.employeeProcess?.employeeNext != null)
+        {
+          bool result = _packageService.AddPickup(id, data.employeeProcess.employeeNext);
+            if (!result)
+            {
+                return BadRequest("Add Pickup failed!");
+            }
+        }
+        return Ok(new { message = "Add Pickup is successfuly!" });
     }
 
     #endregion

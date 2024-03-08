@@ -29,7 +29,7 @@ internal class GetUsersWithPackagesAsyncHandler(IUserRepository userRepository)
                         p.PackageSize,
                         p.PackageNote,
                         p.TotalFee,
-                        p.ServiceId,
+                        p.FeeCustomId,
                         p.Step,
                         p.Status))
                     .ToList()))

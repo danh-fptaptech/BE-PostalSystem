@@ -23,7 +23,7 @@ public class RDTOPackage
     public string PostalCodeTo { get; set; }
     public string? PackageNote { get; set; }
     public string? PackageSize { get; set; }
-    public int ServiceId { get; set; }
+    public int FeeCustomId { get; set; }
     public string? EmployeeCode { get; set; }
     public int? UserId { get; set; }
     public int? EmployeeId { get; set; }
