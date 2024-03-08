@@ -17,7 +17,7 @@ namespace TARS_Delivery.Repositories
 
         public async Task<Service> ChangeStatus(int id)
         {
-            var service = await GetServiceById(id);
+            var service = await _context.Services.FindAsync(id);
             if (service == null)
             {
                 return null;
@@ -108,43 +108,6 @@ namespace TARS_Delivery.Repositories
             }).Where(s => s.WeighFrom <= weight && s.WeighTo >= weight).ToListAsync();
             return services;
         }
-        /*public async Task<Boolean> ValidateWeight(int serviceTypeId,int weightFrom, int weightTo, int serviceId)
-        {
-            if (serviceId == 0) { 
-                var services = await _context.Services
-                .Where(s => s.ServiceTypeId == serviceTypeId &&
-                        ((s.WeighFrom <= weightFrom && s.WeighTo >= weightFrom) ||
-                        (s.WeighFrom <= weightTo && s.WeighTo >= weightTo)))
-                .ToListAsync();
-
-                if (services.Count > 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                var services = await _context.Services
-                .Where(s => s.ServiceTypeId == serviceTypeId &&
-                        s.Id != serviceId &&
-                        ((s.WeighFrom <= weightFrom && s.WeighTo >= weightFrom) ||
-                        (s.WeighFrom <= weightTo && s.WeighTo >= weightTo)))
-                .ToListAsync();
-
-                if (services.Count > 0)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }*/
         public async Task<List<Service>> ValidateWeight(int serviceTypeId, int weightFrom, int weightTo, int serviceId)
         {
             if (serviceId == 0)
@@ -185,7 +148,7 @@ namespace TARS_Delivery.Repositories
                         listRange.Add(new RDTORange { From = services[i].WeighTo, To = services[i + 1].WeighFrom });
                     }
                 }
-                if (services[services.Count-1].WeighFrom <= 999999999)
+                if (services[services.Count-1].WeighTo < 999999999)
                 {
                     listRange.Add(new RDTORange { From = services[services.Count-1].WeighTo, To = 999999999 });
                 }
