@@ -16,6 +16,11 @@
 *.user
 *.userosscache
 *.sln.docstates
+**/appsettings.json
+**/appsettings.Development.json
+**/bin
+**/obj
+**/Migrations
 obj/
 
 # Ignore .vs and .idea directories

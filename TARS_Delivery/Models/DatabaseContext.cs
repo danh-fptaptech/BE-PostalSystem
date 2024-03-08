@@ -72,9 +72,9 @@ public class DatabaseContext : DbContext
             .HasForeignKey(p=>p.UserId)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Package>()
-            .HasOne<Service>(p => p.Service)
+            .HasOne<FeeCustom>(p => p.FeeCustom)
             .WithMany()
-            .HasForeignKey(p=>p.ServiceId)
+            .HasForeignKey(p => p.FeeCustomId)
             .OnDelete(DeleteBehavior.Restrict);
         #endregion
 
@@ -83,14 +83,14 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<RoleHasPermission>()
             .HasKey(rhp => new { rhp.RoleId, rhp.PermissionId });
         modelBuilder.Entity<RoleHasPermission>()
-            .HasOne<Role>()
-            .WithMany(r=>r.RoleHasPermissions)
-            .HasForeignKey(rhp=>rhp.RoleId)
+            .HasOne<Role>(rhp=>rhp.Role)
+            .WithMany(r => r.RoleHasPermissions)
+            .HasForeignKey(rhp => rhp.RoleId)
             .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<RoleHasPermission>()
             .HasOne<Permission>(rhp => rhp.Permission)
             .WithMany()
-            .HasForeignKey(rhp=>rhp.PermissionId)
+            .HasForeignKey(rhp => rhp.PermissionId)
             .OnDelete(DeleteBehavior.Restrict);
 
         #endregion
@@ -152,6 +152,26 @@ public class DatabaseContext : DbContext
 
         #endregion
 
+        #region ModelBuilder for Blog
+        modelBuilder.Entity<Blog>()
+            .HasOne<Employee>(b => b.Employee)
+            .WithMany(e=>e.Blogs)
+            .HasForeignKey(b=>b.EmployeeId)
+            .OnDelete(DeleteBehavior.Restrict);
+        #endregion
+
+        #region ModelBuilder for SupportTicket
+        modelBuilder.Entity<SupportTicket>()
+            .HasOne<Employee>(st => st.Employee)
+            .WithMany(e=>e.SupportTickets)
+            .HasForeignKey(st=>st.EmployeeId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<SupportTicket>()
+            .HasOne<User>(st => st.User)
+            .WithMany(u=>u.SupportTickets)
+            .HasForeignKey(st=>st.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        #endregion
     }
 
     #region DbSet
@@ -171,8 +191,10 @@ public class DatabaseContext : DbContext
     public DbSet<Package> Packages { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Customer> Customers { get; set; }
-
+    public DbSet<UserRegistrationInfo> UserRegistrations { get; set; }
+    public DbSet<Blog> Blogs { get; set; }
+    public DbSet<SupportTicket> SupportTickets { get; set; }
     #endregion
 
-    
+
 }

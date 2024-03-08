@@ -9,6 +9,7 @@ public class SDTOPackageList
     public string NameTo { get; set; }
     public string AddressTo { get; set; }
     public string PostalCodeTo { get; set; }
+    public string PhoneFrom { get; set; }
     public decimal TotalFee { get; set; }
     public int CounterItem { get; set; }
 }

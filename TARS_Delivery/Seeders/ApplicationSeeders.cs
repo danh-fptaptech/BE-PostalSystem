@@ -8,6 +8,7 @@ public class ApplicationSeeders
     {
         // RoleSeeders(modelBuilder);
         new BranchSeeders(modelBuilder);
+        new UserSeeders(modelBuilder);
         new CustomerSeeder(modelBuilder);
         new EmployeeSeeders(modelBuilder);
         new FeeCustomSeeders(modelBuilder);
@@ -16,9 +17,11 @@ public class ApplicationSeeders
         new LocationSeeders(modelBuilder);
         new PackageSeeders(modelBuilder);
         new PermissionSeeders(modelBuilder);
+        new RoleHasPermissionSeeders(modelBuilder);
         new RoleSeeders(modelBuilder);
-        new UserSeeders(modelBuilder);
         new ServiceSeeders(modelBuilder);
+        new BlogSeeders(modelBuilder);
         new ServiceTypeSeeders(modelBuilder);
+        new GeneralSettingSeeders(modelBuilder);
     }
 }

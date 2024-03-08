@@ -23,7 +23,7 @@ namespace TARS_Delivery.Services.imp
             return await _itemRepository.GetItemById(id);
         }
 
-        public async Task<Item> AddItem(ItemCreateDTO item)
+        public async Task<Item> AddItem(Item item)
         {
             return await _itemRepository.AddItem(item);
         }

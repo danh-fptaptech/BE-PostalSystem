@@ -18,10 +18,9 @@ public class PackageService : IPackageService
         _mapper = mapper;
     }
 
-    public async Task<ICollection<SDTOPackageList>> GetAllPackages()
+    public async Task<ICollection<Package>> GetAllPackages()
     {
-        ICollection<Package> packages = await _rp.GetAllPackages();
-        return _mapper.Map<ICollection<SDTOPackageList>>(packages);
+        return await _rp.GetAllPackages();
     }
 
     public async Task<Package> GetPackageById(int id)
@@ -29,12 +28,13 @@ public class PackageService : IPackageService
         return await _rp.GetPackageById(id);
     }
 
-    public async Task<Package> UserAddPackage(RDTOPackage package)
-    {
+    public async Task<Package> AddPackage(RDTOPackage package)
+    {  
         Package newPackage = _mapper.Map<Package>(package);
-        return await _rp.AddPackage(newPackage);
+        return  await _rp.AddPackage(newPackage);
     }
-    
+
+
     public async Task<bool> CancelPackage(int id)
     {
         try
@@ -59,18 +59,29 @@ public class PackageService : IPackageService
         return await _rp.AddPackage(newPackage);
     }
 
-    public Task<Package> UpdatePackage(int id, Object package)
-    {
-        return null;
-    }
-
     public bool TogglePackageStatus(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Package> GetPackageByTrackingNumber(string trackingNumber)
+    public Task<Package> GetPackageByTrackingNumber(string trackingNumber, string phoneFrom)
     {
-        return _rp.GetPackageByTrackingNumber(trackingNumber);
+        return _rp.GetPackageByTrackingNumber(trackingNumber, phoneFrom);
+    }
+
+    public async Task<bool> AddPickup(int id, int empId)
+    {
+        Package package = await _rp.FindPackageById(id);
+        if (package == null) return false;
+        package?.HistoryLogs?.Where(h => h.Step == EPackageStatus.WaitingForPickup).ToList().ForEach(h => h.ProcessStep = EStep.Done);
+        package?.HistoryLogs?.Add(new HistoryLog
+        {
+            Step = EPackageStatus.Created,
+            ProcessStep = EStep.Processing,
+            EmployeeId = empId,
+            CreatedAt = DateTime.Now
+        });
+        await _rp.UpdatePackage(id, package);
+        return true;
     }
 }

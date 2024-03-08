@@ -6,12 +6,12 @@ namespace TARS_Delivery.Services;
 
 public interface IPackageService
 {
-    Task<ICollection<SDTOPackageList>> GetAllPackages();
+    Task<ICollection<Package>> GetAllPackages();
     Task<Package> GetPackageById(int id);
-    Task<Package> UserAddPackage(RDTOPackage package);
+    Task<Package> AddPackage(RDTOPackage package);
     Task<Package> EmpAddPackage(RDTOEmpPackage package);
     Task<bool> CancelPackage(int id);
-    Task<Package> UpdatePackage(int id, Object package);
     bool TogglePackageStatus(int id);
-    Task<Package> GetPackageByTrackingNumber(string trackingNumber);
+    Task<bool> AddPickup(int id, int empId);
+    Task<Package> GetPackageByTrackingNumber(string trackingNumber, string phoneFrom);
 }

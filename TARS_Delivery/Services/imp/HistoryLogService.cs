@@ -1,5 +1,6 @@
 ﻿using TARS_Delivery.Models.DTOs.req.HistoryLog;
 using TARS_Delivery.Models.Entities;
+using TARS_Delivery.Models.Enums;
 using TARS_Delivery.Repositories;
 
 namespace TARS_Delivery.Services.imp
@@ -13,7 +14,7 @@ namespace TARS_Delivery.Services.imp
             _historyLogRepository = historyLogRepository;
         }
 
-        public async Task<IEnumerable<ListHistoryLogDTO>> GetAllHistoryLogs()
+        public async Task<IEnumerable<HistoryLog>> GetAllHistoryLogs()
         {
             return await _historyLogRepository.GetAllHistoryLogs();
         }
@@ -23,7 +24,7 @@ namespace TARS_Delivery.Services.imp
             return await _historyLogRepository.GetHistoryLogById(id);
         }
 
-        public async Task<HistoryLog> AddHistoryLog(ListHistoryLogDTO historyLog)
+        public async Task<bool> AddHistoryLog(HistoryLog historyLog)
         {
             return await _historyLogRepository.AddHistoryLog(historyLog);
         }
@@ -37,5 +38,15 @@ namespace TARS_Delivery.Services.imp
         {
             _historyLogRepository.ChangeStatusHistoryLog(id, status);
         }
+
+        /*public async Task UpdateStep(int id, EPackageStatus newStep)
+        {
+            await _historyLogRepository.UpdateStep(id, newStep);
+        }*/
+
+        /*public async Task UpdateProcessStep(int id, EStep newProcessStep)
+        {
+            await _historyLogRepository.UpdateProcessStep(id, newProcessStep);
+        }*/
     }
 }

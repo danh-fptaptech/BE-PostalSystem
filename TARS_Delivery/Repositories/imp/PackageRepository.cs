@@ -22,26 +22,36 @@ public class PackageRepository : IPackageRepository
 
     public async Task<ICollection<Package>> GetAllPackages()
     {
-        ICollection<Package> packages =  await _db.Packages.Include(p=>p.Service).ToListAsync();
+        ICollection<Package> packages =  await _db.Packages
+            .Include(p => p.FeeCustom)
+            .ThenInclude(f => f.Service)
+            .ThenInclude(s => s.ServiceType)
+            .ToListAsync();
         return packages;
     }
 
     public async Task<Package> GetPackageById(int id)
     {
-        return await _db.Packages
-            .Include(p=>p.Items)
-            .Include(p=> p.Service)
-            .Include(p=>p.HistoryLogs)
-            .ThenInclude(h=>h.Employee)
-            .ThenInclude(e=>e.Branch)
-            .FirstAsync(p => p.Id == id);
+        Package pack = await _db.Packages
+            .Include(p => p.User)
+            .Include(p => p.Items)
+            .Include(p => p.FeeCustom)
+            .ThenInclude(f => f.Service)
+            .ThenInclude(s => s.ServiceType)
+            .Include(p => p.HistoryLogs)
+            .ThenInclude(h => h.Employee)
+            .ThenInclude(e => e.Branch)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (pack == null) return null;
+        return pack;
     }
 
     public async Task<Package> AddPackage(Package package)
     {
         try
         { 
-            package.TrackingCode = GenerateTrackingNumber(package.UserId);
+            package.TrackingCode = GenerateTrackingNumber(1);
             await _db.Packages.AddAsync(package);
             await _db.SaveChangesAsync();
             return package;
@@ -66,39 +76,31 @@ public class PackageRepository : IPackageRepository
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var random = new Random().Next(1000, 9999);
             code =  $"CT{id}-{timestamp}{random}";
-        } while (!IsTrackingNumberUnique(code));
+        } while (IsTrackingNumberUnique(code));
         return code;
     }
 
-    public Task<Package> UpdatePackage(int id, Package package)
-    {
-        throw new NotImplementedException();
-    }
-    
-    // Tạo phương thức update một số trường được chỉ định trong tham số package.
-    public async Task<Package> UpdatePackage(int id, RDTOPackage package)
+    // Tạo phương thức update Package
+    public async Task<Package> UpdatePackage(int id, Package package)
     {
         try
         {
             Package packageToUpdate = await _db.Packages.FindAsync(id);
             if (packageToUpdate == null)
             {
-                throw new Exception("Package not found");
+                return null;
             }
-            // Tạo config mapper để chỉ map những trường nào null hoặc empty giữ nguyên giá trị cũ
-            
-            
-            
-            packageToUpdate.UpdatedAt = DateTime.Now;
+            packageToUpdate = package;
             await _db.SaveChangesAsync();
             return packageToUpdate;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw new Exception("Error while updating package");
+            return null;
         }
     }
+    
     
     
     
@@ -123,15 +125,18 @@ public class PackageRepository : IPackageRepository
         }
     }
 
-    public async Task<Package> GetPackageByTrackingNumber(string trackingNumber)
+    public async Task<Package> GetPackageByTrackingNumber(string trackingNumber, string phoneFrom)
     {
         Package package = await _db.Packages
             .Include(p=>p.Items)
-            .Include(p=> p.Service)
+            .Include(p=>p.User)
             .Include(p=>p.HistoryLogs)
             .ThenInclude(h=>h.Employee)
             .ThenInclude(e=>e.Branch)
-            .FirstOrDefaultAsync(p => p.TrackingCode == trackingNumber);
+            .Include(p => p.FeeCustom)
+            .ThenInclude(f=>f.Service)
+            .ThenInclude(s=>s.ServiceType)
+            .FirstOrDefaultAsync(p => p.TrackingCode == trackingNumber && (p.PhoneFrom == phoneFrom|| p.PhoneTo == phoneFrom));
         return package;
     }
 

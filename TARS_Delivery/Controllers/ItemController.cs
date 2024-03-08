@@ -35,24 +35,6 @@ namespace TARS_Delivery.Controllers
             return Ok(item);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Item>> AddItem(ItemCreateDTO item)
-        {
-            var newItem = await _itemService.AddItem(item);
-            return CreatedAtAction(nameof(GetItemById), new { id = newItem.Id }, newItem);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateItem(int id, ItemUpdateDTO item)
-        {
-            if (id != item.Id)
-            {
-                return BadRequest();
-            }
-            await _itemService.UpdateItem(id, item);
-            return NoContent();
-        }
-
         [HttpPut("{id}/status/{status}")]
         public IActionResult ChangeStatusItem(int id, int status)
         {

@@ -1,0 +1,10 @@
+﻿namespace TARS_Delivery.Services.Users.Query.GetReceiverAddressListByUserIdAsync;
+
+internal sealed record SenderAddressResponse(
+    string Name,
+    string PhoneNumber,
+    string Address,
+    string City,
+    string District,
+    string Ward,
+    string PostalCode);

@@ -25,7 +25,6 @@ namespace TARS_Delivery.Repositories.imp
                     ItemWeight = x.ItemWeight,
                     ItemQuantity = x.ItemQuantity,
                     ItemValue = x.ItemValue,
-                    ItemType = x.ItemType,
                     CreatedAt = (DateTime)x.CreatedAt,
                     UpdatedAt = (DateTime)x.UpdatedAt,
                     Status = x.Status
@@ -40,23 +39,11 @@ namespace TARS_Delivery.Repositories.imp
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<Item> AddItem(ItemCreateDTO item)
+        public async Task<Item> AddItem(Item item)
         {
-            var newItem = new Item
-            {
-                PackageId = item.PackageId,
-                ItemName = item.ItemName,
-                ItemWeight = item.ItemWeight,
-                ItemQuantity = item.ItemQuantity,
-                ItemValue = item.ItemValue,
-                ItemType = item.ItemType,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                Status = EStatusData.Active
-            };
-            _context.Items.Add(newItem);
+            await _context.Items.AddAsync(item);
             await _context.SaveChangesAsync();
-            return newItem;
+            return item;
         }
 
         public async Task<Item> UpdateItem(int id, ItemUpdateDTO item)
@@ -68,7 +55,6 @@ namespace TARS_Delivery.Repositories.imp
             itemToUpdate.ItemWeight = item.ItemWeight;
             itemToUpdate.ItemQuantity = item.ItemQuantity;
             itemToUpdate.ItemValue = item.ItemValue;
-            itemToUpdate.ItemType = item.ItemType;
             itemToUpdate.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return itemToUpdate;

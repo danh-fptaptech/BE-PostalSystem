@@ -31,5 +31,7 @@ namespace TARS_Delivery.Models.Entities
         [ForeignKey("RoleId")]
         public virtual Role Role { get; set; }
         public virtual ICollection<HistoryLog>? HistoryLogs { get; set; }
+        public virtual ICollection<Blog>? Blogs { get; set; }
+        public virtual ICollection<SupportTicket>? SupportTickets { get; set; }
     }
 }
