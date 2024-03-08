@@ -138,6 +138,11 @@ namespace TARS_Delivery.Seeders
                 PermissionId = 39,
                 RoleId = 1
             },
+            new RoleHasPermission
+            {
+                PermissionId = 47,
+                RoleId = 1
+            },
 
             // Branch Manager
             new RoleHasPermission
@@ -199,6 +204,11 @@ namespace TARS_Delivery.Seeders
                 PermissionId = 41,
                 RoleId = 2
             },
+            new RoleHasPermission
+            {
+                PermissionId = 53,
+                RoleId = 2
+            },
 
             // Warehouse
             new RoleHasPermission
@@ -234,6 +244,11 @@ namespace TARS_Delivery.Seeders
             new RoleHasPermission
             {
                 PermissionId = 41,
+                RoleId = 3
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 54,
                 RoleId = 3
             },
             // Delivery
@@ -280,6 +295,11 @@ namespace TARS_Delivery.Seeders
             new RoleHasPermission
             {
                 PermissionId = 41,
+                RoleId = 4
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 55,
                 RoleId = 4
             }
 
