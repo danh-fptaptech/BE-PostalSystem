@@ -136,7 +136,7 @@ public class PackageRepository : IPackageRepository
             .Include(p => p.FeeCustom)
             .ThenInclude(f=>f.Service)
             .ThenInclude(s=>s.ServiceType)
-            .FirstOrDefaultAsync(p => p.TrackingCode == trackingNumber && p.User.Phone == phoneFrom);
+            .FirstOrDefaultAsync(p => p.TrackingCode == trackingNumber && (p.PhoneFrom == phoneFrom|| p.PhoneTo == phoneFrom));
         return package;
     }
 
