@@ -17,11 +17,11 @@ public class ApplicationSeeders
         new LocationSeeders(modelBuilder);
         new PackageSeeders(modelBuilder);
         new PermissionSeeders(modelBuilder);
-        new RoleHasPermissionSeeders(modelBuilder);
         new RoleSeeders(modelBuilder);
         new ServiceSeeders(modelBuilder);
         new BlogSeeders(modelBuilder);
         new ServiceTypeSeeders(modelBuilder);
+        new RoleHasPermissionSeeders(modelBuilder);
         new GeneralSettingSeeders(modelBuilder);
     }
 }
