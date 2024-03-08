@@ -13,6 +13,11 @@ public class GeneralSettingService: IGeneralSettingService
         _rp = rp;
     }
     
+    public async Task<List<GeneralSetting>> GetAllSettings()
+    {
+        return await _rp.GetAllSettings();
+    }
+
     public async Task<GeneralSetting> GetSettingByName(string name)
     {
         return await _rp.GetSettingByName(name);
@@ -20,19 +25,14 @@ public class GeneralSettingService: IGeneralSettingService
 
     public async Task<ActionResult> UpdateSetting(string name, string value)
     {
-        try
+        GeneralSetting setting = await _rp.GetSettingByName(name);
+        if (setting == null)
         {
-            if (await _rp.UpdateSetting(name, value))
-            {
-                return new OkResult();
-            }
-            return  new BadRequestObjectResult("Setting "+name+" cannot be updated");
+            throw new Exception($"Setting {name} not found");
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return new BadRequestObjectResult("Setting "+name+" cannot be updated");
-        }
+        setting.SettingValue = value;
+        await _rp.UpdateSetting(name, value);
+        return new OkObjectResult(setting);
     }
 
     public async Task<string> GetSettingValue(string name)

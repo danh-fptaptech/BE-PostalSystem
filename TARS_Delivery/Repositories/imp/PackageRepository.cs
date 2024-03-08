@@ -125,7 +125,7 @@ public class PackageRepository : IPackageRepository
         }
     }
 
-    public async Task<Package> GetPackageByTrackingNumber(string trackingNumber)
+    public async Task<Package> GetPackageByTrackingNumber(string trackingNumber, string phoneFrom)
     {
         Package package = await _db.Packages
             .Include(p=>p.Items)
@@ -136,7 +136,7 @@ public class PackageRepository : IPackageRepository
             .Include(p => p.FeeCustom)
             .ThenInclude(f=>f.Service)
             .ThenInclude(s=>s.ServiceType)
-            .FirstOrDefaultAsync(p => p.TrackingCode == trackingNumber);
+            .FirstOrDefaultAsync(p => p.TrackingCode == trackingNumber && p.User.Phone == phoneFrom);
         return package;
     }
 

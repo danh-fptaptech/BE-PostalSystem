@@ -5,6 +5,7 @@ namespace TARS_Delivery.Repositories;
 
 public interface IGeneralSettingRepository
 {
+    public Task<List<GeneralSetting>> GetAllSettings();
     public Task<GeneralSetting> GetSettingByName(string name);
-    public Task<bool> UpdateSetting(string name, string value);
+    public Task<GeneralSetting> UpdateSetting(string name, string value);
 }
