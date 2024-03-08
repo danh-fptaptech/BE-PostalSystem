@@ -7,18 +7,16 @@ namespace TARS_Delivery.Seeders
     {
         public RoleHasPermissionSeeders(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<RoleHasPermission>().HasData(
-            
-            new RoleHasPermission{
-                PermissionId = 1,
-                RoleId = 1
-            },
-            new RoleHasPermission
+            for (int i = 1; i <= 41; i++)
             {
-                PermissionId = 2,
-                RoleId = 1
-            }
-            );
+                modelBuilder.Entity<RoleHasPermission>().HasData(
+                    new RoleHasPermission
+                    {
+                        PermissionId = i,
+                        RoleId = 1
+                    }
+                );
+            };
         }
     }
 }

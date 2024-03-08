@@ -1,4 +1,5 @@
-﻿using TARS_Delivery.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TARS_Delivery.Models;
 using TARS_Delivery.Models.Entities;
 
 namespace TARS_Delivery.Repositories.imp;
@@ -12,28 +13,37 @@ public class GeneralSettingRepository : IGeneralSettingRepository
         _db = db;
     }
     
-    public async Task<GeneralSetting> GetSettingByName(string name)
+    public async Task<List<GeneralSetting>> GetAllSettings()
     {
-        return await _db.GeneralSettings.FindAsync(name);
+        return await _db.GeneralSettings.ToListAsync();
     }
 
-    public async Task<bool> UpdateSetting(string name, string value)
+    public async Task<GeneralSetting> GetSettingByName(string name)
     {
-        GeneralSetting setting = await _db.GeneralSettings.FindAsync(name);
-        try
+        return await _db.GeneralSettings.FirstOrDefaultAsync(s => s.SettingName == name);
+    }
+
+    public async Task<GeneralSetting> GeneralSetting(string name, string value)
+    {
+        GeneralSetting setting = await _db.GeneralSettings.FirstOrDefaultAsync(s => s.SettingName == name);
+        if (setting == null)
         {
-            if (setting == null)
-            {
-                return false;
-            }
-            setting.SettingValue = value;
-            await _db.SaveChangesAsync();
-            return true;
+            throw new Exception($"Setting {name} not found");
         }
-        catch (Exception e)
+        setting.SettingValue = value;
+        await _db.SaveChangesAsync();
+        return setting;
+    }
+
+    public async Task<GeneralSetting> UpdateSetting(string name, string value)
+    {
+        GeneralSetting setting = await _db.GeneralSettings.FirstOrDefaultAsync(s => s.SettingName == name);
+        if (setting == null)
         {
-            Console.WriteLine(e);
-            return false;
+            throw new Exception($"Setting {name} not found");
         }
+        setting.SettingValue = value;
+        await _db.SaveChangesAsync();
+        return setting;
     }
 }
