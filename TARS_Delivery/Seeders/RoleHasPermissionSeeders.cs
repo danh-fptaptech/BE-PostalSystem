@@ -143,6 +143,56 @@ namespace TARS_Delivery.Seeders
                 PermissionId = 47,
                 RoleId = 1
             },
+            new RoleHasPermission
+            {
+                PermissionId = 48,
+                RoleId = 1
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 52,
+                RoleId = 1
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 53,
+                RoleId = 1
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 54,
+                RoleId = 1
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 55,
+                RoleId = 1
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 56,
+                RoleId = 1
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 57,
+                RoleId = 1
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 58,
+                RoleId = 1
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 59,
+                RoleId = 1
+            },
+            new RoleHasPermission
+            {
+                PermissionId = 60,
+                RoleId = 1
+            },
 
             // Branch Manager
             new RoleHasPermission

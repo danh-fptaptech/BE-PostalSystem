@@ -287,6 +287,25 @@ namespace TARS_Delivery.Seeders
                 {
                     Id = 56,
                     PermissionName = "servicetype.view",
+                },
+                new Permission
+                {
+                    Id = 57,
+                    PermissionName = "new.create",
+                },new Permission
+                {
+                    Id = 58,
+                    PermissionName = "new.update",
+                },
+                new Permission
+                {
+                    Id = 59,
+                    PermissionName = "new.disable",
+                },
+                new Permission
+                {
+                    Id = 60,
+                    PermissionName = "new.view",
                 }
             );
         }

@@ -21,9 +21,9 @@ public class GeneralSettingSeeders
             new GeneralSetting { Id = 11, SettingName = "site_logo_bg", SettingValue = "Site logo bg dummy" , Status = Models.Enums.EStatusData.Active },
             new GeneralSetting { Id = 12, SettingName = "site_language", SettingValue = "Site language dummy" , Status = Models.Enums.EStatusData.Active },
             new GeneralSetting { Id = 13, SettingName = "site_favicon_bg", SettingValue = "Site favicon_bg dummy" , Status = Models.Enums.EStatusData.Active },
-            new GeneralSetting { Id = 14, SettingName = "rateConvert", SettingValue = "Site rate convert dummy" , Status = Models.Enums.EStatusData.Active },
-            new GeneralSetting { Id = 15, SettingName = "limitSize", SettingValue = "Site limitSize dummy" , Status = Models.Enums.EStatusData.Active },
-            new GeneralSetting { Id = 16, SettingName = "limitWeight", SettingValue = "Site limitWeight dummy" , Status = Models.Enums.EStatusData.Active }
+            new GeneralSetting { Id = 14, SettingName = "rateConvert", SettingValue = "5" , Status = Models.Enums.EStatusData.Active },
+            new GeneralSetting { Id = 15, SettingName = "limitSize", SettingValue = "50" , Status = Models.Enums.EStatusData.Active },
+            new GeneralSetting { Id = 16, SettingName = "limitWeight", SettingValue = "6" , Status = Models.Enums.EStatusData.Active }
         );
     }
 }
