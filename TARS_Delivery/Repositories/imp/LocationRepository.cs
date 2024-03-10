@@ -154,6 +154,16 @@ namespace TARS_Delivery.Repositories.imp
 
         public async Task<List<RDTOLocation>> GetListLocationByLevel(ELocationLevel eLocationLevel)
         {
+            var locations = await _context.Locations.Where(x => x.LocationLevel == eLocationLevel && x.Status==EStatusData.Active).ToListAsync();
+            if (locations.Count > 0)
+            {
+                List<RDTOLocation> rdtolocations = _mapper.Map<List<RDTOLocation>>(locations);
+                return rdtolocations;
+            }
+            return null;
+        }
+        public async Task<List<RDTOLocation>> GetListLocationByLevelAll(ELocationLevel eLocationLevel)
+        {
             var locations = await _context.Locations.Where(x => x.LocationLevel == eLocationLevel).ToListAsync();
             if (locations.Count > 0)
             {
@@ -164,7 +174,7 @@ namespace TARS_Delivery.Repositories.imp
         }
         public async Task<RDTOLocationByZipcode> GetLocationByCode(string zipcode)
         {
-            var location = await _context.Locations.FirstOrDefaultAsync(x => x.PostalCode == zipcode && x.LocationLevel == ELocationLevel.District);
+            var location = await _context.Locations.FirstOrDefaultAsync(x => x.PostalCode == zipcode);
             if (location != null)
             {
                 var rdtolocation = _mapper.Map<RDTOLocationByZipcode>(location);

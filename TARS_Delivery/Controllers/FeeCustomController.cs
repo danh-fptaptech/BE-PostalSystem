@@ -154,6 +154,7 @@ namespace TARS_Delivery.Controllers
                 {
                     if (item.ServiceId == fee.ServiceId)
                     {
+                        item.FeeCharge = fee.FeeCharge;
                         item.OverWeightCharge = fee.OverWeightCharge;
                         item.TimeProcess = fee.TimeProcess;
                         await _feeCustomRepository.UpdateFee(item.Id, item);

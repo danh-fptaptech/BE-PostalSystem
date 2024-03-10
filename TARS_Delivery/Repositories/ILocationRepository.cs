@@ -14,6 +14,7 @@ namespace TARS_Delivery.Repositories
         Task DeleteLocation(int id);
         Task<object> GetChildLocation(int id);
         Task<List<RDTOLocation>> GetListLocationByLevel(ELocationLevel eLocationLevel);
+        Task<List<RDTOLocation>> GetListLocationByLevelAll(ELocationLevel eLocationLevel);
         Task<RDTOLocationByZipcode> GetLocationByCode(string zipcode);
         Task UpdateStatus(int id);
     }

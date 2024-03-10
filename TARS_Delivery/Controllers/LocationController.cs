@@ -193,5 +193,31 @@ namespace TARS_Delivery.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+        //Get List Location By Level
+        [HttpGet("GetListLocationByLevelAll/{eLocationLevel}")]
+        public async Task<ActionResult<List<RDTOLocation>>> GetListLocationByLevelAll(string eLocationLevel)
+        {
+            try
+            {
+                switch (eLocationLevel.ToLower())
+                {
+                    case "province":
+                        var province = await _iLocationRepository.GetListLocationByLevelAll(ELocationLevel.Province);
+                        return Ok(province);
+                    case "district":
+                        var distric = await _iLocationRepository.GetListLocationByLevelAll(ELocationLevel.District);
+                        return Ok(distric);
+                    case "ward":
+                        var ward = await _iLocationRepository.GetListLocationByLevelAll(ELocationLevel.Ward);
+                        return Ok(ward);
+                    default:
+                        return NotFound("Please choice [Province,District,Ward]");
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
     }
 }

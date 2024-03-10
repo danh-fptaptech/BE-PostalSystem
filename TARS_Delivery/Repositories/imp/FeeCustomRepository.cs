@@ -219,9 +219,15 @@ namespace TARS_Delivery.Repositories.imp
                 return new List<RDTOFeecustom>(); 
             }
 
-            var feeCustom = await _context.FeeCustoms
+/*            var feeCustom = await _context.FeeCustoms
                 .Where(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdTo == postalCodeToItem.Id)
                 .Where(s => s.Service.WeighFrom <= weight && s.Service.WeighTo >= weight)
+                .Include(s => s.Service)
+                .ThenInclude(st => st.ServiceType)
+                .ToListAsync();*/
+            var feeCustom = await _context.FeeCustoms
+                .Where(fee => fee.LocationIdFrom == postalCodeFromItem.Id && fee.LocationIdTo == postalCodeToItem.Id && fee.Status==EStatusData.Active)
+                .Where(s => s.Service.WeighFrom <= weight && s.Service.WeighTo >= weight && s.Service.Status == EStatusData.Active && s.Service.ServiceType.Status==EStatusData.Active)
                 .Include(s => s.Service)
                 .ThenInclude(st => st.ServiceType)
                 .ToListAsync();
