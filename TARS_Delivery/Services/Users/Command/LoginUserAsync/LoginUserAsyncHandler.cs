@@ -56,7 +56,7 @@ internal sealed class LoginUserAsyncHandler(
 
         await _unitOfWork.SaveChangeAsync(cancellationToken);
 
-        LoginUserAsyncResponse res = new(token);
+        LoginUserAsyncResponse res = new(user.Id, user.Fullname, user.Email, user.Phone, user.Avatar, token);
 
         return Result.Success(res);
     }

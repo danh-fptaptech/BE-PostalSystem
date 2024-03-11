@@ -121,7 +121,7 @@ public class User
         CookieOptions options = new()
         {
             HttpOnly = true,
-            Expires = RefreshTokenExpires
+            Expires = RefreshTokenExpires,
         };
 
         httpContext
@@ -159,10 +159,9 @@ public class User
         return PasswordResetToken;
     }
 
-    public void UpdateProfile(string fullname, string email, string phone)
+    public void UpdateProfile(string fullname, string phone)
     {
         Fullname = fullname;
-        Email = email;
         Phone = phone;
         UpdatedAt = DateTime.Now;
     }

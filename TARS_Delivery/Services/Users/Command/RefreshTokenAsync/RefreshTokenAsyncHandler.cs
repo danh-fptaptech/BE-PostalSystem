@@ -1,23 +1,25 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authentication;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using TARS_Delivery.Models.Entities;
 using TARS_Delivery.Providers;
 using TARS_Delivery.Repositories;
 using TARS_Delivery.Shared;
+using TARS_Delivery.UnitOfWork;
 
 namespace TARS_Delivery.Services.Users.Command.RefreshTokenAsync;
 
 internal sealed class RefreshTokenAsyncHandler(
     IHttpContextAccessor httpContextAccessor,
     IUserRepository userRepository,
-    IJwtProvider jwtProvider)
+    IJwtProvider jwtProvider,
+    IUnitOfWork unitOfWork)
     : IRequestHandler<RefreshTokenAsyncCommand, Result<RefreshTokenAsyncResponse>>
 {
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Result<RefreshTokenAsyncResponse>> Handle(
         RefreshTokenAsyncCommand command,
@@ -25,9 +27,15 @@ internal sealed class RefreshTokenAsyncHandler(
     {
         var httpContext = _httpContextAccessor.HttpContext!;
 
-        var oldToken = await httpContext.GetTokenAsync("access_token");
+        var authorization = httpContext.Request.Headers.Authorization.ToString();
 
-        if (oldToken is null)
+        if (authorization == null) {
+            return Result.Failure<RefreshTokenAsyncResponse>(RefreshTokenAsyncErrors.Unauthorized);
+        }
+
+        var oldToken = authorization["Bearer ".Length..].Trim();
+
+        if (oldToken == "")
         {
             return Result.Failure<RefreshTokenAsyncResponse>(RefreshTokenAsyncErrors.Unauthorized);
         }
@@ -56,6 +64,8 @@ internal sealed class RefreshTokenAsyncHandler(
         string newToken = _jwtProvider.Generate(user);
 
         user.GenerateRefreshToken(httpContext);
+
+        await _unitOfWork.SaveChangeAsync(cancellationToken);
 
         RefreshTokenAsyncResponse res = new(newToken);
 

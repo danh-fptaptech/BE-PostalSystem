@@ -74,7 +74,10 @@ builder.Services.AddAutoMapper(typeof(DtoProfile));
 //authentication and authorization
 builder.Services.ConfigureJwtSetup(configuration);
 builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer();
 
 builder.Services.AddHttpContextAccessor();

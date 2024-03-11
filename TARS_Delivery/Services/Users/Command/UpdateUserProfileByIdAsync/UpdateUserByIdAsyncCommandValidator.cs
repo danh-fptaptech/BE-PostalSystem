@@ -12,10 +12,6 @@ internal class UpdateUserByIdAsyncCommandValidator : AbstractValidator<UpdateUse
         RuleFor(x => x.Fullname)
             .NotEmpty();
 
-        RuleFor(x => x.Email)
-            .NotEmpty()
-            .EmailAddress();
-
         RuleFor(x => x.Phone)
             .NotEmpty();
     }

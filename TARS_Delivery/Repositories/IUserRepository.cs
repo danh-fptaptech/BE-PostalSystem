@@ -27,6 +27,4 @@ internal interface IUserRepository
     Task<List<User>> GetUsersWithAllAsync(CancellationToken cancellationToken);
 
     Task<User?> GetUserByIdWithPackagesAsync(int id, CancellationToken cancellationToken);
-
-    void UpdateUserByIdAsync(User user);
 }

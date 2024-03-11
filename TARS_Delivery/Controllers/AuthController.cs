@@ -92,60 +92,46 @@ public class AuthController(
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> Login([FromBody] LoginUserAsyncRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Login([FromBody] LoginUserAsyncRequest request)
     {
-        if (request.Role == "Employee")
+        var employee = await _context.Employees
+       .Include(e => e.Branch)
+       .Include(e => e.Role)
+       .ThenInclude(r => r.RoleHasPermissions)
+       .ThenInclude(rhp => rhp.Permission)
+       .Where(e => e.Status == EStatusData.Active)
+       .FirstOrDefaultAsync(e => e.Email == request.UserId);
+
+        if (employee != null)
         {
-            var employee = await _context.Employees
-           .Include(e => e.Role)
-           .ThenInclude(r => r.RoleHasPermissions)
-           .ThenInclude(rhp => rhp.Permission)
-           .FirstOrDefaultAsync(e => e.Email == request.UserId);
+            bool verify = _hashProvider.Verify(request.Password, employee.Password);
 
-            if (employee != null)
+            if (verify)
             {
-                //string a = _hashProvider.Hash(request.Password);
-                bool verify = _hashProvider.Verify(request.Password, employee.Password);
-
-                if (verify)
+                return Ok(new
                 {
-                    return Ok(new { Token = _jwtProvider.Generate(employee) });
-                }
+                    employee.Id,
+                    employee.Fullname,
+                    employee.Email,
+                    employee.PhoneNumber,
+                    employee.Avatar,
+                    Token = _jwtProvider.Generate(employee),
+                    Role = new
+                    {
+                        Name = employee.Role.RoleName,
+                        Permissions = employee.Role.RoleHasPermissions.Select(rhp => rhp.Permission.PermissionName).ToList()
+                    },
+                    employee.EmployeeCode,
+                    employee.Address,
+                    employee.Province,
+                    employee.District,
+                    employee.PostalCode,
+                    employee.BranchId,
+                    BranchName = employee.Branch.BranchName,
+                    });
             }
-
-
-            return Unauthorized("Email or Password is incorrect");
         }
-        else
-        {
-            LoginUserAsyncCommand command = new(
-                request.UserId,
-                request.Password);
 
-            var result = await Sender.Send(
-                command, cancellationToken);
-
-            if (result.IsFailure)
-            {
-                if (result.Error.Code is "ValidationError")
-                {
-                    return HandleFailure(result);
-                }
-
-                if (result.Error.Code is "Unauthorized" or "IncorrectPassword")
-                {
-                    return Unauthorized(result.Error);
-                }
-
-                if (result.Error.Code == "NotFound")
-                {
-                    return NotFound(result.Error);
-                }
-            }
-
-            return Ok(result.Value);
-        }
-       
+        return Unauthorized("Email or Password is incorrect");
     }
 }

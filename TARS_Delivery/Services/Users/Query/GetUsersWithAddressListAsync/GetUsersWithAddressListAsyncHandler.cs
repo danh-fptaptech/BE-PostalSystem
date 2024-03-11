@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using TARS_Delivery.Repositories;
-using TARS_Delivery.Services.Users.Query.GetUserByIdWithAddressListAsync;
+using TARS_Delivery.Services.Users.Query.GetAddressListByUserIdAsync;
 using TARS_Delivery.Shared;
 
 namespace TARS_Delivery.Services.Users.Query.GetUsersWithAddressListAsync;

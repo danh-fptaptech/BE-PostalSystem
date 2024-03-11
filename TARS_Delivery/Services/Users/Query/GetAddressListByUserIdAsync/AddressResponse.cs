@@ -1,6 +1,6 @@
 ﻿using TARS_Delivery.Models.Enums;
 
-namespace TARS_Delivery.Services.Users.Query.GetUserByIdWithAddressListAsync;
+namespace TARS_Delivery.Services.Users.Query.GetAddressListByUserIdAsync;
 
 public sealed record AddressResponse(
     string Name,

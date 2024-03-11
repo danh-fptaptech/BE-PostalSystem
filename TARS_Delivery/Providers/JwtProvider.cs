@@ -30,7 +30,7 @@ internal class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             _options.Audience,
             claims,
             null,
-            DateTime.Now.AddHours(1),
+            DateTime.Now.AddMinutes(5),
             signingCredentials);
 
         string tokenValue = new JwtSecurityTokenHandler()

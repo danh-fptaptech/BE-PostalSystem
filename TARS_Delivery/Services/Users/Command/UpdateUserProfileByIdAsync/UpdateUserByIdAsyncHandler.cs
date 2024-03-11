@@ -21,9 +21,7 @@ internal class UpdateUserByIdAsyncHandler(IUserRepository userRepository, IUnitO
             return Result.Failure(UpdateUserByIdAsyncErrors.NotFound);
         }
 
-        user.UpdateProfile(command.Fullname, command.Email, command.Phone);
-
-        _userRepository.UpdateUserByIdAsync(user);
+        user.UpdateProfile(command.Fullname, command.Phone);
 
         await _unitOfWork.SaveChangeAsync(cancellationToken);
 

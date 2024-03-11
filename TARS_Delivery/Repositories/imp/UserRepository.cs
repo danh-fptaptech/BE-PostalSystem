@@ -101,9 +101,4 @@ internal class UserRepository(DatabaseContext dbContext) : IUserRepository
     {
         return _dbContext.Users.Include(u => u.Packages).Include(u => u.Customers).FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
-
-    public void UpdateUserByIdAsync(User user)
-    {
-        _dbContext.Users.Update(user);
-    }
 }
